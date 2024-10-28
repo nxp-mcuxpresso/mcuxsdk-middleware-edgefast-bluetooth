@@ -1,0 +1,117 @@
+# edgefast_bluetooth project segment
+
+# local storage
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.storage
+    bool "MCUX_PRJSEG_middleware.edgefast_bluetooth.flash"
+    default y
+    imply BT_SETTINGS
+
+if MCUX_PRJSEG_middleware.edgefast_bluetooth.storage
+
+choice
+    prompt "Local storage"
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth_flash_adapter_rt1170evkb if MCUX_HW_BOARD_evkbmimxrt1170
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth_flash_adapter_rt595evk if MCUX_HW_BOARD_evkmimxrt595
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth_flash_adapter_rt685evk if MCUX_HW_BOARD_evkmimxrt685
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth_mflash_offchip if MCUX_HW_BOARD_evkbimxrt1050 || \
+                 MCUX_HW_BOARD_evkcmimxrt1060 || MCUX_HW_BOARD_evkmimxrt1040 || \
+                 MCUX_HW_BOARD_evkmimxrt1180 || MCUX_HW_BOARD_mimxrt685audevk || \
+                 MCUX_HW_BOARD_rdrw612bga || MCUX_HW_BOARD_frdmrw612 || \
+				 MCUX_HW_BOARD_mimxrt700evk
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth_mflash_onchip_fmu if MCUX_HW_BOARD_mcxn5xxevk || \
+                 MCUX_HW_BOARD_mcxn9xxevk
+    help
+      The codec will be automatically selected based on board.
+      It is also possible to select the codec manually.
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth_flash_adapter_rt1170evkb
+    bool "rt1170evkb flash adapter"
+    select MCUX_COMPONENT_component.flexspi_nor_flash_adapter_rt1170evkb
+    depends on MCUX_HW_BOARD_evkbmimxrt1170
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth_flash_adapter_rt595evk
+    bool "rt595evk flash adapter"
+    select MCUX_COMPONENT_component.flexspi_nor_flash_adapter_rt595evk
+    depends on MCUX_HW_BOARD_evkmimxrt595
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth_flash_adapter_rt685evk
+    bool "rt685evk flash adapter"
+    select MCUX_COMPONENT_component.flexspi_nor_flash_adapter_rt685evk
+    depends on MCUX_HW_BOARD_evkmimxrt685
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth_mflash_offchip
+    bool "off chip mflash"
+    select MCUX_COMPONENT_component.mflash_offchip
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth_mflash_onchip_fmu
+    bool "on chip mflash via FMU controller"
+    select MCUX_COMPONENT_component.mflash_onchip_fmu
+
+endchoice
+
+endif # MCUX_PRJSEG_middleware.edgefast_bluetooth.storage
+
+# codec selection
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.codec
+    bool "Edegfast_bluetooth CODEC selection"
+
+if MCUX_PRJSEG_middleware.edgefast_bluetooth.codec
+
+choice
+    prompt "CODEC selection"
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_wm8960 if MCUX_HW_BOARD_evkbimxrt1050 || \
+                                                                      MCUX_HW_BOARD_evkmimxrt1040
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_wm8962 if MCUX_HW_BOARD_evkbmimxrt1170 || \
+                                                                      MCUX_HW_BOARD_evkmimxrt1180 || \
+                                                                      MCUX_HW_BOARD_evkcmimxrt1060 || \
+																	  MCUX_HW_BOARD_mimxrt700evk
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_wm8904 if MCUX_HW_BOARD_evkmimxrt595 || \
+                                                                      MCUX_HW_BOARD_evkmimxrt685
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_cs42448 if MCUX_HW_BOARD_mimxrt685audevk
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_dialog7212 if MCUX_HW_BOARD_mcxn5xxevk
+    help
+      The codec will be automatically selected based on board.
+      It is also possible to select the codec manually.
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_wm8960
+    bool "WM8960"
+    imply MCUX_COMPONENT_driver.wm8960
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_wm8962
+    bool "WM8962"
+    imply MCUX_COMPONENT_driver.wm8962
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_wm8904
+    bool "WM8904"
+    imply MCUX_COMPONENT_driver.wm8904
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_cs42448
+    bool "CS42448"
+    imply MCUX_COMPONENT_driver.cs42448
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_dialog7212
+    bool "DIALOG7212"
+    imply MCUX_COMPONENT_driver.dialog7212
+
+endchoice
+
+choice
+    prompt "CODEC data bus selection"
+    default MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_sai_edma
+    help
+      The codec date bus will be automatically selected based on peripherals of the chip.
+      If multiple options are met at the same time, please select one of them manually.
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_sai_edma
+    bool "SAI EDMA"
+    imply MCUX_COMPONENT_component.audio_sai_edma_adapter
+    depends on MCUX_HAS_COMPONENT_driver.sai_edma
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_i2s_dma
+    bool "I2S DMA"
+    imply MCUX_COMPONENT_component.audio_flexcomm_i2s_dma_adapter
+    depends on MCUX_HAS_COMPONENT_driver.flexcomm_i2s_dma
+
+endchoice
+
+endif # MCUX_PRJSEG_middleware.edgefast_bluetooth.codec

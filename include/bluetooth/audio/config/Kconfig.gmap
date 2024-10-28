@@ -1,0 +1,38 @@
+# Bluetooth Audio - Gaming Audio Profile (GMAP) options
+#
+# Copyright (c) 2023 Nordic Semiconductor ASA
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menu "gmap"
+
+config BT_GMAP_UGG_SUPPORTED
+	def_bool BT_CAP_INITIATOR && BT_BAP_UNICAST_CLIENT && BT_VCP_VOL_CTLR
+	help
+	  This symbol is a config macro.
+
+config BT_GMAP_UGT_SUPPORTED
+	def_bool BT_CAP_ACCEPTOR && BT_BAP_UNICAST_SERVER
+	help
+	  This symbol is a config macro.
+
+config BT_GMAP_BGS_SUPPORTED
+	def_bool BT_CAP_INITIATOR && BT_BAP_BROADCAST_SOURCE
+	help
+	  This symbol is a config macro.
+
+config BT_GMAP_BGR_SUPPORTED
+	def_bool BT_CAP_ACCEPTOR && BT_BAP_BROADCAST_SINK && BT_VCP_VOL_REND
+	help
+	  This symbol is a config macro.
+
+config BT_GMAP
+	bool "Gaming Audio Profile"
+	depends on BT_CAP_ACCEPTOR || BT_CAP_INITIATOR
+	help
+	  Enabling this will enable GMAP.
+	  This symbol is a config macro.
+
+endmenu

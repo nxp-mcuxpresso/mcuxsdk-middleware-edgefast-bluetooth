@@ -1,0 +1,74 @@
+# Copyright 2024 NXP
+
+menu "extension"
+
+config LE_AUDIO_SYNC_ENABLE
+	bool "LE_AUDIO_SYNC_ENABLE"
+	help
+	  LE Audio Sync Enable.
+	  This symbol is a config macro.
+	  No prefix in generated macro
+
+config BT_AUDIO_CAPABILITY
+	bool "BT_AUDIO_CAPABILITY"
+	help
+	  This symbol is a config macro.
+
+config BT_AUDIO_BROADCAST_SRC_SUBGROUP_COUNT
+	int "BT_AUDIO_BROADCAST_SRC_SUBGROUP_COUNT"
+	default 0
+	help
+	  This symbol is a config macro.
+
+config BT_AUDIO_BROADCAST_SOURCE
+	bool "BT_AUDIO_BROADCAST_SOURCE"
+	help
+	  This symbol is a config macro.
+
+config BT_AUDIO_BROADCAST_SINK
+	bool "BT_AUDIO_BROADCAST_SINK"
+	help
+	  This symbol is a config macro.
+
+config BT_AUDIO_BROADCAST_SRC_STREAM_COUNT
+	int "BT_AUDIO_BROADCAST_SRC_STREAM_COUNT"
+	default 0
+	help
+	  This symbol is a config macro.
+
+config UTF8
+	bool "BT_AUDIO_BROADCAST_SRC_STREAM_COUNT"
+	help
+	  This symbol is a config macro.
+
+config LE_CONN_COUNT
+	int "LE_CONN_COUNT"
+	default 0
+	help
+	  This symbol is a config macro.
+	  No prefix in generated macro
+
+config BT_AUDIO_BROADCAST_SNK_STREAM_COUNT
+	int "BT_AUDIO_BROADCAST_SNK_STREAM_COUNT"
+	default 0
+	help
+	  This symbol is a config macro.
+
+config BT_PACS_SNK_CONTEXT
+	hex "BT_PACS_SNK_CONTEXT"
+	default 0x0007
+	help
+	  This symbol is a config macro.
+
+config BT_PACS_SRC_CONTEXT
+	hex "BT_PACS_SRC_CONTEXT"
+	default 0x0007
+	help
+	  This symbol is a config macro.
+
+config TMAP_PERIPHERAL_SINGLE
+	bool "TMAP_PERIPHERAL_SINGLE"
+	help
+	  This symbol is a config macro.
+
+endmenu

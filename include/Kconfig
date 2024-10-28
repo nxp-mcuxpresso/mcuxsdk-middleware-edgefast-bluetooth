@@ -1,0 +1,2668 @@
+menu "Edgefast Bluetooth Configurations(edgefast_bluetooth_config_Gen.h)"
+
+config BT_LONG_WQ
+    bool "BT_LONG_WQ"
+    default y if BT_GATT_CACHING
+    help
+      Adds an API for a workqueue dedicated to long-running tasks.
+
+if BT_LONG_WQ
+config BT_LONG_WQ_STACK_SIZE
+    # Hidden: Long workqueue stack size. Should be derived from system
+    # requirements.
+    int "BT_LONG_WQ_STACK_SIZE"
+    default 1300 if BT_GATT_CACHING
+    default 1140 if BT_TINYCRYPT_ECC
+    default 1024
+    help
+      Long workqueue stack size. Should be derived from system requirements.
+
+config BT_LONG_WQ_PRIO
+    int "BT_LONG_WQ_PRIO"
+    default 10
+    help
+      Long workqueue priority. Should be pre-emptible.
+
+endif # BT_LONG_WQ
+
+config BT_HCI_HOST
+    bool "BT_HCI_HOST"
+    default y
+    help
+      Bluetooth Host stack
+      This symbol is a config macro.
+
+config BT_BUF_RESERVE
+    int "BT_BUF_RESERVE"
+    default 8
+    help
+      buffer reserved length, suggested value is 8.
+      This symbol is a config macro.
+
+config BT_SNOOP
+    bool "BT_SNOOP"
+    default n
+    help
+      whether enable bt snoop feature, 0 - disable, 1 - enable.
+      This symbol is a config macro.
+
+config BT_HCI_RESERVE
+    int "BT_HCI_RESERVE"
+    default 4
+    help
+      Reserve buffer size for user.
+      Headroom that the driver needs for sending and receiving buffers. Add a
+      new 'default' entry for each new driver.
+      This symbol is a config macro.
+
+config BT_HCI_TX_STACK_SIZE
+    int "BT_HCI_TX_STACK_SIZE"
+    default 1024
+    help
+      HCI TX task stack size needed for executing bt_send
+      with specified driver, should be no less than 512.
+      This symbol is a config macro.
+
+config BT_HCI_TX_PRIO
+    int "BT_HCI_TX_PRIO"
+    default 2
+    help
+      HCI TX task priority.
+      This symbol is a config macro.
+
+config BT_RX_STACK_SIZE
+    int "BT_RX_STACK_SIZE"
+    default 2500 if BT_SMP > 0
+    default 1024
+    help
+      Size of the receiving thread stack.
+      This is the context from
+      which all event callbacks to the application occur. The
+      default value is sufficient for basic operation, but if the
+      application needs to do advanced things in its callbacks that
+      require extra stack space, this value can be increased to
+      accommodate for that.
+      This symbol is a config macro.
+
+config BT_RX_PRIO
+    int "BT_RX_PRIO"
+    default 1
+    help
+      RX task priority.
+      This symbol is a config macro.
+
+config BT_PERIPHERAL
+    bool "BT_PERIPHERAL"
+    default n
+    help
+      Peripheral Role support, if the macro is set to 0,feature is disabled, if 1, feature is enabled.
+      Select this for LE Peripheral role support.
+      This symbol is a config macro.
+
+config BT_BROADCASTER
+    bool "BT_BROADCASTER"
+    default y
+    depends on BT_PERIPHERAL
+    help
+      Broadcaster Role support, if the macro is set to 0,feature is disabled, if 1, feature is enabled.
+      Select this for LE Broadcaster role support.
+      This symbol is a config macro.
+
+config BT_CENTRAL
+    bool "BT_CENTRAL"
+    default n
+    help
+      Central Role support, if the macro is set to 0,feature is disabled, if 1, feature is enabled.
+      Select this for LE Central role support.
+      This symbol is a config macro.
+
+config BT_OBSERVER
+    bool "BT_OBSERVER"
+    default y
+    depends on BT_CENTRAL
+    help
+      Observer Role support.
+      Select this for LE Observer role support.
+      This symbol is a config macro.
+
+config BT_EXT_ADV
+    bool "BT_EXT_ADV"
+    default n
+    help
+      Extended Advertising and Scanning support [EXPERIMENTAL], if the macro is set to 0,feature is disabled, if 1, feature is enabled.
+      Select this to enable Extended Advertising API support.
+      This enables support for advertising with multiple advertising sets,
+      extended advertising data, and advertising on LE Coded PHY.
+      It enables support for receiving extended advertising data as a
+      scanner, including support for advertising data over the LE coded PHY.
+      It enables establishing connections over LE Coded PHY.
+      This symbol is a config macro.
+
+config BT_LIM_ADV_TIMEOUT
+    int "BT_LIM_ADV_TIMEOUT"
+    default 30
+    help
+      Timeout for limited advertising in 1s units.
+      The default value is 30, and the valid range should be 1-180.
+      This symbol is a config macro.
+
+config BT_CONN_TX_USER_DATA_SIZE
+    int "BT_CONN_TX_USER_DATA_SIZE"
+    default 8
+    help
+      Necessary user_data size for allowing packet fragmentation when
+      sending over HCI. See `struct tx_meta` in conn.c.
+      The default value is 8, and default 16 if 64BIT.
+      This symbol is a config macro.
+
+config BT_PER_ADV_SYNC_BUF_SIZE
+    int "BT_PER_ADV_SYNC_BUF_SIZE"
+    default 0
+    help
+      Maximum size of a fragmented periodic advertising report.
+      The default value is 0, and the valid range should be 0-1650.
+      This symbol is a config macro.
+
+config BT_SMP
+    bool "BT_SMP"
+    default n
+    help
+      This symbol is a config macro.
+
+if BT_EXT_ADV
+
+config BT_EXT_ADV_LEGACY_SUPPORT
+    bool "BT_EXT_ADV_LEGACY_SUPPORT"
+    default y
+    help
+      Support starting advertising through legacy commands, if the macro is set to 0,feature is disabled, if 1, feature is enabled.
+      Select this to enable the use of the Legacy Advertising HCI commands.
+      This option should be used where the capabilities of the controller
+      is not known.
+      If this option is not enabled the controller must support the extended
+      advertising feature.
+      This symbol is a config macro.
+
+config BT_EXT_ADV_MAX_ADV_SET
+    int "BT_EXT_ADV_MAX_ADV_SET"
+    default 1
+    help
+      Maximum number of simultaneous advertising sets, ranging from 1 to 64.
+      Maximum number of simultaneous Bluetooth advertising sets supported.
+      This symbol is a config macro.
+
+config BT_PER_ADV
+    bool "BT_PER_ADV"
+    default n
+    help
+      Periodic Advertising and Scanning support [EXPERIMENTAL]
+      This allows the device to send advertising data periodically at deterministic
+      intervals. Scanners can synchronize to the periodic advertisements
+      to periodically get the data.
+      This symbol is a config macro.
+
+config BT_PER_ADV_RSP
+    bool "BT_PER_ADV_RSP"
+    default n
+    depends on BT_PER_ADV
+    help
+      Periodic Advertising with Responses support [EXPERIMENTAL]
+      Select this to enable Periodic Advertising with Responses
+      API support.
+      This symbol is a config macro.
+
+config BT_PER_ADV_SYNC
+    bool
+    default y if BT_OBSERVER
+    default n
+    help
+      Periodic advertising sync support [EXPERIMENTAL]
+      Syncing with a periodic advertiser allows the device to periodically
+      and deterministic receive data from that device in a connectionless
+      manner.
+      This symbol is a config macro.
+
+config BT_PER_ADV_SYNC_RSP
+    bool "BT_PER_ADV_SYNC_RSP"
+    default n
+    depends on BT_OBSERVER
+    help
+      Periodic Advertising with Responses sync support [EXPERIMENTAL]
+      Select this to enable Periodic Advertising with Responses Sync
+      API support.
+      This symbol is a config macro.
+
+config BT_PER_ADV_SYNC_MAX
+    int "BT_PER_ADV_SYNC_MAX"
+    default 1
+    depends on BT_PER_ADV_SYNC
+    help
+      Maximum number of simultaneous periodic advertising syncs, range 1 to 64
+      Maximum number of simultaneous periodic advertising syncs supported.
+      This symbol is a config macro.
+
+endif # BT_EXT_ADV
+
+if BT_HCI_HOST
+
+config BT_FILTER_ACCEPT_LIST
+    bool "BT_FILTER_ACCEPT_LIST"
+    default n
+    help
+      Enable filter accept list support.
+      This option enables the filter accept list API. This takes advantage of the
+      whitelisting feature of a BLE controller.
+      The filter accept list is a global list and the same filter accept list is used
+      by both scanner and advertiser. The filter accept list cannot be modified while
+      it is in use.
+      An Advertiser can filter accept list which peers can connect or request scan
+      response data.
+      A scanner can filter accept list advertiser for which it will generate
+      advertising reports.
+      Connections can be established automatically for filter accepted peers.
+      This options deprecates the bt_le_set_auto_conn API in favor of the
+      bt_conn_create_aute_le API.
+      This symbol is a config macro.
+
+config BT_DEVICE_NAME
+    string "BT_DEVICE_NAME"
+    default "\"ibeacon\"" if IBEACON_APP
+    default "\"eddystone\"" if EDDYSTONE
+    default "\"beacon\"" if BEACON_APP
+    default "\"BLE_Peripheral\""
+    help
+      Bluetooth device name.
+      Name can be up to 248 bytes long (excluding
+      NULL termination). Can be empty string.
+      This symbol is a config macro.
+
+config BT_DEVICE_APPEARANCE_DYNAMIC
+    int "BT_DEVICE_APPEARANCE_DYNAMIC"
+    default 0
+    help
+      Runtime Bluetooth Appearance changing
+      Enables use of bt_set_appearance.
+      If BT_SETTINGS is set, the appearance is persistently stored.
+      This symbol is a config macro.
+
+config BT_DEVICE_APPEARANCE
+    int "BT_DEVICE_APPEARANCE"
+    default 0
+    help
+      Bluetooth device appearance
+      For the list of possible values please
+      consult the following link:
+      www.bluetooth.com/specifications/assigned-numbers
+      This symbol is a config macro.
+
+config BT_DEVICE_NAME_DYNAMIC
+    bool "BT_DEVICE_NAME_DYNAMIC"
+    default n
+    help
+      Allow to set Bluetooth device name on runtime.
+      Enabling this option allows for runtime configuration of Bluetooth
+      device name.
+      This symbol is a config macro.
+
+config BT_DEVICE_NAME_MAX
+    int "BT_DEVICE_NAME_MAX"
+    default 28
+    depends on BT_DEVICE_NAME_DYNAMIC
+    help
+      Maximum size in bytes for device name.
+      Bluetooth device name storage size, Storage can be up to 248 bytes
+      long (excluding NULL termination).
+      Range 2 to 248 is valid.
+      This symbol is a config macro.
+
+config BT_ID_MAX
+    int "BT_ID_MAX"
+    default 1
+    help
+      Maximum number of local identities, range 1 to 10 is valid.
+      Maximum number of supported local identity addresses, For most
+      products this is safe to leave as the default value (1).
+      Range 1 to 10 is valid.
+      This symbol is a config macro.
+
+config BT_CONN
+    bool "BT_CONN"
+    default y
+    help
+      Connection enablement, if the macro is set to 0,feature is disabled, if 1, feature is enabled.
+      This symbol is a config macro.
+
+config BT_MAX_CONN
+    int "BT_MAX_CONN"
+    default 1
+    help
+      it is the max connection supported by host stack.
+      Maximum number of simultaneous Bluetooth connections supported.
+      This symbol is a config macro.
+
+config BT_CONN_FRAG_COUNT
+	int "BT_CONN_FRAG_COUNT"
+	default BT_MAX_CONN if BT_CONN
+	default BT_ISO_MAX_CHAN if BT_ISO
+	help
+	  Internal kconfig that sets the maximum amount of simultaneous data
+	  packets in flight. It should be equal to the number of connections.
+
+config BT_CONN_TX
+    bool "BT_CONN_TX"
+    default BT_CONN if BT_CONN
+    default BT_ISO_BROADCASTER if BT_ISO_BROADCASTER
+    help
+      Hidden configuration that is true if ACL or broadcast ISO is enabled.
+      This symbol is a config macro.
+
+if BT_CONN
+
+config BT_HCI_ACL_FLOW_CONTROL
+    bool "BT_HCI_ACL_FLOW_CONTROL"
+    default n
+    help
+      Controller to Host ACL flow control support.
+      Enable support for throttling ACL buffers from the controller
+      to the host. This is particularly useful when the host and
+      controller are on separate cores, since it ensures that we do
+      not run out of incoming ACL buffers.
+      This symbol is a config macro.
+
+config BT_PHY_UPDATE
+    bool "BT_PHY_UPDATE"
+    default n
+    help
+      PHY Update, if the macro is set to 0,feature is disabled, if 1, feature is enabled.
+      Enable support for Bluetooth 5.0 PHY Update Procedure.
+      This symbol is a config macro.
+
+config BT_DATA_LEN_UPDATE
+    bool "BT_DATA_LEN_UPDATE"
+    default n
+    help
+      Data Length Update,if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Enable support for Bluetooth v4.2 LE Data Length Update procedure.
+      This symbol is a config macro.
+
+config BT_PER_ADV_SYNC_TRANSFER_RECEIVER
+    bool "BT_PER_ADV_SYNC_TRANSFER_RECEIVER"
+    default n
+    help
+      Periodic Advertising Sync Transfer receiver, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This symbol is a config macro.
+
+config BT_PER_ADV_SYNC_TRANSFER_SENDER
+    bool "BT_PER_ADV_SYNC_TRANSFER_SENDER"
+    default n
+    help
+      Periodic Advertising Sync Transfer sender,if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This symbol is a config macro.
+
+config BT_CREATE_CONN_TIMEOUT
+    int "BT_CREATE_CONN_TIMEOUT"
+    default 3
+    help
+      Timeout for pending LE Create Connection command in seconds.
+      This symbol is a config macro.
+
+config BT_CONN_PARAM_UPDATE_TIMEOUT
+    int "BT_CONN_PARAM_UPDATE_TIMEOUT"
+    default 5000
+    help
+      Peripheral connection parameter update timeout in milliseconds, range 1 to 65535 is valid.
+      The value is a timeout used by peripheral device to wait until it
+      starts the connection parameters update procedure to change default
+      connection parameters. The default value is set to 5s, to comply
+      with BT protocol specification: Core 4.2 Vol 3, Part C, 9.3.12.2
+      Range 1 to 65535 is valid.
+      This symbol is a config macro.
+
+config BT_CONN_TX_MAX
+    int "BT_CONN_TX_MAX"
+    default BT_L2CAP_TX_BUF_COUNT
+    help
+      Maximum number of pending TX buffers.
+      Maximum number of pending TX buffers that have not yet
+      been acknowledged by the controller.
+      This symbol is a config macro.
+
+config BT_CONN_DISABLE_SECURITY
+    bool "BT_CONN_DISABLE_SECURITY"
+    default n
+    help
+      BT_CONN_DISABLE_SECURITY is enabled.
+      Security is disabled for incoming requests for GATT attributes and L2CAP
+      channels that would otherwise require encryption/authentication in order to be accessed.
+      Do not use in production.
+      This symbol is a config macro.
+
+config BT_CONN_PARAM_ANY
+    bool "BT_CONN_PARAM_ANY"
+    default n
+    help
+      Accept any values for connection parameters, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Some controllers support additional connection parameter ranges
+      beyond what is described in the specification. Enabling this option
+      allows the application to set any value to all connection parameters.
+      Tbe Host will perform no limits nor consistency checks on any of the
+      connection parameters (conn interval min and max, latency and timeout).
+      However, the Host will still use numerical comparisons between the
+      min and max connection intervals in order to verify whether the
+      desired parameters have been established in the connection.
+      This symbol is a config macro.
+
+config BT_CTLR_LE_POWER_CONTROL_SUPPORT
+    bool "BT_CTLR_LE_POWER_CONTROL_SUPPORT"
+    default n
+    help
+      This symbol is a config macro.
+
+config BT_TRANSMIT_POWER_CONTROL
+    bool "BT_TRANSMIT_POWER_CONTROL"
+    default y
+    depends on BT_CTLR_LE_POWER_CONTROL_SUPPORT
+    help
+      LE Power Control
+      Enable support for LE Power Control Request feature that is defined in the
+      Bluetooth Core specification, Version 5.4 | Vol 6, Part B, Section 4.6.31.
+      This symbol is a config macro.
+
+if BT_PHY_UPDATE
+
+config BT_USER_PHY_UPDATE
+    bool "BT_USER_PHY_UPDATE"
+    default n
+    help
+      User control of PHY Update Procedure, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Enable application access to initiate the PHY Update Procedure.
+      The application can also register a callback to be notified about PHY
+      changes on the connection. The current PHY info is available in the
+      connection info.
+      This symbol is a config macro.
+
+config BT_AUTO_PHY_UPDATE
+    bool "BT_AUTO_PHY_UPDATE"
+    default n if BT_USER_PHY_UPDATE
+    default y
+    help
+      Auto-initiate PHY Update Procedure, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Initiate PHY Update Procedure on connection establishment.
+      Disable this if you want the PHY Update Procedure feature supported
+      but want to rely on the remote device to initiate the procedure at its
+      discretion or want to initiate manually.
+      This symbol is a config macro.
+
+endif # BT_PHY_UPDATE
+
+if BT_DATA_LEN_UPDATE
+
+config BT_USER_DATA_LEN_UPDATE
+    bool "BT_USER_DATA_LEN_UPDATE"
+    default n
+    help
+      User control of Data Length Update Procedure, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Enable application access to initiate the Data Length Update
+      Procedure. The application can also a register callback to be notified
+      about Data Length changes on the connection. The current Data Length
+      info is available in the connection info.
+      This symbol is a config macro.
+
+config BT_AUTO_DATA_LEN_UPDATE
+    bool "BT_AUTO_DATA_LEN_UPDATE"
+    default n if BT_USER_DATA_LEN_UPDATE
+    default y
+    help
+      Auto-initiate Data Length Update procedure, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Initiate Data Length Update Procedure on connection establishment.
+      Disable this if you want the Data Length Update Procedure feature
+      supported but want to rely on the remote device to initiate the
+      procedure at its discretion or want to initiate manually.
+      This symbol is a config macro.
+
+endif # BT_DATA_LEN_UPDATE
+
+config BT_REMOTE_INFO
+    bool "BT_REMOTE_INFO"
+    default n
+    help
+      Enable application access to remote information.
+      Enable application access to the remote information available in the
+      stack. The remote information is retrieved once a connection has been
+      established and the application will be notified when this information
+      is available through the remote_version_available connection callback.
+      This symbol is a config macro.
+
+config BT_REMOTE_VERSION
+    bool "BT_REMOTE_VERSION"
+    default n
+    depends on BT_REMOTE_INFO
+    help
+      Enable fetching of remote version.
+      Enable this to get access to the remote version in the Controller and
+      in the Host through bt_conn_get_info(). The fields in question can
+      be then found in the bt_conn_info struct.
+      This symbol is a config macro.
+
+if BT_SMP
+
+config BT_SMP_SC_ONLY
+    bool "BT_SMP_SC_ONLY"
+    default n
+    select BT_SMP_SC_PAIR_ONLY
+    help
+      Secure Connections Only Mode.
+      This option enables support for Secure Connection Only Mode. In this
+      mode device shall only use Security Mode 1 Level 4 with exception
+      for services that only require Security Mode 1 Level 1 (no security).
+      Security Mode 1 Level 4 stands for authenticated LE Secure Connections
+      pairing with encryption. Enabling this option disables legacy pairing.
+      This symbol is a config macro.
+
+config BT_SMP_SC_PAIR_ONLY
+    bool "BT_SMP_SC_PAIR_ONLY"
+    default n
+    help
+      Disable legacy pairing, if 1, legacy pairing is disabled, vice versa.
+      This option disables LE legacy pairing and forces LE secure connection
+      pairing. All Security Mode 1 levels can be used with legacy pairing
+      disabled, but pairing with devices that do not support secure
+      connections pairing will not be supported.
+      To force a higher security level use "Secure Connections Only Mode"
+      This symbol is a config macro.
+
+if !(BT_SMP_SC_PAIR_ONLY || BT_SMP_SC_ONLY)
+
+config BT_SMP_OOB_LEGACY_PAIR_ONLY
+    bool "BT_SMP_OOB_LEGACY_PAIR_ONLY"
+    default n
+    help
+      Force Out Of Band Legacy pairing.
+      This option disables Legacy and LE SC pairing and forces legacy OOB.
+      This symbol is a config macro.
+
+endif # !(BT_SMP_SC_PAIR_ONLY || BT_SMP_SC_ONLY)
+
+if !(BT_SMP_SC_PAIR_ONLY || BT_SMP_SC_ONLY || BT_SMP_OOB_LEGACY_PAIR_ONLY)
+
+config BT_SMP_DISABLE_LEGACY_JW_PASSKEY
+    bool "BT_SMP_DISABLE_LEGACY_JW_PASSKEY"
+    default n
+    help
+      Forbid usage of insecure legacy pairing methods.
+      This option disables Just Works and Passkey legacy pairing methods to
+      increase security.
+      This symbol is a config macro.
+
+endif # !(BT_SMP_SC_PAIR_ONLY || BT_SMP_SC_ONLY || BT_SMP_OOB_LEGACY_PAIR_ONLY)
+
+config BT_PASSKEY_KEYPRESS
+    bool "BT_PASSKEY_KEYPRESS"
+    default n
+    help
+      Passkey Keypress Notification support [EXPERIMENTAL] Feature, if the macro is set to 0,
+      feature is disabled, if 1, feature is enabled.
+      Enable support for receiving and sending Keypress Notifications during
+      Passkey Entry during pairing.
+      This symbol is a config macro.
+
+config BT_PRIVACY
+    bool "BT_PRIVACY"
+    default n
+    help
+      Privacy Feature, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Enable Privacy Feature support. This makes it possible to generate and use
+      Resolvable Private Addresses (RPAs).
+      Disabling this will remove the capability to resolve private addresses.
+      This symbol is a config macro.
+
+config BT_PRIVACY_RANDOMIZE_IR
+    bool "BT_PRIVACY_RANDOMIZE_IR"
+    default n
+    depends on BT_PRIVACY && BT_SETTINGS
+    help
+      Randomize identity root for fallback identities
+      Enabling this option will cause the Host to ignore controller-provided
+      identity roots (IR). The Host will instead use bt_rand to generate
+      identity resolving keys (IRK) and store them in the settings subsystem.
+
+      Setting this config may come with a performance penalty to boot time,
+      as the hardware RNG may need time to generate entropy and will block
+      Bluetooth initialization.
+
+      This option increases privacy, as explained in the following text.
+
+      The IR determines the IRK of the identity. The IRK is used to both
+      generate and resolve (recognize) the private addresses of an identity.
+      The IRK is a shared secret, distributed to peers bonded to that
+      identity.
+
+      An attacker that has stolen or once bonded and retained the IRK can
+      forever resolve addresses from that IRK, even if that bond has been
+      deleted locally.
+
+      Deleting an identity should ideally delete the IRK as well and thereby
+      restore anonymity from previously bonded peers. But unless this config
+      is set, this does not always happen.
+
+      In particular, a factory reset function that wipes the data in the
+      settings subsystem may not affect the controller-provided IRs. If
+      those IRs are reused, this device can be tracked across factory resets.
+
+      For optimal privacy, a new IRK (i.e., identity) should be used per
+      bond. However, this naturally limits advertisements from that identity
+      to be recognizable by only that one bonded device.
+
+      A description of the exact effect of this setting follows.
+
+      If the application has not setup an identity before calling
+      settings_load()/settings_load_subtree("bt") after bt_enable(), the
+      Host will automatically try to load saved identities from the settings
+      subsystem, and if there are none, set up the default identity
+      (BT_ID_DEFAULT).
+
+      If the controller has a public address (HCI_Read_BD_ADDR), that becomes
+      the address of the default identity. The Host will by default try to
+      obtain the IR for that identity from the controller (by Zephyr HCI
+      Read_Key_Hierarchy_Roots). Setting this config randomizes the IR
+      instead.
+
+      If the controller does not have a public address, the Host will try
+      to source the default identity from the static address information
+      from controller (Zephyr HCI Read_Static_Addresses). This results in an
+      identity for each entry in Read_Static_Addresses. Setting this config
+      randomizes the IRs during this process.
+      This symbol is a config macro.
+
+config BT_ECC
+    bool "BT_ECC"
+    default y if !BT_SMP_OOB_LEGACY_PAIR_ONLY
+    default n
+    help
+      Enable ECDH key generation support.
+      This option adds support for ECDH HCI commands.
+      This symbol is a config macro.
+
+if BT_ECC
+
+config BT_TINYCRYPT_ECC
+    bool "BT_TINYCRYPT_ECC"
+    default n
+    help
+      Use TinyCrypt library for ECDH.
+      If this option is used to set TinyCrypt library which is used for emulating the
+      ECDH HCI commands and events needed by e.g. LE Secure Connections.
+      In builds including the BLE Host, if don't set the controller crypto which is
+      used for ECDH and if the controller doesn't support the required HCI
+      commands the LE Secure Connections support will be disabled.
+      In builds including the HCI Raw interface and the BLE Controller, this
+      option injects support for the 2 HCI commands required for LE Secure
+      Connections so that Hosts can make use of those. The option defaults
+      to enabled for a combined build with Zephyr's own controller, since it
+      does not have any special ECC support itself (at least not currently).
+      This symbol is a config macro.
+
+config BT_TINYCRYPT_ECC_PRIORITY
+    int "BT_TINYCRYPT_ECC_PRIORITY"
+    default 10
+    help
+      Thread priority of ECC Task.
+      This symbol is a config macro.
+
+config BT_HCI_ECC_STACK_SIZE
+    int "BT_HCI_ECC_STACK_SIZE"
+    default 1100
+    help
+      Thread stack size of ECC Task.
+      This symbol is a config macro.
+
+endif # BT_ECC
+
+config BT_RPA
+    bool "BT_RPA"
+    default y
+    help
+      Bluetooth Resolvable Private Address (RPA)
+      This option enables RPA feature.
+      This symbol is a config macro.
+
+config BT_RPA_TIMEOUT
+    int "BT_RPA_TIMEOUT"
+    default 900
+    help
+      Resolvable Private Address timeout, defaults to 900 seconds.
+      This option defines how often resolvable private address is rotated.
+      Value is provided in seconds and defaults to 900 seconds (15 minutes).
+      This symbol is a config macro.
+
+config BT_RPA_TIMEOUT_DYNAMIC
+    int "BT_RPA_TIMEOUT_DYNAMIC"
+    default 0
+    depends on BT_PRIVACY
+    help
+      Support setting the Resolvable Private Address timeout at runtime
+      This option allows the user to override the default value of
+      the Resolvable Private Address timeout using dedicated APIs.
+      This symbol is a config macro.
+
+config BT_RPA_SHARING
+    int "BT_RPA_SHARING"
+    default 0
+    depends on BT_PRIVACY && BT_EXT_ADV
+    help
+      Share the Resolvable Private Address between advertising sets
+      This option configures the advertising sets linked with the same
+      Bluetooth identity to use the same Resolvable Private Address in
+      a given rotation period. After the RPA timeout, the new RPA is
+      generated and shared between the advertising sets in the subsequent
+      rotation period. When this option is disabled, the generated RPAs
+      of the advertising sets differ from each other in a given rotation
+      period.
+      This symbol is a config macro.
+
+config BT_SIGNING
+    bool "BT_SIGNING"
+    default n
+    help
+      Data signing support, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables data signing which is used for transferring
+      authenticated data in an unencrypted connection.
+      This symbol is a config macro.
+
+config BT_SMP_APP_PAIRING_ACCEPT
+    bool "BT_SMP_APP_PAIRING_ACCEPT"
+    default n
+    help
+      Accept or reject pairing initiative.
+      When receiving pairing request or pairing response queries, the
+      application shall either accept proceeding with pairing or not. This is
+      for pairing over SMP and does not affect SSP, which will continue
+      pairing without querying the application.
+      The application can return an error code, which is translated into
+      an SMP return value if the pairing is not allowed.
+      This symbol is a config macro.
+
+config BT_SMP_ALLOW_UNAUTH_OVERWRITE
+    bool "BT_SMP_ALLOW_UNAUTH_OVERWRITE"
+    default n
+    help
+      Allow unauthenticated pairing for paired device.
+      This option allows all unauthenticated pairing attempts made by the
+      peer where an unauthenticated bond already exists.
+      This would enable cases where an attacker could copy the peer device
+      address to connect and start an unauthenticated pairing procedure
+      to replace the existing bond. When this option is disabled in order
+      to create a new bond the old bond has to be explicitly deleted with
+      bt_unpair.
+      This symbol is a config macro.
+
+config BT_ID_ALLOW_UNAUTH_OVERWRITE
+    bool "BT_ID_ALLOW_UNAUTH_OVERWRITE"
+    default n
+    help
+      This option allows unauthenticated pairing attempts made by the
+      peer where an unauthenticated bond already exists on other local
+      identity. This configuration still blocks unauthenticated pairing
+      attempts on the same local identity. To allow the pairing procedure
+      unconditionally, please see the BT_SMP_ALLOW_UNAUTH_OVERWRITE
+      configuration.
+      This symbol is a config macro.
+
+config BT_ID_UNPAIR_MATCHING_BONDS
+    int "BT_ID_UNPAIR_MATCHING_BONDS"
+    default 0
+    help
+      When a bond is about to complete, find any other bond with the same
+      peer address (or IRK) and `bt_unpair` that bond before the event
+      pairing_complete`.
+      Important: If this option is not enabled, the current implementation
+      will automatically fail the bonding. See "RL limitation" below.
+
+      Important: If this option is not enabled, as Peripheral, it may be too
+      late to abort the bonding. The pairing is failed locally, but it may
+      still be reported as successful on the Central. When this situation
+      occurs, the Zephyr Peripheral will immediately disconnect. See "SMP
+      limitation" below.
+
+      RL limitation]:
+      The Host implementors have considered it unlikely that applications
+      would ever want to have multiple bonds with the same peer. The
+      implementors prioritize the simplicity of the implementation over this
+      capability.
+
+      The Resolve List on a Controller is not able to accommodate multiple
+      local addresses/IRKs for a single remote address. This would prevent
+      the Host from setting up a one-to-one correspondence between the Host
+      bond database and the Controller Resolve List. The implementation
+      relies on that capability when using the Resolve List. For performance
+      reasons, there is the wish to not fallback to Host Address Resolution
+      in this case.
+
+      [SMP Limitation]:
+      The Paring Failed command of the Security Manager Protocol cannot be
+      sent outside of a Pairing Process. A Pairing Process ends when the
+      last Transport Specific Key to be distributed is acknowledged at
+      link-layer. The Host does not have control over this acknowledgment,
+      and the order of distribution is fixed by the specification.
+      This symbol is a config macro.
+
+config BT_FIXED_PASSKEY
+    int "BT_FIXED_PASSKEY"
+    default 0
+    help
+      Use a fixed passkey for pairing, set passkey to fixed or not.
+      With this option enabled, the application will be able to call the
+      bt_passkey_set() API to set a fixed passkey. If set, the
+      pairing_confim() callback will be called for all incoming pairings.
+      This symbol is a config macro.
+
+if BT_TINYCRYPT_ECC
+
+config BT_USE_DEBUG_KEYS
+    int "BT_USE_DEBUG_KEYS"
+    default 0
+    help
+      Enable Security Manager Debug Mode.
+      This option places Security Manager in a Debug Mode. In this mode
+      predefined Diffie-Hellman private/public key pair is used as described
+      in Core Specification Vol. 3, Part H, 2.3.5.6.1. This option should
+      only be enabled for debugging and should never be used in production.
+      If this option is enabled anyone is able to decipher encrypted air
+      traffic.
+      This symbol is a config macro.
+
+config BT_STORE_DEBUG_KEYS
+    int "BT_STORE_DEBUG_KEYS"
+    default 0
+    help
+      Store Debug Mode bonds.
+      This option enables support for storing bonds where either device
+      has the Security Manager in Debug mode. This option should
+      only be enabled for debugging and should never be used in production.
+      This symbol is a config macro.
+
+endif # BT_TINYCRYPT_ECC
+
+config BT_BONDABLE
+    bool "BT_BONDABLE"
+    default y
+    help
+      Bondable Mode, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables support for Bondable Mode. In this mode,
+      Bonding flag in AuthReq of SMP Pairing Request/Response will be set
+      indicating the support for this mode.
+      This symbol is a config macro.
+
+config BT_BONDING_REQUIRED
+    bool "BT_BONDING_REQUIRED"
+    default n
+    depends on BT_BONDABLE
+    help
+      Always require bonding.
+      When this option is enabled remote devices are required to always
+      set the bondable flag in their pairing request. Any other kind of
+      requests will be rejected.
+      This symbol is a config macro.
+
+config BT_BONDABLE_PER_CONNECTION
+    int "BT_BONDABLE_PER_CONNECTION"
+    default 0
+    help
+      Set/clear the bonding flag per-connection [EXPERIMENTAL].
+      Enable support for the bt_conn_set_bondable API function that is
+      used to set/clear the bonding flag on a per-connection basis.
+      This symbol is a config macro.
+
+config BT_SMP_ENFORCE_MITM
+    bool "BT_SMP_ENFORCE_MITM"
+    default n
+    help
+      Enforce MITM protection, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      With this option enabled, the Security Manager will set MITM option in
+      the Authentication Requirements Flags whenever local IO Capabilities
+      allow the generated key to be authenticated.
+      This symbol is a config macro.
+
+config BT_OOB_DATA_FIXED
+    bool "BT_OOB_DATA_FIXED"
+    default n
+    help
+      Use a fixed random number for LESC OOB pairing.
+      With this option enabled, the application will be able to perform LESC
+      pairing with OOB data that consists of fixed random number and confirm
+      value. This option should only be enabled for debugging and should
+      never be used in production.
+      This symbol is a config macro.
+
+config BT_KEYS_OVERWRITE_OLDEST
+    bool "BT_KEYS_OVERWRITE_OLDEST"
+    default n
+    help
+      Overwrite oldest keys with new ones if key storage is full.
+      With this option enabled, if a pairing attempt occurs and the key storage
+      is full, then the oldest keys in storage will be removed to free space
+      for the new pairing keys.
+      This symbol is a config macro.
+
+config BT_KEYS_SAVE_AGING_COUNTER_ON_PAIRING
+    bool "BT_KEYS_SAVE_AGING_COUNTER_ON_PAIRING"
+    default n
+    depends on BT_SMP_SC_PAIR_ONLY
+    help
+      Store aging counter upon each successful paring.
+      With this option enabled, aging counter will be stored in settings every
+      time a successful pairing. This increases flash wear out but offers
+      a more correct finding of the oldest unused pairing info.
+      This symbol is a config macro.
+
+config BT_EAD
+    bool "BT_EAD"
+    default n
+    select BT_HOST_CCM
+    select BT_EXT_ADV
+    select BT_BROADCASTER
+    help
+      Encrypted Advertising Data [EXPERIMENTAL].
+      Enable the Encrypted Advertising Data.
+      This symbol is a config macro.
+
+config BT_HOST_CCM
+    bool "BT_HOST_CCM"
+    default n
+    help
+      Enable host side AES-CCM module.
+      Enables the software based AES-CCM engine in the host. Will use the
+      controller's AES encryption functions if available, or BT_HOST_CRYPTO
+      otherwise.
+      This symbol is a config macro.
+
+config BT_SMP_MIN_ENC_KEY_SIZE
+    int
+    default 16 if BT_SMP_SC_ONLY
+    default 7
+    help
+      "Minimum encryption key size accepted in octets, rangeing from 7 to 16
+      This option sets the minimum encryption key size accepted during pairing.
+      This symbol is a config macro.
+
+endif # BT_SMP
+
+config BT_L2CAP_TX_BUF_COUNT
+    int "BT_L2CAP_TX_BUF_COUNT"
+    default 3
+    help
+      Number of buffers available for outgoing L2CAP packets, ranging from 2 to 255.
+      range is 2 to 255
+      This symbol is a config macro.
+
+config BT_L2CAP_TX_FRAG_COUNT
+    int "BT_L2CAP_TX_FRAG_COUNT"
+    default 2
+    help
+      Number of L2CAP TX fragment buffers, ranging from 0 to 255.
+      Number of buffers available for fragments of TX buffers. Warning:
+      setting this to 0 means that the application must ensure that
+      queued TX buffers never need to be fragmented, i.e. that the
+      controller's buffer size is large enough. If this is not ensured,
+      and there are no dedicated fragment buffers, a deadlock may occur.
+      In most cases the default value of 2 is a safe bet.
+      range is 0 to 255.
+      This symbol is a config macro.
+
+config BT_L2CAP_TX_MTU
+    int "BT_L2CAP_TX_MTU"
+    default 253 if BT_CLASSIC
+    default 65 if BT_SMP
+    default 23
+    help
+      Maximum supported L2CAP MTU for L2CAP TX buffers, if BT_SMP is set, the range is 65 to 2000, Otherwise, range is 23 to 2000.
+      Can not be changed in menuconfig and guiconfig.
+      This symbol is a config macro.
+
+config BT_L2CAP_RESCHED_MS
+    int "BT_L2CAP_RESCHED_MS"
+    default 1000
+    help
+      Delay between retries for sending L2CAP segment. Necessary because the
+     	stack might not be able to allocate enough conn contexts and might not
+     	have enough credits, leading to a state where an SDU is stuck
+     	mid-transfer and never resumes.
+
+     	Note that this should seldom happen, this is just to work around a few
+     	edge cases.
+      This symbol is a config macro.
+
+config BT_L2CAP_SEG_RECV
+    bool "BT_L2CAP_SEG_RECV"
+    default n
+    help
+      L2CAP Receive segment direct API [EXPERIMENTAL]
+      Enable API for direct receiving of L2CAP SDU segments, bypassing the
+     	Host's fixed-function SDU re-assembler, RX SDU buffer management and
+     	credit issuer.
+      This API enforces conformance with L2CAP TS, but is otherwise as
+      flexible and semantically simple as possible.
+      This symbol is a config macro.
+
+config BT_L2CAP_DYNAMIC_CHANNEL
+    bool "BT_L2CAP_DYNAMIC_CHANNEL"
+    default y if BT_CLASSIC && !BT_BLE_DISABLE
+    default n
+    depends on BT_SMP
+    help
+      L2CAP Dynamic Channel support.
+      This option enables support for LE Connection oriented Channels,
+      allowing the creation of dynamic L2CAP Channels.
+      This symbol is a config macro.
+
+config BT_L2CAP_ECRED
+    bool "BT_L2CAP_ECRED"
+    default n
+    depends on BT_L2CAP_DYNAMIC_CHANNEL
+    help
+      L2CAP Enhanced Credit Based Flow Control support.
+      This option enables support for LE Connection oriented Channels with
+      Enhanced Credit Based Flow Control support on dynamic L2CAP Channels.
+      This symbol is a config macro.
+
+config BT_L2CAP_IFRAME_SUPPORT
+    bool "BT_L2CAP_IFRAME_SUPPORT"
+    default n
+    help
+      L2CAP RETRANSMISSION/FLOW CONTROL/STREAMING modes support.
+      This option enables support for RETRANSMISSION/FLOW CONTROL/STREAMING
+      modes.
+      The Enhanced Retransmission Mode and Streaming Mode are supported.
+      The Retransmission Mode and Flow control Mode are not supported yet.
+      The Enhanced Retransmission Mode (Extended Flow Spec) and
+      Streaming Mode (Extended Flow Sepc) are not supported yet.
+      This symbol is a config macro.
+
+config BT_ATT_PREPARE_COUNT
+    int "BT_ATT_PREPARE_COUNT"
+    default 0
+    help
+      Number of ATT prepare write buffers, if the macro is set to 0, feature is disabled, if greater than 1, feature is enabled.
+      Number of buffers available for ATT prepare write, setting
+      this to 0 disables GATT long/reliable writes.
+      This symbol is a config macro.
+
+config BT_ATT_TX_COUNT
+    int "BT_ATT_TX_COUNT"
+    default 3
+    help
+      Number of ATT buffers, default BT_BUF_ACL_TX_COUNT
+      These buffers are only used for sending anything over ATT.
+      Requests, responses, indications, confirmations, notifications.
+      range is 1 to 255, default 3.
+      This symbol is a config macro.
+
+config BT_ATT_RETRY_ON_SEC_ERR
+    bool "BT_ATT_RETRY_ON_SEC_ERR"
+    default y
+    depends on BT_SMP
+    help
+      Automatic security elevation and retry on security errors
+      If an ATT request fails due to insufficient security, the host will
+      try to elevate the security level and retry the ATT request.
+      This symbol is a config macro.
+
+config BT_ATT_TX_MAX
+    int "BT_ATT_TX_MAX"
+    default (BT_L2CAP_TX_BUF_COUNT)
+    help
+      Maximum number of queued outgoing ATT PDUs.
+      Number of ATT PDUs that can be at a single moment queued for
+      transmission. If the application tries to send more than this
+      amount the calls will block until an existing queued PDU gets
+      sent.
+      range is 1 to BT_L2CAP_TX_BUF_COUNT
+      This symbol is a config macro.
+
+config BT_ATT_RX_MAX
+    int "BT_ATT_RX_MAX"
+    default BT_BUF_ACL_RX_COUNT
+    help
+      Maximum number of queued ingoing ATT PDUs.
+      Number of ATT PDUs that can be at a single moment queued for
+      transmission. If the application tries to send more than this
+      amount the calls will block until an existing queued PDU gets
+      sent.
+      range is 1 to 255
+      This symbol is a config macro.
+
+config BT_EATT
+    bool "BT_EATT"
+    default n
+    depends on BT_L2CAP_ECRED
+    select BT_GATT_READ_MULT_VAR_LEN
+    help
+      Enhanced ATT Bearers support [EXPERIMENTAL], if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables support for Enhanced ATT bearers support. When
+      enabled additional L2CAP channels can be connected as bearers enabling
+      multiple outstanding request.
+      This symbol is a config macro.
+
+config BT_GATT_READ_MULT_VAR_LEN
+    bool "BT_GATT_READ_MULT_VAR_LEN"
+    default y
+    help
+      This option enables support for the GATT Read Multiple Variable Length
+      Characteristic Values procedure. Mandatory if EATT is enabled, optional
+      otherwise (Core spec v5.3, Vol 3, Part G, Section 4.2, Table 4.1).
+      This symbol is a config macro.
+
+config BT_EATT_MAX
+    int "BT_EATT_MAX"
+    default 3
+    help
+      Maximum number of Enhanced ATT bearers, range 1 to 16 is valid.
+      Number of Enhanced ATT bearers available.
+      This symbol is a config macro.
+
+config BT_EATT_AUTO_CONNECT
+    bool "BT_EATT_AUTO_CONNECT"
+    default y
+    help
+      Automatically connect EATT bearers when a link is established
+      The device will try to connect BT_EATT_MAX enhanced ATT bearers when a
+      connection to a peer is established.
+      This symbol is a config macro.
+
+config BT_EATT_SEC_LEVEL
+    int "BT_EATT_SEC_LEVEL"
+    default 1
+    help
+      Enhanced ATT bearer security level, range 1 to 4 is valid.
+      L2CAP server required security level of EATT bearers:
+      Level 1 (BT_SECURITY_L1) = No encryption or authentication required
+      Level 2 (BT_SECURITY_L2) = Only encryption required
+      Level 3 (BT_SECURITY_L3) = Encryption and authentication required
+      Level 4 (BT_SECURITY_L4) = Secure connection required
+      This symbol is a config macro.
+
+config BT_GATT_SERVICE_CHANGED
+    bool "BT_GATT_SERVICE_CHANGED"
+    default y
+    help
+      GATT Service Changed support, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables support for the service changed characteristic.
+      This symbol is a config macro.
+
+config BT_GATT_AUTO_RESUBSCRIBE
+    bool "BT_GATT_AUTO_RESUBSCRIBE"
+    depends on BT_GATT_CLIENT
+    default n
+    help
+      Automatic re-subscription to characteristics, upon re-establishing a bonded connection, assumes the remote
+     	forgot the CCC values and sets them again. If this behavior is not desired for a particular subscription, set the
+     	`BT_GATT_SUBSCRIBE_FLAG_NO_RESUB` flag. This also means that upon a reconnection,
+     	the application will get an unprompted call to its `subscribe` callback.
+      This symbol is a config macro.
+
+if BT_GATT_SERVICE_CHANGED
+
+config BT_GATT_DYNAMIC_DB
+    bool "BT_GATT_DYNAMIC_DB"
+    default n
+    help
+      GATT dynamic database support, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables registering/unregistering services at runtime.
+      This symbol is a config macro.
+
+config BT_GATT_CACHING
+    bool "BT_GATT_CACHING"
+    default n
+    help
+      GATT Caching support, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables support for GATT Caching. When enabled the stack
+      will register Client Supported Features and Database Hash
+      characteristics which can be used by clients to detect if anything has
+      changed on the GATT database.
+      This symbol is a config macro.
+
+if BT_GATT_CACHING
+
+config BT_GATT_NOTIFY_MULTIPLE
+    bool "BT_GATT_NOTIFY_MULTIPLE"
+    default y
+    help
+      GATT Notify Multiple Characteristic Values support, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables support for the GATT Notify Multiple
+      Characteristic Values procedure.
+      This symbol is a config macro.
+
+config BT_GATT_NOTIFY_MULTIPLE_FLUSH_MS
+    int "BT_GATT_NOTIFY_MULTIPLE_FLUSH_MS"
+    default 1
+    depends on BT_GATT_NOTIFY_MULTIPLE
+    help
+      Delay for batching multiple notifications in a single PDU.
+      Sets the time (in milliseconds) during which consecutive GATT
+      notifications will be tentatively appended to form a single
+      ATT_MULTIPLE_HANDLE_VALUE_NTF PDU.
+
+      If set to 0, batching is disabled. Then, the only way to send
+      ATT_MULTIPLE_HANDLE_VALUE_NTF PDUs is to use bt_gatt_notify_multiple.
+
+      See the documentation of bt_gatt_notify() for more details.
+
+      Valid range 0 ~ 4000
+      This symbol is a config macro.
+
+config BT_GATT_ENFORCE_CHANGE_UNAWARE
+    int "BT_GATT_ENFORCE_CHANGE_UNAWARE"
+    default 0
+    help
+      GATT Enforce change-unaware state, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      When enabled, this option blocks notification and indications to client
+      to conform to the following statement from the Bluetooth 5.1
+      specification:
+      '...the server shall not send notifications and indications to such
+      a client until it becomes change-aware."
+      In case the service cannot deal with sudden errors (-EAGAIN) then it
+      shall not use this option.
+      This symbol is a config macro.
+
+endif # BT_GATT_CACHING
+
+endif # BT_GATT_SERVICE_CHANGED
+
+config BT_GATT_ENFORCE_SUBSCRIPTION
+    bool "BT_GATT_ENFORCE_SUBSCRIPTION"
+    default y
+    help
+      GATT Enforce characteristic subscription
+      When enabled, this option will make the server block sending
+      notifications and indications to a device which has not subscribed to
+      the supplied characteristic.
+      This symbol is a config macro.
+
+config BT_GATT_CLIENT
+    bool "BT_GATT_CLIENT"
+    default n
+    help
+      GATT client support, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables support for the GATT Client role.
+      This symbol is a config macro.
+
+config BT_GATT_READ_MULTIPLE
+    int "BT_GATT_READ_MULTIPLE"
+    default 1
+    help
+      GATT Read Multiple Characteristic Values support, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables support for the GATT Read Multiple Characteristic
+      Values procedure.
+      This symbol is a config macro.
+
+config BT_GATT_AUTO_UPDATE_MTU
+    bool "BT_GATT_AUTO_UPDATE_MTU"
+    default n
+    depends on BT_GATT_CLIENT
+    help
+      Automatically send ATT MTU exchange request on connect
+      This option if enabled allows automatically sending request for ATT
+      MTU exchange.
+      This symbol is a config macro.
+
+config BT_GATT_AUTO_DISCOVER_CCC
+    bool "BT_GATT_AUTO_DISCOVER_CCC"
+    depends on BT_GATT_CLIENT
+    help
+      This option enables support for GATT to initiate discovery for CCC
+      handles if the CCC handle is unknown by the application.
+      This symbol is a config macro.
+
+if BT_PERIPHERAL
+
+config BT_GAP_AUTO_UPDATE_CONN_PARAMS
+    int "BT_GAP_AUTO_UPDATE_CONN_PARAMS"
+    default 0
+    help
+      Automatic Update of Connection Parameters, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option, if enabled, allows automatically sending request for connection
+      parameters update after GAP recommended 5 seconds of connection as
+      peripheral.
+      This symbol is a config macro.
+
+config BT_GAP_PERIPHERAL_PREF_PARAMS
+    int "BT_GAP_PERIPHERAL_PREF_PARAMS"
+    default 0
+    help
+      Configure peripheral preferred connection parameters.
+      This allows to configure peripheral preferred connection parameters.
+      Enabling this option results in adding PPCP characteristic in GAP.
+      If disabled it is up to application to set expected connection parameters.
+      This symbol is a config macro.
+
+config BT_PERIPHERAL_PREF_MIN_INT
+    int "BT_PERIPHERAL_PREF_MIN_INT"
+    default 24
+    help
+      Peripheral preferred minimum connection interval in 1.25ms units, range 6 to 65534 is valid.
+      Range 6 to 65534 is valid. 65535 represents no specific value.
+      This symbol is a config macro.
+
+config BT_PERIPHERAL_PREF_MAX_INT
+    int "BT_PERIPHERAL_PREF_MAX_INT"
+    default 40
+    help
+      Peripheral preferred maximum connection interval in 1,25ms units, range 6 to 65534 is valid.
+      Range 6 to 65534 is valid. 65535 represents no specific value.
+      This symbol is a config macro.
+
+config BT_PERIPHERAL_PREF_LATENCY
+    int "BT_PERIPHERAL_PREF_LATENCY"
+    default 0
+    help
+      Peripheral preferred slave latency in Connection Intervals, range 0 to 499 is valid.
+      Range 0 to 499 is valid.
+      This symbol is a config macro.
+
+config BT_PERIPHERAL_PREF_TIMEOUT
+    int "BT_PERIPHERAL_PREF_TIMEOUT"
+    default 42
+    help
+      Peripheral preferred supervision timeout in 10ms units, range 10 to 65534 is valid.
+      It is up to user whether to provide valid timeout which pass required minimum
+      value: in milliseconds it shall be larger than
+      "(1+ Conn_Latency)      Conn_Interval_Max      2"
+      where Conn_Interval_Max is given in milliseconds.
+      Range 10 to 65534 is valid. 65535 represents no specific value.
+      This symbol is a config macro.
+
+if BT_DEVICE_NAME_DYNAMIC
+
+config BT_DEVICE_NAME_GATT_WRITABLE
+    bool "BT_DEVICE_NAME_GATT_WRITABLE"
+    default y
+    help
+      Allow to write name by remote GATT clients, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Enabling this option allows remote GATT clients to write to device
+      name GAP characteristic.
+      This symbol is a config macro.
+
+if BT_DEVICE_NAME_GATT_WRITABLE
+
+config DEVICE_NAME_GATT_WRITABLE_ENCRYPT
+    bool "DEVICE_NAME_GATT_WRITABLE_ENCRYPT"
+    default y
+    help
+      Encryption required to write name by remote GATT clients
+      Enabling this option requires the connection to be encrypted to write
+      to the device name GAP characteristic.
+      This symbol is a config macro.
+
+config DEVICE_NAME_GATT_WRITABLE_AUTHEN
+    bool "DEVICE_NAME_GATT_WRITABLE_AUTHEN"
+    default n
+    help
+      Authentication required to write name by remote GATT clients
+      Enabling this option requires the connection to be encrypted and
+      authenticated to write to the device name GAP characteristic.
+      This symbol is a config macro.
+
+endif # BT_DEVICE_NAME_GATT_WRITABLE
+
+endif # BT_DEVICE_NAME_DYNAMIC
+
+endif # BT_PERIPHERAL
+
+endif # BT_CONN
+
+config BT_GATT_AUTHORIZATION_CUSTOM
+    bool "BT_GATT_AUTHORIZATION_CUSTOM"
+    default n
+    help
+      Custom authorization of GATT operations [EXPERIMENTAL]
+      This option allows the user to define application-specific
+      authorization logic for GATT operations that can be registered
+      with the bt_gatt_authorization_cb_register API. See the API
+      documentation for more details.
+      This symbol is a config macro.
+
+config BT_MAX_PAIRED
+    int "BT_MAX_PAIRED"
+    default 1 if BT_SMP
+    default 0
+    help
+      Maximum number of paired devices
+      Maximum number of paired Bluetooth devices. The minimum (and
+      default) number is 1.
+      Can not be changed in menuconfig and guiconfig.
+      This symbol is a config macro.
+
+if BT_OBSERVER
+
+config BT_BACKGROUND_SCAN_INTERVAL
+    int "BT_BACKGROUND_SCAN_INTERVAL"
+    default 2048
+    help
+      Scan interval used for background scanning in 0.625 ms units, range 4 to 16384 is valid.
+      Range 4 to 16384 is valid.
+      This symbol is a config macro.
+
+config BT_BACKGROUND_SCAN_WINDOW
+    int "BT_BACKGROUND_SCAN_WINDOW"
+    default 18
+    help
+      Scan interval used for background scanning in 0.625 ms units, range 4 to 16384 is valid.
+      Range 4 to 16384 is valid.
+      This symbol is a config macro.
+
+config BT_EXT_SCAN_BUF_SIZE
+    int "BT_EXT_SCAN_BUF_SIZE"
+    default 229
+    help
+      Maximum advertisement report size, range 1 to 1650 is valid.
+      Range 1 to 1650 is valid.
+      This symbol is a config macro.
+
+endif # BT_OBSERVER
+
+config BT_SCAN_WITH_IDENTITY
+    bool "BT_SCAN_WITH_IDENTITY"
+    default n
+    depends on !BT_PRIVACY && (BT_CENTRAL || BT_OBSERVER)
+    help
+      Perform active scanning using local identity address.
+      Enable this if you want to perform active scanning using the local
+      identity address as the scanner address. By default the stack will
+      always use a non-resolvable private address (NRPA) in order to avoid
+      disclosing local identity information. By not scanning with the
+      identity address the scanner will receive directed advertise reports
+      for the local identity. If this use case is required, then enable
+      this option.
+      This symbol is a config macro.
+
+config BT_ISO
+    bool
+    help
+      Bluetooth Isochronous Channel Unicast Support
+      This option enables support for Bluetooth Broadcast Isochronous channels.
+      This symbol is a config macro.
+
+config BT_ISO_TX
+    bool
+    help
+      Bluetooth Isochronous TX.
+      This symbol is a config macro.
+
+config BT_ISO_RX
+    bool
+    help
+      Bluetooth Isochronous RX.
+      This symbol is a config macro.
+
+config BT_ISO_UNICAST
+    bool "BT_ISO_UNICAST"
+    default n
+    depends on BT_CONN
+    select BT_ISO
+    select BT_ISO_TX
+    select BT_ISO_RX
+    help
+      This option enables support for Bluetooth Unicast
+      Isochronous channels.
+      This symbol is a config macro.
+
+config BT_ISO_PERIPHERAL
+    bool "Bluetooth Isochronous Channel Unicast Peripheral Support"
+    # depends on !BT_CTLR || BT_CTLR_PERIPHERAL_ISO_SUPPORT
+    select BT_PERIPHERAL
+    select BT_ISO_UNICAST
+    help
+      This option enables support for Bluetooth Unicast
+      Isochronous channels for the peripheral role.
+      This symbol is a config macro.
+
+config BT_ISO_CENTRAL
+    bool "Bluetooth Isochronous Channel Unicast Central Support"
+    # depends on !BT_CTLR || BT_CTLR_CENTRAL_ISO_SUPPORT
+    select BT_CENTRAL
+    select BT_ISO_UNICAST
+    help
+      This option enables support for Bluetooth Broadcast
+      Isochronous channels for the central role.
+      This symbol is a config macro.
+
+config BT_ISO_BROADCASTER
+    bool "BT_ISO_BROADCASTER"
+    default n
+    select BT_ISO_BROADCAST
+    select BT_BROADCASTER
+    select BT_PERIPHERAL # dependency for BT_BROADCASTER
+    select BT_PER_ADV
+    select BT_EXT_ADV # dependency for BT_PER_ADV
+    select BT_ISO_TX
+    help
+      Bluetooth Isochronous Broadcaster Support
+      This option enables support for the Bluetooth Isochronous Broadcaster.
+      This symbol is a config macro.
+
+config BT_ISO_SYNC_RECEIVER
+    bool "BT_ISO_SYNC_RECEIVER"
+    default n
+    select BT_ISO_BROADCAST
+    select BT_OBSERVER
+    select BT_CENTRAL # dependency for BT_OBSERVER
+    select BT_PER_ADV_SYNC
+    select BT_EXT_ADV # dependency for BT_PER_ADV_SYNC
+    select BT_ISO_RX
+    help
+      Bluetooth Isochronous Synchronized Receiver Support
+      This option enables support for the Bluetooth Isochronous Synchronized Receiver.
+      This symbol is a config macro.
+
+config BT_ISO_BROADCAST
+    bool "BT_ISO_BROADCAST"
+    select BT_ISO
+    select BT_EXT_ADV
+    help
+      This symbol is a config macro.
+
+if BT_ISO
+
+config BT_ISO_MAX_CHAN
+    int "BT_ISO_MAX_CHAN"
+    depends on BT_ISO
+    default BT_MAX_CONN if BT_CONN
+    default 1
+    help
+      Maximum number of simultaneous Bluetooth isochronous channels supported.
+      Valid range 1 ~ 64
+      This symbol is a config macro.
+
+config BT_ISO_TX_BUF_COUNT
+    string "BT_ISO_TX_BUF_COUNT"
+    default "1"
+    help
+      Number of buffers available for outgoing Isochronous channel SDUs.
+      Valid range 1 ~ 255
+      This symbol is a config macro.
+
+config BT_ISO_TX_FRAG_COUNT
+    int "BT_ISO_TX_FRAG_COUNT"
+    default 2
+    help
+      Number of buffers available for fragments of TX buffers.
+      Warning: setting this to 0 means that the application must ensure that
+      queued TX buffers never need to be fragmented, i.e. that the
+      controller's buffer size is large enough. If this is not ensured,
+      and there are no dedicated fragment buffers, a deadlock may occur.
+      In most cases the default value of 2 is a safe bet.
+      Valid range 0 ~ 255
+      This symbol is a config macro.
+
+config BT_ISO_TX_MTU
+    int "BT_ISO_TX_MTU"
+    default 251
+    help
+      Maximum MTU for Isochronous channels TX buffers.
+      Valid range 23 ~ 4095
+      This symbol is a config macro.
+
+config BT_ISO_RX_BUF_COUNT
+    int "BT_ISO_RX_BUF_COUNT"
+    default 1
+    help
+      Number of buffers available for incoming Isochronous channel SDUs.
+      Valid range 1 ~ 255
+      This symbol is a config macro.
+
+config BT_ISO_RX_MTU
+    int "BT_ISO_RX_MTU"
+    default 251
+    help
+      Maximum MTU for Isochronous channels RX buffers.
+      Valid range 23 ~ 4095
+      This symbol is a config macro.
+
+config BT_ISO_MAX_CIG
+    int "BT_ISO_MAX_CIG"
+    default 1
+    depends on BT_ISO_UNICAST
+    help
+      Maximum number of CIGs that are supported by the host. A CIG can be
+      used for either transmitting or receiving.
+      This symbol is a config macro.
+
+config BT_ISO_MAX_BIG
+    int "BT_ISO_MAX_BIG"
+    default 1
+    depends on BT_ISO_BROADCAST
+    help
+      Maximmum number of BIGs that are supported by the host. A BIG can be
+      used for either transmitting or receiving, but not at the same time.
+      This symbol is a config macro.
+
+endif # BT_ISO
+
+
+config BT_SETTINGS
+    bool "BT_SETTINGS"
+    default n
+    depends on BT_SMP
+    help
+      Store Bluetooth state and configuration persistently.
+      When selected, the Bluetooth stack will take care of storing
+      (and restoring) the Bluetooth state (such as pairing keys) and
+      configuration persistently in flash.
+      When this option has been enabled, it's important that the
+      application makes a call to settings_load() after having done
+      all necessary initialization (e.g. calling bt_enable). The
+      reason settings_load() is handled externally to the stack, is
+      that there may be other subsystems using the settings API, in
+      which case it's more efficient to load all settings in one go,
+      instead of each subsystem doing it independently.
+      Warning: The Bluetooth host expects a settings backend that loads
+      settings items in handle order.
+      This symbol is a config macro.
+
+if BT_SETTINGS
+
+config BT_SETTINGS_CCC_LAZY_LOADING
+    int "BT_SETTINGS_CCC_LAZY_LOADING"
+    default 1
+    help
+      Load CCC values from settings when peer connects, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Load Client Configuration Characteristic setting right after a bonded
+      device connects
+      Disabling this option will increase memory usage as CCC values for all
+      bonded devices will be loaded when calling settings_load.
+      This symbol is a config macro.
+
+config BT_SETTINGS_CCC_STORE_ON_WRITE
+    int "BT_SETTINGS_CCC_STORE_ON_WRITE"
+    default 1
+    help
+      Store CCC value immediately after it has been written, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Store Client Configuration Characteristic value right after it has
+      been updated
+      By default, CCC is only stored on disconnection.
+      Choosing this option is safer for battery-powered devices or devices
+      that expect to be reset suddenly. However, it requires additional
+      workqueue stack space.
+      This symbol is a config macro.
+
+config BT_SETTINGS_CF_STORE_ON_WRITE
+    int "BT_SETTINGS_CF_STORE_ON_WRITE"
+    default 1
+    help
+      Store CF value immediately after it has been written, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      Store Client Supported Features value right after it has
+      been updated
+      By default, CF is only stored on disconnection.
+      Choosing this option is safer for battery-powered devices or devices
+      that expect to be reset suddenly. However, it requires additional
+      workqueue stack space.
+      This symbol is a config macro.
+
+config BT_SETTINGS_USE_PRINTK
+    bool "BT_SETTINGS_USE_PRINTK"
+    default y
+    help
+      Use snprintf to encode Bluetooth settings key strings, if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      When selected, Bluetooth settings will use snprintf to encode
+      key strings
+      When not selected, Bluetooth settings will use a faster builtin
+      function to encode the key string. The drawback is that if
+      printk is enabled then the program memory footprint will be larger.
+      This symbol is a config macro.
+
+config BT_SETTINGS_DELAYED_STORE
+    int "BT_SETTINGS_DELAYED_STORE"
+    default 1
+    help
+      Bluetooth BR/EDR settings delayed store enable
+      This option enables Bluetooth BR/EDR settings delayed store support,
+      Triggers the storage of the CF and CCC right after a write.
+      This is done in the workqueue context, in order to not block the BT RX
+      thread for too long.
+      This symbol is a config macro.
+
+endif # BT_SETTINGS
+
+config BT_CLASSIC
+    bool "BT_CLASSIC"
+    default n
+    select BT_PERIPHERAL
+    select BT_CENTRAL
+    select BT_SMP
+    help
+      Bluetooth BR/EDR support [EXPERIMENTAL]
+      This option enables Bluetooth BR/EDR support
+      This symbol is a config macro.
+
+config BT_BLE_DISABLE
+    bool "BT_BLE_DISABLE"
+    default 0
+    help
+      Bluetooth BLE support
+      This option disables Bluetooth BLE support. Note: not all the BLE related codes could be disabled.
+      This symbol is a config macro.
+
+if BT_CLASSIC
+
+config BT_MAX_SCO_CONN
+    int "BT_MAX_SCO_CONN"
+    default 1
+    help
+      Maximum number of simultaneous SCO connections.
+      Maximum number of simultaneous Bluetooth synchronous connections
+      supported. The minimum (and default) number is 1.
+      Range 1 to 3 is valid.
+      This symbol is a config macro.
+
+config BT_RFCOMM
+    bool "BT_RFCOMM"
+    default n
+    help
+      Bluetooth RFCOMM protocol support [EXPERIMENTAL],if the macro is set to 0, feature is disabled,if 1, feature is enabled.
+      This option enables Bluetooth RFCOMM support
+      This symbol is a config macro.
+
+config BT_SPP
+    bool
+    default BT_RFCOMM
+    help
+      Bluetooth SPP profile support [EXPERIMENTAL],if the macro is set to 0, feature is disabled,if 1, feature is enabled.
+      This option enables Bluetooth SPP support
+      This symbol is a config macro.
+
+config BT_RFCOMM_L2CAP_MTU
+    int
+    default BT_BUF_ACL_RX_SIZE
+    help
+      L2CAP MTU for RFCOMM frames.
+      Maximum size of L2CAP PDU for RFCOMM frames.
+      This symbol is a config macro.
+
+config BT_HFP_HF
+    bool "BT_HFP_HF"
+    default 0
+    help
+      Bluetooth Handsfree profile HF Role support [EXPERIMENTAL], if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables Bluetooth HF support
+      This symbol is a config macro.
+
+config BT_HFP_AG
+    bool "BT_HFP_AG"
+    default 0
+    help
+      Bluetooth Handsfree profile AG Role support [EXPERIMENTAL], if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables Bluetooth HFP AG support
+      This symbol is a config macro.
+
+
+config BT_PBAP_PCE
+    bool "BT_PBAP_PCE"
+    default 0
+    help
+      Bluetooth PBAP profile PCE Role support [EXPERIMENTAL], if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables Bluetooth PCE support.
+
+if BT_PBAP_PCE
+
+config BT_PBAP_PCE_SUPPORTED_FEATURE
+    hex "BT_PBAP_PCE_SUPPORTED_FEATURE"
+    default 0x000003FF
+    help
+      This symbol defines the features supported by PCE by default.
+      This symbol is a config macro.
+
+config BT_PBAP_PCE_MAX_PKT_LEN
+    int "BT_PBAP_PCE_MAX_PKT_LEN"
+    default 600
+    help
+      This symbol defines the max packet length supported by PCE by default.
+      This symbol is a config macro.
+
+endif
+
+config BT_PBAP_PSE
+    bool "BT_PBAP_PSE"
+    default 0
+    help
+      Bluetooth PBAP profile PSE Role support [EXPERIMENTAL], if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables Bluetooth PSE support.
+
+if BT_PBAP_PSE
+
+config BT_PBAP_PSE_SUPPORTED_FEATURES
+    hex "BT_PBAP_PSE_SUPPORTED_FEATURES"
+    default 0x000003FF
+    help
+      This symbol defines the features supported by PSE by default.
+      This symbol is a config macro.
+
+config BT_PBAP_PSE_SUPPORTED_REPOSITORIES
+    hex "BT_PBAP_PSE_SUPPORTED_REPOSITORIES"
+    default 0x0F
+    help
+      This symbol defines the repositories supported by PSE by default.
+      This symbol is a config macro.
+
+endif
+
+config BT_AVDTP
+    bool "BT_AVDTP"
+    default 0
+    help
+      Bluetooth AVDTP protocol support [EXPERIMENTAL], if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables Bluetooth AVDTP support
+      This symbol is a config macro.
+
+config BT_MAP_MCE
+    bool "BT_MAP_MCE"
+    default 0
+    help
+      Bluetooth MAP profile MCE Role support [EXPERIMENTAL], if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables Bluetooth MAP MCE support
+
+if BT_MAP_MCE
+
+config BT_MAP_MCE_MAS_NUM_INSTANCES
+    int "BT_MAP_MCE_MAS_NUM_INSTANCES"
+    default 2
+    help
+      This symbol defines the instance supported by MCE MAS by default.
+      This symbol is a config macro.
+
+config BT_MAP_MCE_MNS_NUM_INSTANCES
+    int "BT_MAP_MCE_MNS_NUM_INSTANCES"
+    default 1
+    help
+      This symbol defines the instance supported by MCE MNS by default.
+      This symbol is a config macro.
+
+config BT_MAP_MCE_MAS_MAX_PKT_LEN
+    int "BT_MAP_MCE_MAS_MAX_PKT_LEN"
+    default 512
+    help
+      This symbol defines the max packet length supported by MCE MAS by default.
+      This symbol is a config macro.
+
+config BT_MAP_MCE_MNS_MAX_PKT_LEN
+    int "BT_MAP_MCE_MNS_MAX_PKT_LEN"
+    default 1790
+    help
+      This symbol defines the max packet length supported by MCE MNS by default.
+      This symbol is a config macro.
+
+config BT_MAP_MCE_MAS_SUPPORTED_FEATURES
+    hex "BT_MAP_MCE_MAS_SUPPORTED_FEATURES"
+    default 0x0077FFFF
+    help
+      This symbol defines the features supported by MCE MAS by default.
+      This symbol is a config macro.
+
+endif
+
+config BT_MAP_MSE
+    bool "BT_MAP_MSE"
+    default 0
+    help
+      Bluetooth MAP profile MSE Role support [EXPERIMENTAL], if the macro is set to 0, feature is disabled, if 1, feature is enabled.
+      This option enables Bluetooth MAP MSE support
+
+if BT_MAP_MSE
+
+config BT_MAP_MSE_MAS_NUM_INSTANCES
+    int "BT_MAP_MSE_MAS_NUM_INSTANCES"
+    default 2
+    help
+      This symbol defines the instance supported by MSE MAS by default.
+      This symbol is a config macro.
+
+config BT_MAP_MSE_MNS_NUM_INSTANCES
+    int "BT_MAP_MSE_MNS_NUM_INSTANCES"
+    default 1
+    help
+      This symbol defines the instance supported by MSE MNS by default.
+      This symbol is a config macro.
+
+config BT_MAP_MSE_MAS_MAX_PKT_LEN
+    int "BT_MAP_MSE_MAS_MAX_PKT_LEN"
+    default 1790
+    help
+      This symbol defines the max packet length supported by MSE MAS by default.
+      This symbol is a config macro.
+
+config BT_MAP_MSE_MNS_MAX_PKT_LEN
+    int "BT_MAP_MSE_MNS_MAX_PKT_LEN"
+    default 512
+    help
+      This symbol defines the max packet length supported by MSE MNS by default.
+      This symbol is a config macro.
+
+config BT_MAP_MSE_MNS_SUPPORTED_FEATURES
+    hex "BT_MAP_MSE_MNS_SUPPORTED_FEATURES"
+    default 0x0077FFFF
+    help
+      This symbol defines the features supported by MSE MNS by default.
+      This symbol is a config macro.
+
+endif
+
+config BT_A2DP
+    bool "BT_A2DP"
+    default 0
+    help
+      Bluetooth A2DP Profile.
+      This option enables the A2DP profile
+      This symbol is a config macro.
+
+if BT_A2DP
+
+config BT_A2DP_MAX_CONN
+    int
+    default BT_MAX_CONN
+    help
+      Bluetooth A2DP count.
+      This symbol is a config macro.
+
+config BT_A2DP_SOURCE
+    bool "BT_A2DP_SOURCE"
+    default 0
+    help
+      Bluetooth A2DP Profile Source function.
+      This option enables the A2DP profile Source function
+      This symbol is a config macro.
+
+config BT_A2DP_SINK
+    bool "BT_A2DP_SINK"
+    default 0
+    help
+      Bluetooth A2DP Profile Sink function.
+      This option enables the A2DP profile Sink function
+      This symbol is a config macro.
+
+config BT_A2DP_MAX_ENDPOINT_COUNT
+    int "BT_A2DP_MAX_ENDPOINT_COUNT"
+    default 2
+    help
+      This symbol is a config macro.
+
+if BT_A2DP_SOURCE
+
+config BT_A2DP_SBC_ENCODER_PCM_BUFFER_SIZE
+    int "BT_A2DP_SBC_ENCODER_PCM_BUFFER_SIZE"
+    default 0
+    help
+      This symbol is a config macro.
+
+config BT_A2DP_SBC_ENCODER_BIT_RATE
+    int "BT_A2DP_SBC_ENCODER_BIT_RATE"
+    default 328
+    help
+      This symbol is a config macro.
+
+endif # BT_A2DP_SOURCE
+
+if BT_A2DP_SINK
+
+config BT_A2DP_SBC_DECODER_PCM_BUFFER_SIZE
+    int "BT_A2DP_SBC_DECODER_PCM_BUFFER_SIZE"
+    default 0
+    help
+      This symbol is a config macro.
+
+
+config BT_A2DP_SBC_DATA_IND_COUNT
+    int "BT_A2DP_SBC_DATA_IND_COUNT"
+    default 328
+    help
+      This symbol is a config macro.
+
+
+config BT_A2DP_SBC_DATA_IND_SAMPLES_COUNT
+    int "BT_A2DP_SBC_DATA_IND_SAMPLES_COUNT"
+    default 328
+    help
+      This symbol is a config macro.
+
+endif # BT_A2DP_SINK
+
+config BT_A2DP_TASK_PRIORITY
+    int "BT_A2DP_TASK_PRIORITY"
+    default 4
+    help
+      Bluetooth A2DP Profile task priority.
+      This option sets the task priority. The task is used to process the streamer data and retry command.
+      This symbol is a config macro.
+
+config BT_A2DP_TASK_STACK_SIZE
+    int "BT_A2DP_TASK_STACK_SIZE"
+    default 2048
+    help
+      Bluetooth A2DP Profile task stack size.
+      This option sets the task stack size.
+      This symbol is a config macro.
+
+config BT_A2DP_CP_SERVICE
+    bool "BT_A2DP_CP_SERVICE"
+    default 0
+    help
+      Bluetooth A2DP content protection service.
+      This option enables it or not.
+      This symbol is a config macro.
+
+config BT_A2DP_RECOVERY_SERVICE
+    bool "BT_A2DP_RECOVERY_SERVICE"
+    default 0
+    help
+      Bluetooth A2DP recovery service.
+      This option enables it or not.
+      only the a2dp configuration is supported,
+      data transfer is not supported yet.
+      This symbol is a config macro.
+
+config BT_A2DP_REPORTING_SERVICE
+    bool "BT_A2DP_REPORTING_SERVICE"
+    default 0
+    help
+      Bluetooth A2DP reporting service.
+      This option enables it or not.
+      only the a2dp configuration is supported,
+      data transfer is not supported yet.
+      This symbol is a config macro.
+
+config BT_A2DP_DR_SERVICE
+    bool "BT_A2DP_DR_SERVICE"
+    default 0
+    help
+      Bluetooth A2DP delay report service.
+      This option enables it or not.
+      This symbol is a config macro.
+
+config BT_A2DP_HC_SERVICE
+    bool "BT_A2DP_HC_SERVICE"
+    default 0
+    help
+      Bluetooth A2DP header compression service.
+      This option enables it or not.
+      only the a2dp configuration is supported,
+      data transfer is not supported yet.
+      This symbol is a config macro.
+
+config BT_A2DP_MULTIPLEXING_SERVICE
+    bool "BT_A2DP_MULTIPLEXING_SERVICE"
+    default 0
+    help
+      Bluetooth A2DP multiplexing service.
+      This option enables it or not.
+      only the a2dp configuration is supported,
+      data transfer is not supported yet.
+      This symbol is a config macro.
+
+endif # BT_A2DP
+
+config BT_AVRCP
+    bool "BT_AVRCP"
+    default 0
+    help
+      Bluetooth AVRCP profile.
+      This option enables it or not.
+      This symbol is a config macro.
+
+if BT_AVRCP
+
+config BT_AVRCP_MAX_CONN
+    int "BT_AVRCP_MAX_CONN"
+    default BT_MAX_CONN
+    help
+      Bluetooth AVRCP count.
+      This symbol is a config macro.
+
+config BT_AVRCP_CT
+    bool "BT_AVRCP_CT"
+    default 0
+    help
+      Bluetooth AVRCP Controller.
+      This option enables it or not.
+      This symbol is a config macro.
+
+config BT_AVRCP_TG
+    bool "BT_AVRCP_TG"
+    default 0
+    help
+      Bluetooth AVRCP Target.
+      This option enables it or not.
+      This symbol is a config macro.
+
+config BT_AVRCP_BROWSING
+    bool "BT_AVRCP_BROWSING"
+    default 0
+    help
+      Bluetooth AVRCP browsing.
+      This option enables it or not.
+      This symbol is a config macro.
+
+config BT_AVRCP_COVER_ART
+    bool "BT_AVRCP_COVER_ART"
+    default 0
+    help
+      Bluetooth AVRCP cover art.
+      This option enables it or not.
+      This symbol is a config macro.
+
+if BT_AVRCP_COVER_ART
+
+config BT_AVRCP_COVER_ART_INITIATOR
+    bool "BT_AVRCP_COVER_ART_INITIATOR"
+    default 0
+    help
+      Bluetooth AVRCP cover art initiator.
+      This option enables it or not.
+      This symbol is a config macro.
+
+config BT_AVRCP_COVER_ART_RESPONDER
+    bool "BT_AVRCP_COVER_ART_RESPONDER"
+    default 0
+    help
+      Bluetooth AVRCP cover art responder.
+      This option enables it or not.
+      This symbol is a config macro.
+
+endif # BT_AVRCP_COVER_ART
+
+endif # BT_AVRCP
+
+config BT_PAGE_TIMEOUT
+    hex "BT_PAGE_TIMEOUT"
+    default 0x2000
+    help
+      Bluetooth Page Timeout.
+      This option sets the page timeout value. Value is selected as (N*0.625) ms.
+      This symbol is a config macro.
+
+config BT_COD
+    hex "BT_COD"
+    default 0x0
+    help
+      Bluetooth Class of Device(CoD).
+      This option sets the class of device.For the list of possible values please
+      consult the following link:
+      https://www.bluetooth.com/specifications/assigned-numbers
+      This symbol is a config macro.
+
+endif # BT_CLASSIC
+
+config BT_BUF_ACL_TX_SIZE
+    int "BT_BUF_ACL_TX_SIZE"
+    default 27
+    help
+      Maximum supported ACL size for outgoing data, ranging from 27 to 251
+      Maximum supported ACL size of data packets sent from the Host to the
+      Controller. This value does not include the HCI ACL header.
+      The Host will segment the data transmitted to the Controller so that
+      packets sent to the Controller will contain data up to this size.
+      In a combined build this value will be set in both the Host and the
+      Controller.
+      In a Host-only build the Host will read the maximum ACL size supported
+      by the Controller and use the smallest value supported by both the
+      Bost and the Controller.
+      The Host supports sending of larger L2CAP PDUs than the ACL size and
+      will fragment L2CAP PDUs into ACL data packets.
+      The Controller will return this value in the HCI LE Read Buffer
+      Size command response. If this size if greater than effective Link
+      Layer transmission size then the Controller will perform
+      fragmentation before transmitting the packet(s) on air.
+      If this value is less than the effective Link Layer transmission size
+      then this will restrict the maximum Link Layer transmission size.
+      Maximum is set to 251 due to implementation limitations (use of
+      uint8_t for length field in PDU buffer structure).
+      This symbol is a config macro.
+
+config BT_BUF_ACL_TX_COUNT
+    int "BT_BUF_ACL_TX_COUNT"
+    default 3
+    help
+      Number of outgoing ACL data buffers, ranging from 1 to 255
+      Number of outgoing ACL data buffers sent from the Host to the
+      Controller. This determines the maximum amount of data packets the
+      Host can have queued in the Controller before waiting for the
+      to notify the Host that more packets can be queued with the Number of
+      Completed Packets event.
+      The buffers are shared between all of the connections and the Host
+      determines how to divide the buffers between the connections.
+      The Controller will return this value in the HCI LE Read Buffer Size
+      command response.
+      This symbol is a config macro.
+
+config BT_BUF_ACL_RX_SIZE
+    int "BT_BUF_ACL_RX_SIZE"
+    default 200 if BT_CLASSIC
+    default 70 if BT_EATT
+    default 69 if BT_SMP
+    default 27
+    help
+      Maximum supported ACL size for incoming data, ranging from 27 to 1300
+      Maximum support ACL size of data packets sent from the Controller to
+      the Host. This value does not include the HCI ACL header.
+      In a combined Host and Controller build the buffer sizes in both the
+      Host and the Controller will use this value for buffer sizes, and
+      therefore Controller to Host flow Controller is not needed.
+      In a Host only build with Controller to Host flow control enabled
+      the Host will inform the Controller about the maximum ACL data size it
+      can send by setting this value in the Host Buffer Size command.
+      If Controller to Host flow control is not enabled then the Controller
+      can assume the Host has infinite buffer size so this value should then
+      be set to something that is guaranteed the Controller will not exceed
+      or the data packets will be dropped.
+      In a Controller only build this will determine the maximum ACL size
+      that the Controller will send to the Host.
+      The Host supports reassembling of L2CAP PDUs from ACL data packets,
+      but the maximum supported L2CAP PDU size is limited by the maximum
+      supported ACL size.
+      This means the maximum L2CAP PDU MTU is restricted by the maximum ACL
+      size subtracting the 4 byte header of an L2CAP PDU.
+      When using L2CAP Connection oriented Channels without segmentation
+      then the L2CAP SDU MTU is also restricetd by the maximum ACL size
+      subtracting the 4 Byte header of an L2CAP PDU plus the 2 byte header
+      of an L2CAP SDU.
+
+      With Enhanced ATT enabled the minimum of 70 is needed to support the
+      minimum ATT_MTU of 64 octets in an L2CAP SDU without segmentation.
+      With SMP LE Secure Connections enabled the minimum of 69 is needed to
+      support the minimum SMP MTU of 65 octets (public key + opcode) in an
+      L2CAP PDU.
+
+      An L2CAP PDU is also referred to as an L2CAP basic frame or B-frame.
+      An L2CAP SDU is also referred to as an L2CAP Credit-based frame or
+      K-frame.
+      This symbol is a config macro.
+
+config BT_BUF_ACL_RX_COUNT
+    int "BT_BUF_ACL_RX_COUNT"
+    default 6
+    help
+      Number of incoming ACL data buffers, ranging from 1 to 64
+      Number or incoming ACL data buffers sent from the Controller to the
+      Host.
+      In a combined Host and Controller build the buffers are shared and
+      therefore Controller to Host flow control is not needed.
+      In a Host only build with Controller to Host flow control enabled
+      the Host will inform the Controller about the maximum number of
+      buffers by setting this value in the Host Buffer Size command.
+      When Controller to Host flow control is not enabled the Controller
+      can assume that the Host has infinite amount of buffers.
+      This symbol is a config macro.
+
+config BT_BUF_EVT_RX_SIZE
+    int "BT_BUF_EVT_RX_SIZE"
+    default 255
+    help
+      Maximum supported HCI Event buffer length, ranging from 68 to 255
+      Maximum supported HCI event buffer size. This value does not include
+      the HCI Event header.
+      This value is used by both the Host and the Controller for buffer
+      sizes that include HCI events. It should be set according to the
+      expected HCI events that can be generated from the configuration.
+      If the subset of possible HCI events is unknown, this should be set to
+      the maximum of 255.
+      This symbol is a config macro.
+
+config BT_BUF_EVT_RX_COUNT
+    int "BT_BUF_EVT_RX_COUNT"
+    default 10
+    help
+      Number of HCI Event buffers, ranging from 2 to 255
+      Number of buffers available for incoming HCI events from the
+      Controller.
+      This symbol is a config macro.
+
+config BT_BUF_EVT_DISCARDABLE_SIZE
+    int "BT_BUF_EVT_DISCARDABLE_SIZE"
+    default 255 if BT_CLASSIC || BT_EXT_ADV
+    default 43
+    help
+      Maximum supported discardable HCI Event buffer length, ranging from 43 to 255
+      Maximum support discardable HCI event size of buffers in the separate
+      discardable event buffer pool. This value does not include the
+      HCI Event header.
+      The minimum size is set based on the Advertising Report. Setting
+      the buffer size different than BT_BUF_EVT_RX_SIZE can save memory.
+      This symbol is a config macro.
+
+config BT_BUF_EVT_DISCARDABLE_COUNT
+    int "BT_BUF_EVT_DISCARDABLE_COUNT"
+    default 3
+    help
+      Number of discardable HCI Event buffers, ranging from 1 to 255
+      Number of buffers in a separate buffer pool for events which
+      the HCI driver considers discardable. Examples of such events
+      could be e.g. Advertising Reports. The benefit of having such
+      a pool is that the if there is a heavy inflow of such events
+      it will not cause the allocation for other critical events to
+      block and may even eliminate deadlocks in some cases.
+      This symbol is a config macro.
+
+config BT_BUF_CMD_TX_SIZE
+    int "BT_BUF_CMD_TX_SIZE"
+    default 255 if BT_CLASSIC || BT_EXT_ADV
+    default 65
+    help
+      Maximum support HCI Command buffer length, ranging from 65 to 255
+      Maximum data size for each HCI Command buffer. This value does not
+      include the HCI Command header.
+      This value is used by both the Host and the Controller for buffer
+      sizes that include HCI commands. It should be set according to the
+      expected HCI commands that can be sent from the configuration.
+      If the subset of possible HCI commands is unknown, this should be set
+      to the maximum of 255.
+      This symbol is a config macro.
+
+config BT_BUF_CMD_TX_COUNT
+    int "BT_BUF_CMD_TX_COUNT"
+    default 2
+    help
+      Number of HCI command buffers, ranging from 2 to 64
+      Number of buffers available for outgoing HCI commands from the Host.
+      This symbol is a config macro.
+
+config BT_DIS_MODEL
+    string "BT_DIS_MODEL"
+    default "\"Simplified BT\""
+    help
+      Model name.
+      The device model inside Device Information Service.
+      This symbol is a config macro.
+
+config BT_DIS_MANUF
+    string "BT_DIS_MANUF"
+    default "\"NXP\""
+    help
+      Manufacturer name.
+      The device manufacturer inside Device Information Service.
+      This symbol is a config macro.
+
+config BT_DIS_PNP
+    bool "BT_DIS_PNP"
+    default y
+    help
+      Enable PnP_ID characteristic.
+      Enable PnP_ID characteristic in Device Information Service.
+      This symbol is a config macro.
+
+if BT_DIS_PNP
+
+config BT_DIS_PNP_VID_SRC
+    int "BT_DIS_PNP_VID_SRC"
+    default 1
+    help
+      Vendor ID source, range 1 - 2.
+      The Vendor ID Source field designates which organization assigned the
+      value used in the Vendor ID field value.
+      The possible values are:
+      - 1 Bluetooth SIG, the Vendor ID was assigned by the Bluetooth SIG
+      - 2 USB IF, the Vendor ID was assigned by the USB IF
+      This symbol is a config macro.
+
+config BT_DIS_PNP_VID
+    hex "BT_DIS_PNP_VID"
+    default 0x0025
+    help
+      Vendor ID, range 0 - 0xFFFF.
+      The Vendor ID field is intended to uniquely identify the vendor of the
+      device. This field is used in conjunction with Vendor ID Source field,
+      which determines which organization assigned the Vendor ID field value.
+      Note: The Bluetooth Special Interest Group assigns Device ID Vendor ID,
+      and the USB Implementers Forum assigns Vendor IDs,
+      either of which can be used for the Vendor ID field value.
+      Device providers should procure the Vendor ID from the USB Implementers
+      Forum or the Company Identifier from the Bluetooth SIG.
+      This symbol is a config macro.
+
+config BT_DIS_PNP_PID
+    int "BT_DIS_PNP_PID"
+    default 0
+    help
+      Product ID, range 0 - 0xFFFF.
+      The Product ID field is intended to distinguish between different products
+      made by the vendor identified with the Vendor ID field. The vendors
+      themselves manage Product ID field values.
+      This symbol is a config macro.
+
+config BT_DIS_PNP_VER
+    int "BT_DIS_PNP_VER"
+    default 1
+    help
+      Product Version, range 0 - 0xFFFF.
+      The Product Version field is a numeric expression identifying the device
+      release number in Binary-Coded Decimal. This is a vendor-assigned value,
+      which defines the version of the product identified by the Vendor ID and
+      Product ID fields. This field is intended to differentiate between
+      versions of products with identical Vendor IDs and Product IDs.
+      The value of the field value is 0xJJMN for version JJ.M.N
+      (JJ - major version number, M - minor version number,
+      N - sub-minor version number); e.g., version 2.1.3 is represented with
+      value 0x0213 and version 2.0.0 is represented with a value of 0x0200.
+      When upward-compatible changes are made to the device, it is recommended
+      that the minor version number be incremented. If incompatible changes are
+      made to the device, it is recommended that the major version number be
+      incremented. The sub-minor version is incremented for bug fixes.
+      This symbol is a config macro.
+
+endif # BT_DIS_PNP
+
+config BT_DIS_SERIAL_NUMBER
+    bool "BT_DIS_SERIAL_NUMBER"
+    default y
+    help
+      Enable DIS Serial number characteristic, 1 - enable, 0 - disable.
+      Enable Serial Number characteristic in Device Information Service.
+      This symbol is a config macro.
+
+config BT_DIS_SERIAL_NUMBER_STR
+    string "BT_DIS_SERIAL_NUMBER_STR"
+    default "\"00000000\""
+    depends on BT_DIS_SERIAL_NUMBER
+    help
+      Serial Number.
+      Serial Number characteristic string in Device Information Service.
+      This symbol is a config macro.
+
+config BT_DIS_FW_REV
+    bool "BT_DIS_FW_REV"
+    default y
+    help
+      Enable DIS Firmware Revision characteristic, 1 - enable, 0 - disable.
+      Enable Firmware Revision characteristic in Device Information Service.
+      This symbol is a config macro.
+
+config BT_DIS_FW_REV_STR
+    string "BT_DIS_FW_REV_STR"
+    default "\"00000000\""
+    depends on BT_DIS_FW_REV
+    help
+      Firmware revision.
+      Firmware Revision characteristic String in Device Information Service.
+      This symbol is a config macro.
+
+config BT_DIS_HW_REV
+    bool "BT_DIS_HW_REV"
+    default y
+    help
+      Enable DIS Hardware Revision characteristic, 1 - enable, 0 - disable.
+      Enable Hardware Revision characteristic in Device Information Service.
+      This symbol is a config macro.
+
+config BT_DIS_HW_REV_STR
+    string "BT_DIS_HW_REV_STR"
+    default "\"00000000\""
+    depends on BT_DIS_HW_REV
+    help
+      Hardware revision.
+      Hardware Revision characteristic String in Device Information Service.
+      This symbol is a config macro.
+
+config BT_DIS_SW_REV
+    bool "BT_DIS_SW_REV"
+    default y
+    help
+      Enable DIS Software Revision characteristic, 1 - enable, 0 - disable.
+      Enable Software Revision characteristic in Device Information Service.
+      This symbol is a config macro.
+
+config BT_DIS_SW_REV_STR
+    string "BT_DIS_SW_REV_STR"
+    default "\"00000000\""
+    depends on BT_DIS_SW_REV
+    help
+      Software revision
+      Software revision characteristic String in Device Information Service.
+      This symbol is a config macro.
+
+endif # BT_HCI_HOST
+
+config NET_BUF_USER_DATA_SIZE
+    int
+    default BT_BUF_RESERVE
+    help
+      This symbol is a config macro.
+
+config SYSTEM_WORKQUEUE_STACK_SIZE
+    int "SYSTEM_WORKQUEUE_STACK_SIZE"
+    default 512
+    help
+      system work queue stack size.
+      This symbol is a config macro.
+
+config SYSTEM_WORKQUEUE_PRIORITY
+    int "SYSTEM_WORKQUEUE_PRIORITY"
+    default 4
+    help
+      System workqueue priority.
+      This symbol is a config macro.
+
+config BT_HCI_TRANSPORT_INTERFACE_TYPE
+    string
+    default "(gSerialMgrLpuart_c)"
+    help
+      hci transport interface type.
+      This symbol is a config macro.
+
+config BT_HCI_TRANSPORT_INTERFACE_INSTANCE
+    int "BT_HCI_TRANSPORT_INTERFACE_INSTANCE"
+    default 1
+    help
+      hci transport interface instance number.
+      This symbol is a config macro.
+
+config BT_HCI_TRANSPORT_INTERFACE_SPEED
+    int "BT_HCI_TRANSPORT_INTERFACE_SPEED"
+    default 115200
+    help
+      hci transport interface rate.
+      configurate the interface speed, for example, the default interface is h4, the speed to 115200
+      This symbol is a config macro.
+
+config BT_HCI_TRANSPORT_TX_THREAD
+    bool "BT_HCI_TRANSPORT_TX_THREAD"
+    default y
+    help
+      whether enable hci transport tx thread.
+      This symbol is a config macro.
+
+config BT_HCI_TRANSPORT_RX_THREAD
+    bool "BT_HCI_TRANSPORT_RX_THREAD"
+    default y
+    help
+      whether enable hci transport rx thread.
+      This symbol is a config macro.
+
+config BT_HCI_TRANSPORT_RX_STACK_SIZE
+    int "BT_HCI_TRANSPORT_RX_STACK_SIZE"
+    default 512
+    help
+      hci transport rx thread stack size.
+      This symbol is a config macro.
+
+config BT_HCI_TRANSPORT_TX_STACK_SIZE
+    int "BT_HCI_TRANSPORT_TX_STACK_SIZE"
+    default 512
+    help
+      hci transport tx thread stack size.
+      This symbol is a config macro.
+
+config BT_HCI_TRANSPORT_TX_PRIO
+    int "BT_HCI_TRANSPORT_TX_PRIO"
+    default 8
+    help
+      hci transport tx thread priority.
+      This symbol is a config macro.
+
+config BT_HCI_TRANSPORT_RX_PRIO
+    int "BT_HCI_TRANSPORT_RX_PRIO"
+    default 6
+    help
+      hci transport rx thread priority.
+      This symbol is a config macro.
+
+config BT_MSG_QUEUE_COUNT
+    int "BT_MSG_QUEUE_COUNT"
+    default 16
+    help
+      message number in message queue.
+      This symbol is a config macro.
+
+if BT_RFCOMM
+
+config BT_RFCOMM_SESSION_MAX_COUNT
+    int "BT_RFCOMM_SESSION_MAX_COUNT"
+    default 1
+    help
+      Maximum Number of RFCOMM Session supported.
+      This symbol is a config macro.
+
+config BT_RFCOMM_CLIENT_MAX_COUNT
+    int "BT_RFCOMM_CLIENT_MAX_COUNT"
+    default 1
+    help
+      Maximum Number of RFCOMM Entity supported.
+      This symbol is a config macro.
+
+config BT_RFCOMM_SERVER_MAX_COUNT
+    int "BT_RFCOMM_SERVER_MAX_COUNT"
+    default 1
+    help
+      Maximum Number of RFCOMM Server Entity supported.
+      This symbol is a config macro.
+
+config BT_RFCOMM_ENABLE_CONTROL_CMD
+    bool "BT_RFCOMM_ENABLE_CONTROL_CMD"
+    default y
+    help
+      Enable RFCOMM Control Command.
+      This symbol is a config macro.
+
+endif # BT_RFCOMM
+
+if BT_SPP
+
+config BT_SPP_MAX_CONN
+    string
+    default "(CONFIG_BT_RFCOMM_SERVER_MAX_COUNT + CONFIG_BT_RFCOMM_CLIENT_MAX_COUNT)"
+    help
+      Maximum Number of SPP Entity supported.
+      This symbol is a config macro.
+
+config BT_SPP_SERVER_MAX_COUNT
+    int
+    default BT_RFCOMM_SERVER_MAX_COUNT
+    help
+      Maximum Number of SPP Server Entity supported.
+      This symbol is a config macro.
+
+config BT_SPP_ENABLE_CONTROL_CMD
+    bool
+    default BT_RFCOMM_ENABLE_CONTROL_CMD
+    help
+      Enable SPP Control Command.
+      This symbol is a config macro.
+
+endif # BT_SPP
+
+endmenu

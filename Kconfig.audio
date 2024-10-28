@@ -1,0 +1,98 @@
+###############################
+# LE audio related components #
+###############################
+menu "LE audio"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.lc3
+	bool "LC3 extension"
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.config.template
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib.lc3 if \
+           MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib.lc3 if \
+           MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib.lc3 if \
+           MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind
+	help
+	  Necessary files to support LE audio feature.
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.lc3_nodsp
+	bool "LC3 nodsp extension"
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.config.template
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib.lc3_nodsp if \
+           MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib.lc3_nodsp if \
+           MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind
+	help
+	  Necessary files to support LE audio feature.
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.config.template
+    bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.cap
+    bool "cap"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.csip
+    bool "csip"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.aics
+    bool "aics"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.micp
+    bool "micp"
+    depends on MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.aics
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.vocs
+    bool "vocs"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.vcp
+    bool "vcp"
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.aics
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.vocs
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.ccid
+    bool "ccid"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.mcs
+    bool "mcs"
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.ccid
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.mcc
+    bool "mcc"
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.ccid
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.mpl
+    bool "mpl"
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.ccid
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.bass
+    bool "bass"
+    #depends on MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.ccid
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.bap
+    bool "bap"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.has
+    bool "has"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.tbs
+    bool "tbs"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.tmap
+    bool "tmap"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.gmap
+    bool "gmap"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.pbp
+    bool "pbp"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.liblc3codec
+    bool "liblc3codec"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.asrc_sw
+    bool "asrc_sw"
+
+# configuration
+rsource "include/bluetooth/audio/config/Kconfig"
+
+endmenu

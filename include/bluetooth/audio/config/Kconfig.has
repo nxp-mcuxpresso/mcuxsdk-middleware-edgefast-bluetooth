@@ -1,0 +1,78 @@
+# Bluetooth Audio - Hearing Access Service options
+#
+# Copyright (c) 2022 Codecoup
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: Apache-2.0
+
+menu "has"
+
+config BT_HAS
+	bool "Hearing Access Service support"
+	select UTF8
+	select BT_GATT_DYNAMIC_DB
+	depends on BT_BAP_UNICAST_SERVER
+	help
+	  This option enables support for Hearing Access Service.
+	  This symbol is a config macro.
+
+if BT_HAS
+
+config BT_HAS_FEATURES_NOTIFIABLE
+	bool "Hearing Aid Features Notifiable Support"
+	help
+	  This option enables support for clients to subscribe for notifications
+	  on the Hearing Aid Features characteristic.
+	  This symbol is a config macro.
+
+config BT_HAS_PRESET_COUNT
+	int "Preset record list size"
+	default 2
+	range 0 255
+	help
+	  This option sets the number of Hearing Access Service Presets
+	  that can be registered. Setting this value to 0 disables Presets support.
+	  This symbol is a config macro.
+
+config BT_HAS_PRESET_SUPPORT
+	def_bool BT_HAS_PRESET_COUNT > 0
+	help
+	  This symbol is a config macro.
+
+if BT_HAS_PRESET_SUPPORT
+
+config BT_HAS_PRESET_NAME_DYNAMIC
+	bool "Allow to set preset name on runtime"
+	help
+	  Enabling this option allows for runtime configuration of preset name.
+	  This symbol is a config macro.
+
+config BT_HAS_PRESET_CONTROL_POINT_NOTIFIABLE
+	bool "Preset Control Point Notifiable support"
+	depends on BT_EATT
+	help
+	  This option enables support for clients to subscribe for notifications
+	  on the Hearing Aid Preset Control Point characteristic.
+	  This symbol is a config macro.
+
+config BT_HAS_ACTIVE_PRESET_INDEX
+	def_bool BT_HAS_PRESET_SUPPORT
+	help
+	  This option enables the Hearing Aid Active Preset Index characteristic.
+	  This symbol is a config macro.
+
+endif # BT_HAS_PRESET_SUPPORT
+
+endif # BT_HAS
+
+config BT_HAS_CLIENT
+	bool "Hearing Access Service Client support"
+	select BT_GATT_CLIENT
+	select BT_GATT_AUTO_DISCOVER_CCC
+	select BT_GATT_AUTO_UPDATE_MTU
+	select UTF8
+	help
+	  This option enables support for Hearing Access Service Client.
+	  This symbol is a config macro.
+
+endmenu

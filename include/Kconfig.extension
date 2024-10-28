@@ -1,0 +1,66 @@
+menu "Edgefast Bluetooth Other Configurations(edgefast_bluetooth_extension_config_Gen.h)"
+
+config BT_HOST_CRYPTO
+    bool "BT_HOST_CRYPTO"
+    default n
+    help
+      This symbol is a config macro.
+
+config CONTROLLER_ID
+    string "CONTROLLER_ID"
+    default "kUSB_ControllerEhci0"
+    help
+      USB Controller ID
+      This symbol is a config macro.
+      No prefix in generated macro
+
+config WORK_QUEUE_TASK_STACK_SIZE
+    int "WORK_QUEUE_TASK_STACK_SIZE"
+    default 4096 if BT_SMP
+    default 2048
+    help
+      This symbol is a config macro.
+
+config BUTTON_COUNT
+    int "BUTTON_COUNT"
+    default 0
+    help
+      This symbol is a config macro.
+      No prefix in generated macro
+
+config BT_HOST_USB_ENABLE
+    bool "BT_HOST_USB_ENABLE"
+    help
+      This symbol is a config macro.
+
+config BT_HOST_USB_IRQ_ENABLE
+    bool "BT_HOST_USB_IRQ_ENABLE"
+    help
+      This symbol is a config macro.
+
+config BT_IND_RESET
+    bool "BT_IND_RESET"
+    help
+      This symbol is a config macro.
+
+config BT_IND_RESET_OOB
+    bool "BT_IND_RESET_OOB"
+    help
+      This symbol is a config macro.
+
+config BT_RF_TEST_MODE
+    bool "BT_RF_TEST_MODE"
+    help
+      This symbol is a config macro.
+
+config BT_WHITELIST
+    bool "BT_WHITELIST"
+    help
+      This symbol is a config macro.
+
+config BT_GATT_SERVER
+    bool "BT_GATT_SERVER"
+    help
+      This symbol is a config macro.
+
+endmenu

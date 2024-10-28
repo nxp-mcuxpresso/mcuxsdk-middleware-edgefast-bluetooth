@@ -1,0 +1,23 @@
+###############
+# shell files #
+###############
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.shell
+    bool "Bluetooth shell based on BT/BLE"
+    select MCUX_COMPONENT_component.common_task
+    depends on MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind
+    help
+      Activate Bluetooth shell based on BT/BLE.
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.shell.le_audio
+    bool "Bluetooth shell with le audio"
+    select MCUX_COMPONENT_component.common_task
+    depends on MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind
+    help
+      Activate Bluetooth shell with LE audio function.
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.shell_ble
+    bool "Bluetooth shell based on BLE"
+    select MCUX_COMPONENT_component.common_task
+    depends on MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind
+    help
+      Activate Bluetooth shell based on BLE.

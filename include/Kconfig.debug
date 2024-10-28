@@ -1,0 +1,688 @@
+menu "Edgefast Bluetooth Debug Configurations(edgefast_bluetooth_debug_config_Gen.h)"
+
+config BT_LOG_LEGACY
+    bool "BT_LOG_LEGACY"
+    default y
+    help
+      This symbol is a config macro.
+
+config BT_LOG
+    bool "BT_LOG"
+    default y
+    depends on BT_LOG_LEGACY
+    help
+      bt_config Bluetooth Configuration
+      This symbol is a config macro.
+
+config BT_DEBUG
+    bool "BT_DEBUG"
+    default n
+    help
+      This symbol is a config macro.
+
+config BT_DEBUG_HFP_AG
+    bool "BT_DEBUG_HFP_AG"
+    default n
+    help
+      This symbol is a config macro.
+
+config BT_DEBUG_LOG
+    bool "BT_DEBUG_LOG"
+    default n
+    help
+      This symbol is a config macro.
+
+if BT_LOG && BT_LOG_LEGACY
+
+# common
+config BT_DEBUG_HCI_DRIVER
+    bool "BT_DEBUG_HCI_DRIVER"
+    default n
+    help
+      Bluetooth HCI driver debug
+      This option enables debug support for the active
+      Bluetooth HCI driver, including the Controller-side HCI layer
+      when included in the build.
+      This symbol is a config macro.
+
+config BT_DEBUG_RPA
+    bool "BT_DEBUG_RPA"
+    default n
+    depends on BT_RPA
+    help
+      Bluetooth Resolvable Private Address (RPA) debug
+      This option enables debug support for the Bluetooth
+      Resolvable Private Address (RPA) generation and resolution.
+      This symbol is a config macro.
+
+# AUDIO
+# AICS
+config BT_DEBUG_AICS
+    bool "BT_DEBUG_AICS"
+    default n
+    help
+      Audio Input Control Service debug
+      This option enables debug support for the Bluetooth
+      Resolvable Private Address (RPA) generation and resolution.
+      This symbol is a config macro.
+
+config BT_DEBUG_AICS_CLIENT
+    bool "BT_DEBUG_AICS_CLIENT"
+    default n
+    help
+      Audio Input Control Service client debug
+      Use this option to enable Audio Input Control Service client debug
+      logs for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+# BAP
+config BT_BAP_DEBUG_STREAM
+    bool "BT_BAP_DEBUG_STREAM"
+    default n
+    depends on BT_BAP_STREAM
+    help
+      Basic Audio Profile Stream debug
+      Use this option to enable Basic Audio Profile Stream debug logs.
+      This symbol is a config macro.
+
+config BT_DEBUG_ASCS
+    bool "BT_DEBUG_ASCS"
+    default n
+    depends on BT_ASCS
+    help
+      Audio Stream Control Service debug
+      Use this option to enable Audio Stream Control Service debug logs for
+      the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_BAP_UNICAST_SERVER
+    bool "BT_DEBUG_BAP_UNICAST_SERVER"
+    default n
+    depends on BT_BAP_UNICAST_SERVER
+    help
+      Bluetooth Audio Unicast Server debug
+      Use this option to enable Bluetooth Audio Unicast Server debug logs
+      for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_BAP_UNICAST_CLIENT
+    bool "BT_DEBUG_BAP_UNICAST_CLIENT"
+    default n
+    depends on BT_BAP_UNICAST_CLIENT
+    help
+      Basic Audio Profile client debug
+      Use this option to enable Basic Audio Profile debug logs for the
+      Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_BAP_BROADCAST_SOURCE
+    bool "BT_DEBUG_BAP_BROADCAST_SOURCE"
+    default n
+    depends on BT_BAP_BROADCAST_SOURCE
+    help
+      Bluetooth Audio Broadcast Source debug
+      Use this option to enable Bluetooth Audio Broadcast Source debug logs
+      for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_BAP_BROADCAST_SINK
+    bool "BT_DEBUG_BAP_BROADCAST_SINK"
+    default n
+    depends on BT_BAP_BROADCAST_SINK
+    help
+      Bluetooth Audio Broadcast Sink debug
+      Use this option to enable Bluetooth Audio Broadcast Sink debug logs
+      for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_BAP_SCAN_DELEGATOR
+    bool "BT_DEBUG_BAP_SCAN_DELEGATOR"
+    default n
+    depends on BT_BAP_SCAN_DELEGATOR
+    help
+      Broadcast Audio Scan Service debug
+      Use this option to enable Broadcast Audio Scan Service debug logs for
+      the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_BAP_BROADCAST_ASSISTANT
+    bool "BT_DEBUG_BAP_BROADCAST_ASSISTANT"
+    default n
+    depends on BT_BAP_BROADCAST_ASSISTANT
+    help
+      Broadcast Audio Scan Service client debug
+      Use this option to enable Broadcast Audio Scan Service client
+      debug logs for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+# CAP
+config BT_DEBUG_CAP_ACCEPTOR
+    bool "BT_DEBUG_CAP_ACCEPTOR"
+    default n
+    depends on BT_CAP_ACCEPTOR
+    help
+      Common Audio Profile debug
+      Use this option to enable CAP debug logs for the
+      Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_CAP_INITIATOR
+    bool "BT_DEBUG_CAP_INITIATOR"
+    default n
+    depends on BT_CAP_INITIATOR
+    help
+      Common Audio Profile Initiator debug
+      Use this option to enable CAP Initiator debug logs for the
+      Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+# CSIP
+config BT_DEBUG_CSIP_SET_MEMBER
+    bool "BT_DEBUG_CSIP_SET_MEMBER"
+    default n
+    help
+      Coordinated Set Identification Service debug
+      Use this option to enable Coordinated Set Identification Service debug
+      logs for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_CSIP_SET_COORDINATOR
+    bool "BT_DEBUG_CSIP_SET_COORDINATOR"
+    default n
+    help
+      Coordinated Set Identification Profile Set Coordinator debug
+      Use this option to enable Coordinated Set Identification Profile
+      Set Coordinator debug logs for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_CSIP_SET_MEMBER_CRYPTO
+    bool "BT_DEBUG_CSIP_SET_MEMBER_CRYPTO"
+    default n
+    depends on BT_CSIP_SET_COORDINATOR
+    help
+      Coordinated Set Identification Profile crypto functions debug
+      Use this option to enable Coordinated Set Identification Profile
+      crypto functions debug logs for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+# HAS
+config BT_DEBUG_HAS
+    bool "BT_DEBUG_HAS"
+    default n
+    help
+      Hearing Access Service debug
+      This option enables enables Hearing Access Service debug logs.
+      This symbol is a config macro.
+
+config BT_DEBUG_HAS_CLIENT
+    bool "BT_DEBUG_HAS_CLIENT"
+    default n
+    depends on BT_HAS_CLIENT
+    help
+      Hearing Access Service Client debug
+      This option enables enables Hearing Access Service Client debug logs.
+      This symbol is a config macro.
+
+# MCS
+config BT_DEBUG_MCS
+    bool "BT_DEBUG_MCS"
+    default n
+    help
+      Media Control Service debug
+      Use this option to enable Media Control Service debug logs for the
+      Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_MCC
+    bool "BT_DEBUG_MCC"
+    default n
+    help
+      Media Control Client debug
+      Use this option to enable Media Control Client debug logs for the
+      Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config MCTL_DEBUG
+    bool "MCTL_DEBUG"
+    default n
+    help
+      Media control debug
+      Use this option to enable Media control debug logs
+      This symbol is a config macro.
+
+config BT_DEBUG_MICP_MIC_DEV
+    bool "BT_DEBUG_MICP_MIC_DEV"
+    default n
+    help
+      Microphone Control Profile Microphone Device debug
+      Use this option to enable Microphone Control Profile
+      Microphone Device debug logs for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_MICP_MIC_CTLR
+    bool "BT_DEBUG_MICP_MIC_CTLR"
+    default n
+    help
+      Microphone Control Profile Microphone Controller debug
+      Use this option to enable Microphone Control Profile Microphone
+      Controller debug logs for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_MPL_LOG_LEVEL_DBG
+    bool "BT_MPL_LOG_LEVEL_DBG"
+    default n
+    help
+      Media player debug
+      Enables debug logs for the media player
+      This symbol is a config macro.
+
+config BT_DEBUG_PACS
+    bool "BT_DEBUG_PACS"
+    default n
+    help
+      Published Audio Capabilities Service debug
+      Use this option to enable Published Audio Capabilities Service debug
+      logs for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_TBS
+    bool "BT_DEBUG_TBS"
+    default n
+    help
+      Telephone Bearer Service debug
+      Use this option to enable Telephone Bearer Service debug logs for the
+      Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_TBS_CLIENT
+    bool "BT_DEBUG_TBS_CLIENT"
+    default n
+    help
+      Telephone Bearer Service client debug
+      Use this option to enable Telephone Bearer Service client debug logs
+      for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_VCP_VOL_REND
+    bool "BT_DEBUG_VCP_VOL_REND"
+    default n
+    help
+      Volume Control Profile Volume Renderer debug
+      Use this option to enable Volume Control Profile debug logs for the
+      Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_VCP_VOL_CTLR
+    bool "BT_DEBUG_VCP_VOL_CTLR"
+    default n
+    help
+      Volume Control Profile Volume Controller debug
+      Use this option to enable Volume Control Profile Volume Controller
+      debug logs for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_VOCS
+    bool "BT_DEBUG_VOCS"
+    default n
+    help
+      Volume Offset Control Service debug
+      Use this option to enable Volume Offset Control Service debug logs for
+      the Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_VOCS_CLIENT
+    bool "BT_DEBUG_VOCS_CLIENT"
+    default n
+    help
+      Volume Offset Control Service client debug
+      Use this option to enable Volume Offset Control Service client debug
+      logs for the Bluetooth Audio functionality.
+      This symbol is a config macro.
+# ENDOFAUDIO
+
+# CRYPTO
+config BT_DEBUG_CRYPTO
+    bool "BT_DEBUG_CRYPTO"
+    default n
+    depends on BT_CRYPTO
+    help
+      Bluetooth Cryptographic Toolbox debug
+      This option enables debug log output for the Bluetooth
+      Cryptographic Toolbox.
+      WARNING: This option prints out private security keys such as the Long Term Key.
+      Use of this feature in production is strongly discouraged.
+      This symbol is a config macro.
+
+config BT_DEBUG_ATT
+    bool "BT_DEBUG_ATT"
+    default n
+    help
+      Bluetooth Attribute Protocol (ATT) debug
+      This option enables debug support for the Bluetooth
+      Attribute Protocol (ATT).
+      This symbol is a config macro.
+
+config BT_DEBUG_GATT
+    bool "BT_DEBUG_GATT"
+    default n
+    help
+      Bluetooth Generic Attribute Profile (GATT) debug
+      This option enables debug support for the Bluetooth
+      Generic Attribute Profile (GATT).
+      This symbol is a config macro.
+
+config BT_DEBUG_L2CAP
+    bool "BT_DEBUG_L2CAP"
+    default n
+    help
+      Bluetooth L2CAP debug
+      This option enables debug support for the Bluetooth
+      L2ACP layer.
+      This symbol is a config macro.
+
+config BT_DEBUG_DF
+    bool "BT_DEBUG_DF"
+    default n
+    help
+      Bluetooth Direction Finding debug
+      This option enables debug support for Bluetooth Direction Finding
+      This symbol is a config macro.
+
+config BT_DEBUG_SETTINGS
+    bool "BT_DEBUG_SETTINGS"
+    default n
+    depends on BT_SETTINGS
+    help
+      Bluetooth storage debug
+      This option enables debug support for Bluetooth storage.
+      This symbol is a config macro.
+
+config BT_DEBUG_HCI_CORE
+    bool "BT_DEBUG_HCI_CORE"
+    default n
+    help
+      Bluetooth HCI core debug
+      This option enables debug support for Bluetooth HCI core.
+      This symbol is a config macro.
+
+config BT_DEBUG_CONN
+    bool "BT_DEBUG_CONN"
+    default n
+    help
+      Bluetooth connection debug
+      This option enables debug support for Bluetooth connection handling.
+      This symbol is a config macro.
+
+config BT_DEBUG_ISO
+    bool "BT_DEBUG_ISO"
+    default n
+    help
+      ISO channel debug
+      Use this option to enable ISO channels debug logs for the
+      Bluetooth Audio functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_KEYS
+    bool "BT_DEBUG_KEYS"
+    default n
+    depends on BT_HCI_HOST && BT_SMP
+    help
+      Bluetooth security keys debug
+      This option enables debug support for the handling of
+      Bluetooth security keys.
+      This symbol is a config macro.
+
+config BT_DEBUG_SMP
+    bool "BT_DEBUG_SMP"
+    default n
+    depends on BT_HCI_HOST && BT_SMP
+    help
+      Bluetooth Security Manager Protocol (SMP) debug
+      This option enables debug support for the Bluetooth
+      Security Manager Protocol (SMP).
+      This symbol is a config macro.
+
+config BT_DEBUG_SERVICE
+    bool "BT_DEBUG_SERVICE"
+    default n
+    depends on BT_CONN
+    help
+      Bluetooth Services debug
+      This option enables debug support for the Bluetooth Services.
+      This symbol is a config macro.
+
+# BR/EDR
+config BT_DEBUG_RFCOMM
+    bool "BT_DEBUG_RFCOMM"
+    default n
+    depends on BT_RFCOMM
+    help
+      Bluetooth RFCOMM debug
+      This option enables debug support for the Bluetooth RFCOMM layer.
+      This symbol is a config macro.
+
+config BT_DEBUG_HFP_HF
+    bool "BT_DEBUG_HFP_HF"
+    default n
+    depends on BT_HFP_HF
+    help
+      Bluetooth Hands Free Profile (HFP) debug
+      This option enables debug support for the Bluetooth Hands Free Profile (HFP).
+      This symbol is a config macro.
+
+config BT_DEBUG_AVDTP
+    bool "BT_DEBUG_AVDTP"
+    default n
+    depends on BT_AVDTP
+    help
+      Bluetooth AVDTP debug
+      This option enables debug support for the Bluetooth AVDTP.
+      This symbol is a config macro.
+
+config BT_DEBUG_A2DP
+    bool "BT_DEBUG_A2DP"
+    default n
+    depends on BT_A2DP
+    help
+      Bluetooth A2DP debug
+      This option enables debug support for the Bluetooth  A2DP profile.
+      This symbol is a config macro.
+
+config BT_DEBUG_SDP
+    bool "BT_DEBUG_SDP"
+    default n
+    depends on BT_CLASSIC
+    help
+      Bluetooth Service Discovery Protocol (SDP) debug
+      This option enables debug support for the Bluetooth Service Discovery Protocol (SDP).
+      This symbol is a config macro.
+# ENDOFBR/EDR
+
+# MESH
+config BT_MESH_DEBUG
+    bool "BT_MESH_DEBUG"
+    default n
+    help
+      Debug logs
+      Use this option to enable debug logs for the Bluetooth Mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_NET
+    bool "BT_MESH_DEBUG_NET"
+    default n
+    help
+      Network layer debug
+      Use this option to enable Network layer debug logs for the Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_RPL
+    bool "BT_MESH_DEBUG_RPL"
+    default n
+    help
+      Replay protection list debug
+      Use this option to enable Replay protection list debug logs
+      for the Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_TRANS
+    bool "BT_MESH_DEBUG_TRANS"
+    default n
+    help
+      Transport layer debug
+      Use this option to enable Transport layer debug logs for the
+      Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_BEACON
+    bool "BT_MESH_DEBUG_BEACON"
+    default n
+    help
+      Beacon debug
+      Use this option to enable Beacon-related debug logs for the
+      Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_CRYPTO
+    bool "BT_MESH_DEBUG_CRYPTO"
+    default n
+    help
+      Crypto debug
+      Use this option to enable cryptographic debug logs for the
+      Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_KEYS
+    bool "BT_MESH_DEBUG_KEYS"
+    default n
+    help
+      Key management debug
+      Use this option to enable key management debug logs for the
+      Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_PROV
+    bool "BT_MESH_DEBUG_PROV"
+    default n
+    help
+      Provisioning debug
+      Use this option to enable Provisioning debug logs for the
+      Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_PROVISIONER
+    bool "BT_MESH_DEBUG_PROVISIONER"
+    default n
+    help
+      Provisioner debug
+      Use this option to enable Provisioner debug logs for the
+      Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_PROV_DEVICE
+    bool "BT_MESH_DEBUG_PROV_DEVICE"
+    default n
+    help
+      Provisioning device debug
+      Use this option to enable Provisioning device debug logs for the
+      Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_ACCESS
+    bool "BT_MESH_DEBUG_ACCESS"
+    default n
+    help
+      Access layer debug
+      Use this option to enable Access layer and device composition
+      related debug logs for Bluetooth mesh.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_MODEL
+    bool "BT_MESH_DEBUG_MODEL"
+    default n
+    help
+      Foundation model debug
+      Use this option to enable debug logs for the Foundation Models.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_ADV
+    bool "BT_MESH_DEBUG_ADV"
+    default n
+    help
+      Advertising debug
+      Use this option to enable advertising debug logs for
+      the Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_LOW_POWER
+    bool "BT_MESH_DEBUG_LOW_POWER"
+    default n
+    help
+      Low Power debug
+      Use this option to enable Low Power debug logs for the
+      Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_FRIEND
+    bool "BT_MESH_DEBUG_FRIEND"
+    default n
+    help
+      Friend debug
+      Use this option to enable Friend debug logs for the
+      Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_PROXY
+    bool "BT_MESH_DEBUG_PROXY"
+    default n
+    help
+      Proxy debug
+      Use this option to enable Proxy protocol debug logs.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_SETTINGS
+    bool "BT_MESH_DEBUG_SETTINGS"
+    default n
+    help
+      Persistent settings debug
+      Use this option to enable persistent settings debug logs.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_CDB
+    bool "BT_MESH_DEBUG_CDB"
+    default n
+    depends on BT_MESH_CDB
+    help
+      Configuration database debug
+      Use this option to enable configuration database debug logs.
+      This symbol is a config macro.
+
+config BT_MESH_DEBUG_CFG
+    bool "BT_MESH_DEBUG_CFG"
+    default n
+    help
+      Configuration debug
+      Use this option to enable node configuration debug logs for the
+      Bluetooth mesh functionality.
+      This symbol is a config macro.
+
+config BT_DEBUG_IAS_CLIENT
+    bool "BT_DEBUG_IAS_CLIENT"
+    default n
+    depends on BT_IAS_CLIENT
+    help
+      Immediate Alert Service Client debug
+      This option enables enables Immediate Alert Service Client debug logs.
+      This symbol is a config macro.
+
+config BT_DEBUG_OTS_CLIENT
+    bool "BT_DEBUG_OTS_CLIENT"
+    default n
+    help
+      Object Transfer Service Client debug
+      Use this option to enable Object Transfer Client debug logs.
+      This symbol is a config macro.
+# ENDOFSERVICES
+
+endif # BT_LOG && BT_LOG_LEGACY
+
+endmenu

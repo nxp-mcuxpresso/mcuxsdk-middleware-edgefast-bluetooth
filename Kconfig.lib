@@ -1,0 +1,24 @@
+# edgefast_bluetooth LIB configuration options
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib
+	bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib
+	bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib
+	bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib.lc3
+	bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib.lc3
+	bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib.lc3
+	bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib.lc3_nodsp
+	bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib.lc3_nodsp
+	bool

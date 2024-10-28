@@ -1,0 +1,42 @@
+##############################
+# Profile related components #
+##############################
+menu "Bluetoth profile"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.hrs
+    bool "hrs"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.bas
+    bool "bas"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.dis
+    bool "dis"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.hts
+    bool "hts"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.ias
+    bool "ias"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.hps
+    bool "hps"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.pxr
+    bool "pxr"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.ipsp
+    bool "ipsp"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.ots
+    bool "ots"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.wu
+    bool "wu"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.fmp
+    bool "fmp"
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.tip
+    bool "tip"
+
+endmenu

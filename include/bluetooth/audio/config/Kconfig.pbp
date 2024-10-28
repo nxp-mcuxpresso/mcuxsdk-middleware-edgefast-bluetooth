@@ -1,0 +1,16 @@
+# Bluetooth Audio - Public Broadcast Profile (PBP) options
+#
+# Copyright 2023-2024 NXP
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menu "pbp"
+
+config BT_PBP
+	bool "Public Broadcast Profile"
+	help
+	  Enabling this will enable PBP.
+	  This symbol is a config macro.
+
+endmenu

@@ -1,0 +1,12 @@
+NXP Software Content Register
+
+Package: mcux-sdk-middleware-edgefast-bluetooth
+Version: 1.7.0
+Outgoing License: BSD-3-Clause
+License File: LICENSE
+Type of Content: source code, header files
+Description and comments: EdgeFast Bluetooth PAL
+Release Location: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-edgefast-bluetooth
+Origin: 
+      NXP (BSD-3-Clause)
+      Zephyr BT/BLE Host stack (Apache-2.0) - https://github.com/zephyrproject-rtos/zephyr/tree/v3.7-branch/subsys/bluetooth

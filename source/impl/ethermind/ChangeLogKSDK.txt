@@ -1,0 +1,114 @@
+
+/*!
+@page middleware_log Middleware Change Log
+
+@section edgefast_ethermind_implementation EdgeFast Bluetooth Protocol Abstraction Layer Implementation for MCUXpresso SDK
+
+  The current version is 1.7.0.
+  - 1.7.0
+    - Improvement:
+      - Update source files to align Zephyr V3.7 base.
+    - New features:
+  - 1.6.0
+    - Improvement:
+      - Update source files to align Zephyr V3.6 base.
+      - The name of edegfast_bluetooth configuration files are changed from app_config.h to app_bluetooth_config.h.
+    - New features:
+      - Add a2dp_bridge function on RT1170-EVKB UMS demo.
+      - Add new shell commands for UMS/UMR, BMS/BMR to improve test efficiency and user experience.
+      - Support IW612(Murata Type 2EL-M2) on RT595-EVK, RT1050-EVK and RT685-EVK boards.
+      - Enable a2dp_sink, a2dp_source, handsfree and handsfree_ag on RT1050-EVK.
+      - Low power feature supported on RT595+1XK/2EL in peripheral_ht/central_ht examples.
+      - Independent reset feature supported on RT1170-EVKB and RT1060-EVKC.
+  - 1.5.1
+    - New features:
+      - LE audio support on RT1060-EVKC.  
+  - 1.5.0
+    - Improvement:
+      - Update source files to align Zephyr V3.5 base.
+  - 1.4.0
+    - New features:
+      - Add example wifi_cli_over_ble_wu
+      - Add following LE audio examples, including,
+        - wifi_cli_over_ble_wu
+        - broadcast_media_sender and broadcast_media_receiver
+        - unicast_media_sender and unicast_media_receiver
+        - tmap_central and tmap_peripheral
+        - call_gateway and call_terminal
+      - Update the shell example to support LE audio features.
+  - 1.3.1
+    - Improvement:
+      - Fix MISRA and Coverity issue.
+      - Fix building warnings.
+      - Fix autopts issues.
+      - Improve audio_profile aws part based on new middleware/aws_iot.
+    - New features:
+      - Support MCUXpresso IDE NPW
+      - Support OpenCMSIS Pack
+  - 1.3.0
+    - Improvement:
+      - Updated to Zephyr Bluetooth 3.2.0.
+      - Fix autopts issues.
+      - Improve audio_profile aws part based on new middleware/aws_iot/iot-reference/examples/evkbmimxrt1060/shadow/ example.
+    - New features:
+      - Enable EVKMIMXRT1160
+      - Default Bluetooth module is changed to Murata
+    - Others:
+      - Remove WIFI_provisioning example.
+  - 1.2.1
+    - Improvement:
+      - Fix autopts issues.
+      - Support creating audio streaming without calling in handsfree_ag.
+    - New features:
+      - Enable EVKMIMXRT1040.
+      - Support muRata modules on EVKMIMXRT1040, EVKBIMXRT1050 and EVKBIMXRT1060.
+  - 1.2.0
+    - Improvement:
+      - Updated to Zephyr Bluetooth 3.0.0
+      - Fix autopts issues.
+    - New features:
+      - Enable EVKBIMXRT1050
+      - Enable peripheral_beacon on all boards.
+  - 1.1.1
+    - New features:
+      - Enable peripheral_beacon example in EVKMIMXRT1170 board.
+  - 1.1.0
+    - Improvement:
+      - Updated to Zephyr Bluetooth 2.6.0
+      - change fixed wireless_uart central and peripheral role number to flexiable number.
+  - 1.0.0
+    - New features:
+      - Enable SMP Pairing and Bonding feature for BLE
+      - Enable AVRCP
+      - Enable L2CAP for BR
+      - Add examples wireless_uart and edgefast_bluetooth_shell
+      - Enable data signing, GATT caching, GATT service changed features
+      - Enable data len update, whitelist, phy update
+      - Enable privacy mode
+      - Enable setting for bonding
+      - Enable A2DP content protection/recovery/reporting/delay reporting/header compression/multiplexing services.
+    - Improvement:
+      - Enhance SPP to support multiple connection
+      - Use LittleFS to manage the NVM.
+      - Improve A2DP APIs and implementation.
+        - Add endpoint callbacks to struct bt_a2dp_endpoint.
+        - Add content protection/recovery/reporting/delay reporting/header compression/multiplexing related fields to struct bt_a2dp_endpoint and struct bt_a2dp_control_cb.
+        - Upgrade struct a2dp_configure_result to struct bt_a2dp_endpoint_configure_result.
+        - Add deconfigured callback.
+        - Change sink_start_play callback to start_play callback.
+        - Change sink_suspend_play callback to stop_play callback.
+        - Add bt_a2dp_disconnect API.
+        - Remove bt_a2dp_register_control_callback API.
+        - Change bt_a2dp_configure API's callback.
+        - Add peer_endpoint to bt_a2dp_configure_endpoint API.
+        - Change bt_a2dp_src_start to bt_a2dp_start.
+        - Change bt_a2dp_src_suspend to bt_a2dp_stop.
+        - Remove bt_a2dp_get_configured_peer_endpoint.
+        - Change the parameter as endpoint for the APIs: bt_a2dp_deconfigure, bt_a2dp_start, bt_a2dp_stop, bt_a2dp_reconfigure, bt_a2dp_src_media_write and bt_a2dp_snk_media_sync.
+        - Add new APIs for content protection/delay reporting services: bt_a2dp_set_cp_header, bt_a2dp_set_initial_delay_report and bt_a2dp_send_delay_report.
+
+  - 0.1.0
+    - New features:
+      - Initialization version
+
+*/

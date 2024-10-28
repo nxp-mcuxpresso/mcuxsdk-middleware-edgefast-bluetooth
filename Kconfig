@@ -1,0 +1,300 @@
+# edgefast_bluetooth configuration options
+
+# edgefast_bluetooth protocol abstraction layer(PAL).
+menuconfig MCUX_COMPONENT_middleware.edgefast_bluetooth.pal
+    bool "edgefast_bluetooth"
+    imply MCUX_COMPONENT_middleware.freertos-kernel
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind
+    select MCUX_COMPONENT_middleware.usb.host.stack
+    select MCUX_COMPONENT_middleware.usb.common_header
+    select MCUX_COMPONENT_middleware.usb.host.common_header
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.porting
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.platform.ethermind
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.crypto.ethermind
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.host_msd_fatfs.ethermind
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.db_gen.ethermind
+    # Since mbedtls3x is on the way, this denpendcy will be removed
+    # 1. move it into board level
+    # 2. use imply
+    imply MCUX_COMPONENT_middleware.mbedtls
+
+if MCUX_COMPONENT_middleware.edgefast_bluetooth.pal
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind
+    bool
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.extension.common.ethermind
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.config.ethermind
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci
+    imply MCUX_COMPONENT_middleware.littlefs
+    imply MCUX_COMPONENT_middleware.fatfs
+    imply MCUX_COMPONENT_component.osa_free_rtos
+    imply MCUX_COMPONENT_component.osa
+    imply FSL_OSA_TASK_ENABLE
+    help
+      This option enables edgefast_bluetooth middleware component.
+
+# ethermind extension files and config files that are always required by edgefast_bluetooth.
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.extension.common.ethermind
+    bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.config.ethermind
+    bool
+
+
+# Bluetooth mode selection.
+choice
+    prompt "Bluetooth mode selection"
+    default MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind
+    help
+      Select the Bluetooth stack to compile.
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind
+    bool "BT/BLE"
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.template
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib
+    help
+      BT/BLE.
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind
+    bool "BLE"
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.template
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib
+    help
+      Bluetooth low energy.
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind
+    bool "BR"
+    depends on !MCUX_HW_DEVICE_RW612
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.template
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib
+    help
+      Classic Bluetooth.
+
+endchoice
+
+rsource "Kconfig.lib"
+
+# Template files for mbedtls and mcux linker.
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.template
+    bool
+    # select MCUX_COMPONENT_middleware.edgefast_bluetooth.config.template
+    # select MCUX_COMPONENT_middleware.edgefast_bluetooth.mcux.linker.template
+
+# config MCUX_COMPONENT_middleware.edgefast_bluetooth.config.template
+#     bool
+
+# config MCUX_COMPONENT_middleware.edgefast_bluetooth.mcux.linker.template
+#     bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.crypto.ethermind
+    bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.platform.ethermind
+    bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.host_msd_fatfs.ethermind
+    bool
+    select MCUX_COMPONENT_middleware.fatfs.usb
+    imply MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.host_msd_fatfs.ethermind.config
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.db_gen.ethermind
+    bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.host_msd_fatfs.ethermind.config
+    bool "MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.host_msd_fatfs.ethermind.config"
+
+# Fucntioanl files required by PAL.
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting
+    bool
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.work_queue
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.toolchain
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.net
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.list
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.atomic
+    select MCUX_COMPONENT_component.log
+
+if MCUX_COMPONENT_middleware.edgefast_bluetooth.porting
+
+choice
+    prompt "Debug Console Selection"
+    default MCUX_COMPONENT_middleware.edgefast_bluetooth.porting_DEPEND_ANYOF_OPTION_1
+    help
+      Debug Console Selection.
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting_DEPEND_ANYOF_OPTION_1
+    bool "debug_console"
+    select MCUX_COMPONENT_utility.assert
+    select MCUX_PRJSEG_utility.debug_console_transfer_non_blocking
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting_DEPEND_ANYOF_OPTION_2
+    bool "debug_console_lite"
+    select MCUX_COMPONENT_utility.assert_lite
+
+endchoice
+
+endif # MCUX_COMPONENT_middleware.edgefast_bluetooth.porting
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.work_queue
+    bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.toolchain
+    bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.net
+    bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.list
+    bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.atomic
+    bool
+
+# Physical interface of HCI. Currently supports UART and RPMSG.
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci
+    bool
+
+if MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci
+
+choice
+    prompt "Bluetooth HCI interface Selection"
+    default MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci_platform if MCUX_HW_DEVICE_RW612
+    default MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci_uart
+    help
+      Select the Bluetooth HCI interface.
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci_uart
+    bool "UART HCI"
+    depends on MCUX_HW_DEVICE_MIMXRT1042 || MCUX_HW_DEVICE_MIMXRT1062 || \
+               MCUX_HW_DEVICE_MIMXRT685S || MCUX_HW_DEVICE_MIMXRT1176 || \
+               MCUX_HW_DEVICE_MIMXRT595S || MCUX_HW_DEVICE_MIMXRT1052 || \
+               MCUX_HW_DEVICE_MIMXRT1189 || MCUX_HW_DEVICE_MIMXRT1187 || \
+               MCUX_HW_DEVICE_MIMXRT1166 || MCUX_HW_DEVICE_MCXN547 || \
+               MCUX_HW_DEVICE_MCXN947    || MCUX_HW_DEVICE_MIMXRT798S
+    select MCUX_COMPONENT_component.serial_manager
+    select MCUX_COMPONENT_component.serial_manager_uart
+    select MCUX_COMPONENT_driver.lpuart_edma if MCUX_HAS_COMPONENT_driver.lpuart_edma
+    select MCUX_COMPONENT_driver.lpflexcomm_lpuart_edma if MCUX_HAS_COMPONENT_driver.lpflexcomm_lpuart_edma
+    select MCUX_COMPONENT_driver.flexcomm_usart_dma if MCUX_HAS_COMPONENT_driver.flexcomm_usart_dma
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci_platform
+    bool "RPMSG HCI"
+    depends on MCUX_HW_DEVICE_RW612
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.rw610.controller
+
+endchoice
+
+endif # MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci
+
+# For UART HCI, bluetooth controller type need to be confirmed.
+if MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci_uart
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.wifi_nxp.controller.base
+    bool
+    default y if MCUX_HW_BOARD_evkmimxrt1040 || MCUX_HW_BOARD_evkmimxrt1060 || \
+                 MCUX_HW_BOARD_evkbmimxrt1060 || MCUX_HW_BOARD_evkcmimxrt1060 || \
+                 MCUX_HW_BOARD_evkmimxrt685 || MCUX_HW_BOARD_mimxrt685audevk || \
+                 MCUX_HW_BOARD_evkmimxrt1170 || MCUX_HW_BOARD_evkmimxrt595 || \
+                 MCUX_HW_BOARD_evkbimxrt1050 || MCUX_HW_BOARD_evkbmimxrt1170 || \
+                 MCUX_HW_BOARD_evkmimxrt1180 || MCUX_HW_BOARD_evkmimxrt1180a || \
+                 MCUX_HW_BOARD_evkmimxrt1160 || MCUX_HW_BOARD_mcxn5xxevk || \
+                 MCUX_HW_BOARD_mcxn9xxevk    || MCUX_HW_BOARD_mimxrt700evk
+    select MCUX_PRJSEG_middleware.edgefast_bluetooth.sdio.template
+    select MCUX_COMPONENT_middleware.wifi.fwdnld
+    select MCUX_COMPONENT_middleware.wifi.osa_free_rtos
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.k32w061.controller
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT1042 || MCUX_HW_DEVICE_MIMXRT1062 || \
+                 MCUX_HW_DEVICE_MIMXRT685S || MCUX_HW_DEVICE_MIMXRT1176 || \
+                 MCUX_HW_DEVICE_MIMXRT595S || MCUX_HW_DEVICE_MIMXRT1052 || \
+                 MCUX_HW_DEVICE_MIMXRT1189 || MCUX_HW_DEVICE_MIMXRT1187 || \
+                 MCUX_HW_DEVICE_MIMXRT1166
+
+endif # MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci_uart
+
+
+# Firmware download, especially for NXP controller.
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.sdio.template
+    bool
+    select MCUX_COMPONENT_middleware.sdmmc.host.usdhc
+    select MCUX_COMPONENT_middleware.sdmmc.sdio
+    # select MCUX_COMPONENT_middleware.sdmmc.host.usdhc.freertos
+    select MCUX_COMPONENT_component.igpio_adapter if MCUX_HAS_COMPONENT_driver.igpio
+    select MCUX_COMPONENT_component.rt_gpio_adapter if MCUX_HAS_COMPONENT_driver.lpc_gpio
+    select MCUX_COMPONENT_component.rgpio_adapter if MCUX_HAS_COMPONENT_driver.rgpio
+    select MCUX_COMPONENT_component.gpio_adapter if MCUX_HAS_COMPONENT_driver.gpio
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.wifi_nxp.controller.lwip.config if !MCUX_COMPONENT_middleware.lwip
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.wifi_nxp.controller.wifi.config if !MCUX_COMPONENT_middleware.wifi
+    # select MCUX_COMPONENT_component.igpio_adapter if MCUX_HW_BOARD_evkmimxrt1040
+    # select MCUX_COMPONENT_component.igpio_adapter if MCUX_HW_BOARD_evkmimxrt1060
+    # select MCUX_COMPONENT_component.igpio_adapter if MCUX_HW_BOARD_evkbmimxrt1060
+    # select MCUX_COMPONENT_component.igpio_adapter if MCUX_HW_BOARD_evkcmimxrt1060
+    # select MCUX_COMPONENT_component.rt_gpio_adapter if MCUX_HW_BOARD_evkmimxrt685
+    # select MCUX_COMPONENT_component.rt_gpio_adapter if MCUX_HW_BOARD_mimxrt685audevk
+    # select MCUX_COMPONENT_component.igpio_adapter if MCUX_HW_BOARD_evkmimxrt1170
+    # select MCUX_COMPONENT_component.rt_gpio_adapter if MCUX_HW_BOARD_evkmimxrt595
+    # select MCUX_COMPONENT_component.igpio_adapter if MCUX_HW_BOARD_evkbimxrt1050
+    # select MCUX_COMPONENT_component.igpio_adapter if MCUX_HW_BOARD_evkbmimxrt1170
+    # select MCUX_COMPONENT_component.rgpio_adapter if MCUX_HW_BOARD_evkmimxrt1180
+    # select MCUX_COMPONENT_component.rgpio_adapter if MCUX_HW_BOARD_evkmimxrt1180a
+    # select MCUX_COMPONENT_component.igpio_adapter if MCUX_HW_BOARD_evkmimxrt1160
+    # select MCUX_COMPONENT_component.gpio_adapter if MCUX_HW_BOARD_mcxn5xxevk
+    # select MCUX_COMPONENT_component.gpio_adapter if MCUX_HW_BOARD_mcxn9xxevk
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.wifi_nxp.controller.lwip.config
+    bool
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.wifi_nxp.controller.wifi.config
+    bool
+
+# controller settings for RW610
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.rw610.controller
+    bool
+
+# ind_reset
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.controller_ind_reset
+    bool "ind reset"
+
+# low power component
+# Now it is only supported on the following device
+if MCUX_HW_DEVICE_MIMXRT595S || MCUX_HW_DEVICE_RW612 || MCUX_HW_DEVICE_RW610
+menu "Low power"
+
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.low_power
+    bool "Low power(project segment)"
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.host_low_power
+    select MCUX_COMPONENT_middleware.edgefast_bluetooth.controller_low_power if !MCUX_HW_DEVICE_RW612 && !MCUX_HW_DEVICE_RW610
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.host_low_power
+    bool "Host low power"
+    select MCUX_COMPONENT_middleware.wireless.framework
+    select MCUX_COMPONENT_middleware.wireless.framework.lowpower
+    select MCUX_PRJSEG_middleware.wireless.framework.platform.MIMXRT595S if MCUX_HW_DEVICE_MIMXRT595S
+    select MCUX_PRJSEG_middleware.wireless.framework.platform.rw61x if MCUX_HW_DEVICE_RW612 || MCUX_HW_DEVICE_RW610
+
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.controller_low_power
+    bool "Controller low power"
+    depends on !MCUX_HW_DEVICE_RW612 && !MCUX_HW_DEVICE_RW610
+
+endmenu
+
+endif # MCUX_HW_DEVICE_MIMXRT595S || MCUX_HW_DEVICE_RW612 || MCUX_HW_DEVICE_RW610
+
+# utility
+rsource "Kconfig.utility"
+
+# services components
+rsource "Kconfig.services"
+
+# audio components
+rsource "Kconfig.audio"
+
+# shell components
+rsource "Kconfig.shell"
+
+# host configuration
+rsource "include/Kconfig" # edgefast_bluetooth_config.h
+rsource "include/Kconfig.debug" # edgefast_bluetooth_debug_config.h
+rsource "include/Kconfig.extension"
+
+endif # MCUX_COMPONENT_middleware.edgefast_bluetooth.pal
