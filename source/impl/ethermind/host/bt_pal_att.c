@@ -194,7 +194,7 @@ struct bt_att {
 /* ATT handle */
 struct bt_att_handle {
 	ATT_HANDLE  handle;
-	bool used;
+	struct bt_att_chan *chan;
 };
 
 K_MEM_SLAB_DEFINE(att_slab, sizeof(struct bt_att),
@@ -3866,6 +3866,11 @@ static void rx_async_work(struct k_work *work)
 
 	LOG_DBG("RX workqueue");
 
+	if (!atomic_test_bit(chan->flags, ATT_CONNECTED)) {
+		LOG_WRN("Waiting for ATT channel ready");
+		return;
+	}
+
 	do
 	{
 		buf = net_buf_get(&chan->rx_queue, K_NO_WAIT);
@@ -3940,6 +3945,8 @@ static void bt_att_connected(struct bt_l2cap_chan *chan)
 	k_work_init_delayable(&att_chan->timeout_work, att_timeout);
 
 	bt_gatt_connected(le_chan->chan.conn);
+
+	k_work_submit(&att_chan->rx_work);
 }
 
 static void bt_att_disconnected(struct bt_l2cap_chan *chan)
@@ -4214,31 +4221,19 @@ static void att_enhanced_connection_work_handler(struct k_work *work)
 static void eatt_enhanced_connection_work_handler(struct k_work *work);
 #endif
 
-static ATT_HANDLE *ethermind_att_handle_lookup_by_device_id(uint8_t device_id);
-
-static int bt_att_accept(struct bt_conn *conn, struct bt_l2cap_chan **ch)
+static int bt_att_accept_internal(struct bt_att_handle *handle)
 {
 	struct bt_att *att;
 	struct bt_att_chan *chan;
-	ATT_HANDLE *handle;
 
-	LOG_DBG("conn %p handle %u", conn, conn->handle);
-
-	handle = ethermind_att_handle_lookup_by_device_id(conn->deviceId);
-	if (NULL == handle) {
-		LOG_ERR("ATT Handle is not found of conn %p", conn);
-		return -EINVAL;
-	}
+	LOG_DBG("ATT handle %p", handle);
 
 	if (k_mem_slab_alloc(&att_slab, (void **)&att, K_NO_WAIT)) {
-		LOG_ERR("No available ATT context for conn %p", conn);
+		LOG_ERR("No available ATT context for att %p", handle);
 		return -ENOMEM;
 	}
 
-	att_handle_rsp_thread = k_current_get();
-
 	(void)memset(att, 0, sizeof(*att));
-	att->conn = conn;
 	sys_slist_init(&att->reqs);
 	sys_slist_init(&att->chans);
 
@@ -4254,7 +4249,32 @@ static int bt_att_accept(struct bt_conn *conn, struct bt_l2cap_chan **ch)
 		return -ENOMEM;
 	}
 
-	chan->handle = *handle;
+	chan->handle = handle->handle;
+
+	handle->chan = chan;
+
+	return 0;
+}
+
+static struct bt_att_handle *ethermind_att_handle_lookup_by_device_id(uint8_t device_id);
+
+static int bt_att_accept(struct bt_conn *conn, struct bt_l2cap_chan **ch)
+{
+	struct bt_att_handle *handle;
+	struct bt_att_chan *chan;
+
+	LOG_DBG("conn %p handle %u", conn, conn->handle);
+
+	handle = ethermind_att_handle_lookup_by_device_id(conn->deviceId);
+	if (handle == NULL) {
+		LOG_ERR("ATT Handle is not found");
+		return -ENOMEM;
+	}
+
+	att_handle_rsp_thread = k_current_get();
+
+	chan = handle->chan;
+	chan->att->conn = conn;
 
 	*ch = &chan->chan.chan;
 
@@ -4614,69 +4634,72 @@ static void bt_eatt_init(void)
 NET_BUF_POOL_DEFINE(att_rx_pool, CONFIG_BT_ATT_RX_MAX, BT_ATT_MTU,
 			CONFIG_NET_BUF_USER_DATA_SIZE, NULL);
 
+static int bt_att_accept_internal(struct bt_att_handle *handle);
+
 static int ethermind_att_handle_alloc(ATT_HANDLE *handle)
 {
-    size_t index;
-    unsigned int reg;
+	size_t index;
+	unsigned int reg;
 
-    reg = DisableGlobalIRQ();
-    for (index = 0;index < CONFIG_BT_MAX_CONN;index++)
-    {
-        if (false == att_handle_node[index].used)
-        {
-            att_handle_node[index].used = true;
-            att_handle_node[index].handle = *handle;
-            EnableGlobalIRQ(reg);
-            return 0;
-        }
-    }
-    EnableGlobalIRQ(reg);
-    return -ENOSR;
+	reg = DisableGlobalIRQ();
+	for (index = 0;index < CONFIG_BT_MAX_CONN;index++)
+	{
+		if (att_handle_node[index].chan == NULL)
+		{
+			int err;
+			att_handle_node[index].handle = *handle;
+			err = bt_att_accept_internal(&att_handle_node[index]);
+			EnableGlobalIRQ(reg);
+			return err;
+		}
+	}
+	EnableGlobalIRQ(reg);
+	return -ENOSR;
 }
 
 static int ethermind_att_handle_free(ATT_HANDLE *handle)
 {
-    size_t index;
-    unsigned int reg;
+	size_t index;
+	unsigned int reg;
 
-    reg = DisableGlobalIRQ();
-    for (index = 0;index < CONFIG_BT_MAX_CONN;index++)
-    {
-        if (true == att_handle_node[index].used)
-        {
-            if (att_handle_node[index].handle.att_id == handle->att_id)
-            {
-                att_handle_node[index].used = false;
-                att_handle_node[index].handle.att_id = 0;
-                att_handle_node[index].handle.device_id = 0;
-                EnableGlobalIRQ(reg);
-                return 0;
-            }
-        }
-    }
-    EnableGlobalIRQ(reg);
-    return -ENXIO;
+	reg = DisableGlobalIRQ();
+	for (index = 0;index < CONFIG_BT_MAX_CONN;index++)
+	{
+		if (att_handle_node[index].chan != NULL)
+		{
+			if (att_handle_node[index].handle.att_id == handle->att_id)
+			{
+				att_handle_node[index].chan = NULL;
+				att_handle_node[index].handle.att_id = 0;
+				att_handle_node[index].handle.device_id = 0;
+				EnableGlobalIRQ(reg);
+				return 0;
+			}
+		}
+	}
+	EnableGlobalIRQ(reg);
+	return -ENXIO;
 }
 
-static ATT_HANDLE *ethermind_att_handle_lookup_by_device_id(uint8_t device_id)
+static struct bt_att_handle *ethermind_att_handle_lookup_by_device_id(uint8_t device_id)
 {
-    size_t index;
-    unsigned int reg;
+	size_t index;
+	unsigned int reg;
 
-    reg = DisableGlobalIRQ();
-    for (index = 0;index < CONFIG_BT_MAX_CONN;index++)
-    {
-        if (true == att_handle_node[index].used)
-        {
-            if (att_handle_node[index].handle.device_id == device_id)
-            {
-                EnableGlobalIRQ(reg);
-                return &att_handle_node[index].handle;
-            }
-        }
-    }
-    EnableGlobalIRQ(reg);
-    return NULL;
+	reg = DisableGlobalIRQ();
+	for (index = 0;index < CONFIG_BT_MAX_CONN;index++)
+	{
+		if (att_handle_node[index].chan != NULL)
+		{
+			if (att_handle_node[index].handle.device_id == device_id)
+			{
+				EnableGlobalIRQ(reg);
+				return &att_handle_node[index];
+			}
+		}
+	}
+	EnableGlobalIRQ(reg);
+	return NULL;
 }
 
 static API_RESULT ethermind_bt_att_cb
@@ -4689,14 +4712,24 @@ static API_RESULT ethermind_bt_att_cb
 		   )
 {
 	struct bt_att_chan *attChan = NULL;
+	struct bt_att_handle *att_handle;
 	struct bt_conn *conn = NULL;
 	int err = -ENOENT;
 
 	conn = bt_conn_lookup_device_id(handle->device_id);
 
-	if (NULL != conn)
-	{
+	if (NULL != conn) {
 		attChan = att_chan_get(conn);
+		if (attChan == NULL) {
+			LOG_WRN("Cannot find ATT channel on conn %p, Get ATT handle", conn);
+			att_handle = ethermind_att_handle_lookup_by_device_id(handle->device_id);
+			if (att_handle != NULL) {
+				LOG_DBG("Find ATT handle %p", att_handle);
+				attChan = att_handle->chan;
+			} else {
+				LOG_ERR("Cannot find ATT handle");
+			}
+		}
 	}
 
 	LOG_DBG("att rx chan %p event 0x%02X len %d", attChan, att_event, event_datalen);
