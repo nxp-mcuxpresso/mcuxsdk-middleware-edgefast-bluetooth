@@ -4158,25 +4158,25 @@ int bt_send(struct net_buf *buf)
 		struct bt_hci_cmd_hdr *hdr = (struct bt_hci_cmd_hdr *)buf->data;
 
 		ret = BT_hci_send_command(BT_OGF(hdr->opcode), BT_OCF(hdr->opcode), &(((uint8_t *)buf->data)[sizeof(*hdr)]), buf->len - sizeof(*hdr));
-
-		net_buf_unref(buf);
+		if (API_SUCCESS == ret) {
+			net_buf_unref(buf);
+		}
 	}
-        break;
+	break;
 #if (defined(CONFIG_BT_ISO_UNICAST) && (CONFIG_BT_ISO_UNICAST > 0)) || \
 	(defined(CONFIG_BT_ISO_BROADCAST) && (CONFIG_BT_ISO_BROADCAST > 0))
 	case BT_BUF_ISO_OUT:
 	{
 		struct bt_hci_iso_hdr *iso_hdr = (struct bt_hci_iso_hdr *)buf->data;
 		ret = BT_hci_iso_write_pdu(bt_iso_handle(iso_hdr->handle), buf->data, buf->len);
-
-		if (API_SUCCESS == ret)
-		{
+		if (API_SUCCESS == ret) {
 			net_buf_unref(buf);
 		}
 	}
 	break;
 #endif
 	case BT_BUF_ACL_OUT:
+		LOG_DBG("ACL OUT");
 		net_buf_unref(buf);
 	break;
 	default:
@@ -4185,7 +4185,11 @@ int bt_send(struct net_buf *buf)
 	break;
 	}
 
-    	LOG_DBG("buf %p, return code %u", buf, ret);
+	LOG_DBG("buf %p, return code %u", buf, ret);
+
+	if (API_SUCCESS != ret) {
+		LOG_ERR("Fail to send hci data");
+	}
 
 	return (API_SUCCESS == ret) ? 0 : -EIO;
 }
