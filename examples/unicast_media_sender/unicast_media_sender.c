@@ -810,6 +810,7 @@ static struct bt_bap_stream_ops stream_ops = {
 	.disabled = stream_disabled,
 	.stopped = stream_stopped,
 	.released = stream_released,
+	.connected = stream_connected,
 };
 
 static void add_remote_sink(struct bt_bap_ep *ep, uint8_t index)
@@ -1517,12 +1518,6 @@ static int connect_streams(int index)
 static int start_streams(int index)
 {
 	int err;
-
-	err = bt_bap_stream_start(&streams[index]);
-	if (err != 0) {
-		PRINTF("Unable to start stream: %d\n", err);
-		return err;
-	}
 
 	err = OSA_SemaphoreWait(sem_stream_started, osaWaitForever_c);
 	if (err != 0) {
