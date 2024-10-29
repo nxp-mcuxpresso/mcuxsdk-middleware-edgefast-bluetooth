@@ -12,7 +12,9 @@
 #include <stdint.h>
 #include <inttypes.h>
 
+#include <fsl_debug_console.h>
+
 #define snprintk snprintf
-#define printk printf
+#define printk PRINTF
 
 #endif /* __EDGEFAST_BT_BLE_TYPES_H__ */
