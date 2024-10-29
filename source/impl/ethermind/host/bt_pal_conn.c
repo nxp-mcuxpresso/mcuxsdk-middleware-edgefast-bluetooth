@@ -2512,6 +2512,8 @@ uint8_t bt_conn_enc_key_size(const struct bt_conn *conn)
 
 	if (IS_ENABLED(CONFIG_BT_CLASSIC) &&
 	    conn->type == BT_CONN_TYPE_BR) {
+		/* EDGEFAST: Get encryption key size from conn->br.link_key->enc_size directly*/
+#if 0
 		struct bt_hci_cp_read_encryption_key_size *cp;
 		struct bt_hci_rp_read_encryption_key_size *rp;
 		struct net_buf *buf;
@@ -2539,6 +2541,9 @@ uint8_t bt_conn_enc_key_size(const struct bt_conn *conn)
 		net_buf_unref(rsp);
 
 		return key_size;
+#else
+		return conn->br.link_key ? conn->br.link_key->enc_size : 0;
+#endif
 	}
 
 #if (defined(CONFIG_BT_SMP) && ((CONFIG_BT_SMP) > 0U))

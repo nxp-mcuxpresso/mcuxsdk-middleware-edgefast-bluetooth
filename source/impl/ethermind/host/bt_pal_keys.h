@@ -213,6 +213,7 @@ struct bt_keys_link_key {
 	    uint8_t                 storage_start[1];
 		struct
 		{
+			uint8_t                 enc_size;
 			uint8_t                 flags;
 			uint8_t                 val[16];
 #if (defined(CONFIG_BT_KEYS_OVERWRITE_OLDEST))
