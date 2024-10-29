@@ -101,6 +101,8 @@ struct bt_dev bt_dev = {
 struct bt_dev bt_dev;
 #endif
 
+static struct k_spinlock lock;
+
 static bt_ready_cb_t ready_cb;
 
 #if (defined(CONFIG_BT_HCI_VS_EVT_USER) && ((CONFIG_BT_HCI_VS_EVT_USER) > 0U))
@@ -408,8 +410,14 @@ int bt_hci_cmd_send_sync(uint16_t opcode, struct net_buf *buf,
 		      opcode, err);
 #else
 	if (err != 0) {
+		k_spinlock_key_t key;
 		LOG_ERR("Controller unresponsive, command opcode 0x%04x timeout with err %d",
 			opcode, err);
+		(void)atomic_ptr_clear((atomic_ptr_t *)&bt_dev.sent_cmd);
+		key = k_spin_lock(&lock);
+		cmd(buf)->sync = NULL;
+		cmd(buf)->status = BT_HCI_ERR_UNSPECIFIED;
+		k_spin_unlock(&lock, key);
 	}
 #endif
 	status = cmd(buf)->status;
