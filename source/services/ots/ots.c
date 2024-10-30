@@ -462,13 +462,21 @@ static void olcp_indicate_work_handler(struct k_work *work)
 	bt_gatt_indicate(NULL, &ots->olcp_ind.params);
 }
 
+static int bt_gatt_ots_instances_prepare(void);
+
 int bt_ots_init(struct bt_ots *ots,
 		     struct bt_ots_init_param *ots_init)
 {
 	int err;
+	static bool instances_prepared;
 
 	if (!ots || !ots_init || !ots_init->cb) {
 		return -EINVAL;
+	}
+
+	if (!instances_prepared) {
+		bt_gatt_ots_instances_prepare();
+		instances_prepared = true;
 	}
 
 	__ASSERT(ots_init->cb->obj_created || !BT_OTS_OACP_GET_FEAT_CREATE(ots_init->features.oacp),
