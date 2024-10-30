@@ -191,7 +191,7 @@ static shell_status_t shellBt(shell_handle_t shellHandle, int32_t argc, char **a
             PRINTF("the parameter count is wrong\r\n");
             return kStatus_SHELL_Error;
         }
-        app_hfp_ag_volume_update(hf_volume_type_mic, hfp_get_value_from_str(argv[2]));
+        app_hfp_ag_volume_update(hf_ag_volume_type_mic, hfp_get_value_from_str(argv[2]));
 
     }
     else if (strcmp(argv[1], "set_speaker_volume") == 0)
@@ -201,7 +201,7 @@ static shell_status_t shellBt(shell_handle_t shellHandle, int32_t argc, char **a
             PRINTF("the parameter count is wrong\r\n");
             return kStatus_SHELL_Error;
         }
-        app_hfp_ag_volume_update(hf_volume_type_speaker, hfp_get_value_from_str(argv[2]));
+        app_hfp_ag_volume_update(hf_ag_volume_type_speaker, hfp_get_value_from_str(argv[2]));
     }
     else if (strcmp(argv[1], "set_tag") == 0)
     {

@@ -22,13 +22,13 @@ extern "C" {
 #endif
 
 /** @brief bt hfp ag volume type */
-typedef enum _hf_volume_type_t
+typedef enum _hf_ag_volume_type_t
 {
     /*speaker */
-    hf_volume_type_speaker,
+    hf_ag_volume_type_speaker, 
     /* mic */
-    hf_volume_type_mic,
-} hf_volume_type_t;
+    hf_ag_volume_type_mic, 
+} hf_ag_volume_type_t;
 
 /** @brief bt hf call status */
 typedef enum _hfp_ag_call_status_t
@@ -160,7 +160,7 @@ struct bt_hfp_ag_cb
      *  @param type the hfp volue type, for speaker or mic.
      *  @param value service indicator value received from the AG.
      */
-    void (*volume_control)(struct bt_hfp_ag *hfp_ag, hf_volume_type_t type, int value);
+    void (*volume_control)(struct bt_hfp_ag *hfp_ag, hf_ag_volume_type_t type, int value);
     /** AG remote support feature Callback
      *
      *  This callback provides the remote hfp unit supported feature
@@ -455,7 +455,7 @@ int bt_hfp_ag_set_cops(struct bt_hfp_ag *hfp_ag, char *name);
  *  @return 0 in case of success or otherwise in case
  *  of error.
  */
-int  bt_hfp_ag_set_volume_control(struct bt_hfp_ag *hfp_ag, hf_volume_type_t type, int value);
+int  bt_hfp_ag_set_volume_control(struct bt_hfp_ag *hfp_ag, hf_ag_volume_type_t type, int value);
 
 /** @brief hfp ag to set inband ring tone support
  *

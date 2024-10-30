@@ -736,8 +736,8 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
                             bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
                             if ((bt_hfp_ag_cb) && (bt_hfp_ag_cb->volume_control))
                             {
-                                bt_hfp_ag_cb->volume_control(
-                                    s_actived_bt_hfp_ag, hf_volume_type_speaker, bt_hfp_ag_vgs);
+                                bt_hfp_ag_cb->volume_control(s_actived_bt_hfp_ag, hf_ag_volume_type_speaker,
+                                                             bt_hfp_ag_vgs);
                             }
                             break;
                         }
@@ -754,8 +754,7 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
                             LOG_DBG("Microphone Gain Updated - %d\n", bt_hfp_ag_vgm);
                             if ((bt_hfp_ag_cb) && (bt_hfp_ag_cb->volume_control))
                             {
-                                bt_hfp_ag_cb->volume_control(
-                                    s_actived_bt_hfp_ag, hf_volume_type_mic, bt_hfp_ag_vgm);
+                                bt_hfp_ag_cb->volume_control(s_actived_bt_hfp_ag, hf_ag_volume_type_mic, bt_hfp_ag_vgm);
                             }
                             bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
                             break;
@@ -1453,18 +1452,18 @@ int bt_hfp_ag_send_ccwa_indicator(struct bt_hfp_ag *hfp_ag, char *number)
 
     return 0;
 }
-int bt_hfp_ag_set_volume_control(struct bt_hfp_ag *hfp_ag, hf_volume_type_t type, int value)
+int bt_hfp_ag_set_volume_control(struct bt_hfp_ag *hfp_ag, hf_ag_volume_type_t type, int value)
 {
     if ((!hfp_ag) || (!hfp_ag->bt_hfp_ag_config))
     {
         return -EINVAL;
     }
-    if (type == hf_volume_type_speaker)
+    if (type == hf_ag_volume_type_speaker)
     {
         hfp_ag->bt_hfp_ag_config->bt_hfp_ag_vgs = value;
         bt_hfp_ag_send_at_rsp(HFAG_VGS, NULL);
     }
-    else if (type == hf_volume_type_mic)
+    else if (type == hf_ag_volume_type_mic)
     {
         hfp_ag->bt_hfp_ag_config->bt_hfp_ag_vgm = value;
         bt_hfp_ag_send_at_rsp(HFAG_VGM, NULL);

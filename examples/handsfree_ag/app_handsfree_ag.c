@@ -407,7 +407,7 @@ void app_hfp_ag_set_phnum_tag(char *name)
 {
     bt_hfp_ag_set_phnum_tag(g_HfpAg.hfp_agHandle, name);
 }
-void app_hfp_ag_volume_update(hf_volume_type_t type, int volume)
+void app_hfp_ag_volume_update(hf_ag_volume_type_t type, int volume)
 {
     bt_hfp_ag_set_volume_control(g_HfpAg.hfp_agHandle, type, volume);
 }
