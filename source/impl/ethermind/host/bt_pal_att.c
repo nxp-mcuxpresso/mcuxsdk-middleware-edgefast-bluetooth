@@ -4720,15 +4720,16 @@ static API_RESULT ethermind_bt_att_cb
 
 	if (NULL != conn) {
 		attChan = att_chan_get(conn);
-		if (attChan == NULL) {
-			LOG_WRN("Cannot find ATT channel on conn %p, Get ATT handle", conn);
-			att_handle = ethermind_att_handle_lookup_by_device_id(handle->device_id);
-			if (att_handle != NULL) {
-				LOG_DBG("Find ATT handle %p", att_handle);
-				attChan = att_handle->chan;
-			} else {
-				LOG_ERR("Cannot find ATT handle");
-			}
+	}
+
+	if (attChan == NULL) {
+		LOG_WRN("Cannot find ATT channel on conn %p, Get ATT handle", conn);
+		att_handle = ethermind_att_handle_lookup_by_device_id(handle->device_id);
+		if (att_handle != NULL) {
+			LOG_DBG("Find ATT handle %p", att_handle);
+			attChan = att_handle->chan;
+		} else {
+			LOG_ERR("Cannot find ATT handle");
 		}
 	}
 
