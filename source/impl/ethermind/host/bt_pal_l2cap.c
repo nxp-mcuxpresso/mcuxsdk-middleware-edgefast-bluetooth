@@ -4998,7 +4998,7 @@ static bool ethermind_bt_conn_scan_cb(struct bt_conn *conn, void *param)
 #if (defined (CONFIG_BT_CLASSIC) && (CONFIG_BT_CLASSIC > 0U))
 	if (BT_CONN_TYPE_BR == conn->type)
 	{
-		chan = bt_l2cap_br_lookup_tx_cid(conn, conn_scan->lcid);
+		chan = bt_l2cap_br_lookup_rx_cid(conn, conn_scan->lcid);
 	}
 	else
 #endif
