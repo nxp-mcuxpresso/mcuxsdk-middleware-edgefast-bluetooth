@@ -130,6 +130,10 @@ config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting_DEPEND_ANYOF_OPTION_
     bool "debug_console_lite"
     select MCUX_COMPONENT_utility.assert_lite
 
+config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting_DEPEND_ANYOF_OPTION_3
+    bool "debug_console blocking mode"
+    select MCUX_COMPONENT_utility.assert
+
 endchoice
 
 endif # MCUX_COMPONENT_middleware.edgefast_bluetooth.porting
