@@ -291,14 +291,8 @@ struct bt_smp_br {
 	/* Delayed work for auth timeout handling */
 	struct k_work_delayable		auth_timeout;
 
-	/* Delayed work for auth complete handling */
-	struct k_work_delayable		auth_complete;
-
 	/* pairing result */
 	uint8_t				status;
-
-	/* Delayed work for auth start handling */
-	struct k_work_delayable		auth_starting;
 
 	/* Commands that remote is allowed to send */
 	ATOMIC_DEFINE(allowed_cmds, BT_SMP_NUM_CMDS);
@@ -984,15 +978,14 @@ static void smp_br_send(struct bt_smp_br *smp, struct net_buf *buf,
 
 static uint8_t smp_br_pairing_req(struct bt_smp_br *smp, struct bt_smp_pairing *req, SMP_AUTH_INFO *auth);
 
-static void smp_br_auth_starting(struct k_work *work)
+static void smp_br_auth_starting(struct bt_smp_br *smp)
 {
 #if !(defined(CONFIG_BT_BLE_DISABLE) && ((CONFIG_BT_BLE_DISABLE) > 0U))
-	struct bt_smp_br *smp = CONTAINER_OF(work, struct bt_smp_br, auth_starting);
 	struct bt_conn *conn;
 	int ret;
-    API_RESULT retval;
+	API_RESULT retval;
 
-    conn = smp->chan.chan.conn;
+	conn = smp->chan.chan.conn;
 
 	if (BT_HCI_ROLE_CENTRAL == conn->role)
 	{
@@ -1024,18 +1017,16 @@ static void smp_br_auth_starting(struct k_work *work)
 	{
 		smp->auth.param = ret;
 		retval = BT_smp_authentication_request_reply
-					(
-						(SMP_BD_HANDLE *)&conn->deviceId,
-						&smp->auth
-					);
+		(
+			(SMP_BD_HANDLE *)&conn->deviceId,
+			&smp->auth
+		);
 	}
 #endif /* CONFIG_BT_BLE_DISABLE */
 }
 
-static void smp_br_auth_complete(struct k_work *work)
+static void smp_br_auth_complete(struct bt_smp_br *smp)
 {
-	struct bt_smp_br *smp = CONTAINER_OF(work, struct bt_smp_br, auth_complete);
-
 	smp_pairing_br_complete(smp, smp->status);
 }
 
@@ -1055,8 +1046,6 @@ static void bt_smp_br_connected(struct bt_l2cap_chan *chan)
 
 	atomic_set_bit(smp->flags, SMP_FLAG_BR_CONNECTED);
 
-	k_work_init_delayable(&smp->auth_starting, smp_br_auth_starting);
-	k_work_init_delayable(&smp->auth_complete, smp_br_auth_complete);
 	k_work_init_delayable(&smp->auth_timeout, smp_br_auth_timeout);
 
 	/*
@@ -1083,8 +1072,6 @@ static void bt_smp_br_disconnected(struct bt_l2cap_chan *chan)
 	(void)k_work_cancel_delayable(&smp->work);
 #endif
 
-	k_work_cancel_delayable(&smp->auth_starting);
-	k_work_cancel_delayable(&smp->auth_complete);
 	k_work_cancel_delayable(&smp->auth_timeout);
 
 	(void)memset(smp, 0, sizeof(*smp));
@@ -7140,8 +7127,7 @@ void appl_smp_lesc_xtxp_ltk_complete(SMP_LESC_LK_LTK_GEN_PL * xtxp)
 	}
 
 	k_work_cancel_delayable(&smp->auth_timeout);
-	k_work_cancel_delayable(&smp->auth_complete);
-        k_work_submit(&smp->auth_complete.work);
+	smp_br_auth_complete(smp);
 #endif
     }
 }
@@ -7541,8 +7527,8 @@ static void hci_acl_smp_br_handler(struct net_buf *buf)
 			}
 		}
 
-        memcpy(&smp->auth, auth, sizeof(smp->auth));
-        k_work_schedule(&smp->auth_starting, BT_MSEC(1));
+	memcpy(&smp->auth, auth, sizeof(smp->auth));
+	smp_br_auth_starting(smp);
 
         break;
 
