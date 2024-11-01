@@ -21,6 +21,7 @@
 
 #include "bt_pal_addr_internal.h"
 #include "bt_pal_hci_core.h"
+#include "BT_hci_api.h"
 #include "bt_pal_conn_internal.h"
 #include "bt_pal_sco_internal.h"
 
@@ -268,8 +269,8 @@ static int accept_sco_conn(const bt_addr_t *bdaddr, struct bt_conn *sco_conn)
 	cp->pkt_type = sco_conn->sco.pkt_type;
 	cp->tx_bandwidth = 0x00001f40;
 	cp->rx_bandwidth = 0x00001f40;
-	cp->max_latency = 0x0007;
-	cp->retrans_effort = 0x01;
+	cp->max_latency = LMP_ESCO_MAX_LATENCY_DEFAULT;
+	cp->retrans_effort = LMP_ESCO_RETX_EFFORT_DEFAULT;
 	cp->content_format = BT_VOICE_CVSD_16BIT;
 
 	err = bt_hci_cmd_send_sync(BT_HCI_OP_ACCEPT_SYNC_CONN_REQ, buf, NULL);
@@ -349,8 +350,8 @@ static int sco_setup_sync_conn(struct bt_conn *sco_conn)
 	cp->pkt_type = sco_conn->sco.pkt_type;
 	cp->tx_bandwidth = 0x00001f40;
 	cp->rx_bandwidth = 0x00001f40;
-	cp->max_latency = 0x0007;
-	cp->retrans_effort = 0x01;
+	cp->max_latency = LMP_ESCO_MAX_LATENCY_DEFAULT;
+	cp->retrans_effort = LMP_ESCO_RETX_EFFORT_DEFAULT;
 	cp->content_format = BT_VOICE_CVSD_16BIT;
 
 	err = bt_hci_cmd_send_sync(BT_HCI_OP_SETUP_SYNC_CONN, buf, NULL);
