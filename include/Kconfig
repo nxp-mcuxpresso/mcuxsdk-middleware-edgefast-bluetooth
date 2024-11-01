@@ -277,8 +277,8 @@ config BT_DEVICE_NAME
       This symbol is a config macro.
 
 config BT_DEVICE_APPEARANCE_DYNAMIC
-    int "BT_DEVICE_APPEARANCE_DYNAMIC"
-    default 0
+    bool "BT_DEVICE_APPEARANCE_DYNAMIC"
+    default n
     help
       Runtime Bluetooth Appearance changing
       Enables use of bt_set_appearance.
