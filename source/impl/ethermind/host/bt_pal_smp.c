@@ -159,24 +159,18 @@ struct bt_smp {
 	/* The channel this context is associated with. */
 	struct bt_l2cap_le_chan		chan;
 
-	SMP_AUTH_INFO               auth;
+	SMP_AUTH_INFO			auth;
 
 	/* Delayed work for timeout handling */
 #if 0
 	struct k_work_delayable		work;
 #endif
 
-	/* Delayed work for auth complete handling */
-	struct k_work_delayable		auth_complete;
-
-	/* Delayed work for auth start handling */
-	struct k_work_delayable		auth_starting;
-
 	/* Delayed work for id add */
 	struct k_work_delayable		id_add;
 
 	/* status of auth complete */
-	API_RESULT 					status;
+	API_RESULT			status;
 
 	/* Used Bluetooth authentication callbacks. */
 	atomic_ptr_t			auth_cb;
@@ -224,7 +218,7 @@ struct bt_smp {
 	uint8_t				mackey[16];
 
 	/* LE SC passkey */
-	uint32_t				passkey;
+	uint32_t			passkey;
 
 	/* LE SC passkey round */
 	uint8_t				passkey_round;
@@ -292,7 +286,7 @@ struct bt_smp_br {
 	/* The channel this context is associated with. */
 	struct bt_l2cap_br_chan	chan;
 
-    SMP_AUTH_INFO               auth;
+	SMP_AUTH_INFO			auth;
 
 	/* Delayed work for auth timeout handling */
 	struct k_work_delayable		auth_timeout;
@@ -301,9 +295,9 @@ struct bt_smp_br {
 	struct k_work_delayable		auth_complete;
 
 	/* pairing result */
-	uint8_t status;
+	uint8_t				status;
 
-    /* Delayed work for auth start handling */
+	/* Delayed work for auth start handling */
 	struct k_work_delayable		auth_starting;
 
 	/* Commands that remote is allowed to send */
@@ -312,20 +306,20 @@ struct bt_smp_br {
 	/* Flags for SMP state machine */
 	ATOMIC_DEFINE(flags, SMP_NUM_FLAGS);
 
-    /* Type of method used for pairing */
+	/* Type of method used for pairing */
 	uint8_t				method;
 
-    /* Type of confirm */
+	/* Type of confirm */
 	uint8_t				confirm_type;
 
-    /* passkey */
+	/* passkey */
 	uint32_t			passkey;
 
 	/* Local key distribution */
-	uint8_t			local_dist;
+	uint8_t				local_dist;
 
 	/* Remote key distribution */
-	uint8_t			remote_dist;
+	uint8_t				remote_dist;
 
 	/* Encryption Key Size used for connection */
 	uint8_t 			enc_key_size;
@@ -2092,9 +2086,8 @@ static void smp_timeout(struct k_work *work)
 }
 #endif
 
-static void smp_auth_complete(struct k_work *work)
+static void smp_auth_complete(struct bt_smp *smp)
 {
-	struct bt_smp *smp = CONTAINER_OF(work, struct bt_smp, auth_complete);
 	struct bt_conn *conn;
 	uint8_t smp_err;
 	enum bt_security_err security_err;
@@ -5042,7 +5035,7 @@ static void bt_smp_pkey_ready(const uint8_t *pkey)
 }
 #endif
 
-static void smp_auth_starting(struct k_work *work);
+static void smp_auth_starting(struct bt_smp *smp);
 
 static void bt_smp_connected(struct bt_l2cap_chan *chan)
 {
@@ -5053,8 +5046,6 @@ static void bt_smp_connected(struct bt_l2cap_chan *chan)
 #if 0
 	k_work_init_delayable(&smp->work, smp_timeout);
 #endif
-	k_work_init_delayable(&smp->auth_complete, smp_auth_complete);
-	k_work_init_delayable(&smp->auth_starting, smp_auth_starting);
 	k_work_init_delayable(&smp->id_add, smp_id_add);
 	smp_reset(smp);
 
@@ -5082,8 +5073,6 @@ static void bt_smp_disconnected(struct bt_l2cap_chan *chan)
 		smp_pairing_complete(smp, BT_SMP_ERR_UNSPECIFIED);
 	}
 
-	k_work_cancel_delayable(&smp->auth_complete);
-	k_work_cancel_delayable(&smp->auth_starting);
 	k_work_cancel_delayable(&smp->id_add);
 	if (keys) {
 		/*
@@ -7019,14 +7008,13 @@ static void bt_smp_get_auth_info(struct bt_conn *conn)
 #endif /* CONFIG_BT_BLE_DISABLE */
 }
 
-static void smp_auth_starting(struct k_work *work)
+static void smp_auth_starting(struct bt_smp *smp)
 {
-	struct bt_smp *smp = CONTAINER_OF(work, struct bt_smp, auth_starting);
 	struct bt_conn *conn;
 	int ret;
-    API_RESULT retval;
+	API_RESULT retval;
 
-    conn = smp->chan.chan.conn;
+	conn = smp->chan.chan.conn;
 
 	if (BT_HCI_ROLE_CENTRAL == conn->role)
 	{
@@ -7054,10 +7042,10 @@ static void smp_auth_starting(struct k_work *work)
 	{
 		smp->auth.param = ret;
 		retval = BT_smp_authentication_request_reply
-					(
-						(SMP_BD_HANDLE *)&conn->deviceId,
-						&smp->auth
-					);
+		(
+			(SMP_BD_HANDLE *)&conn->deviceId,
+			&smp->auth
+		);
 	}
 }
 
@@ -7117,14 +7105,14 @@ void appl_smp_lesc_xtxp_ltk_complete(SMP_LESC_LK_LTK_GEN_PL * xtxp)
             &peer_key_info
         );
 
-		conn = bt_conn_lookup_device_id(deviceHandle);
-		if (NULL == conn)
-		{
-			LOG_ERR("Connect is not found, invalid bd handle 0x%02X", deviceHandle);
-			return;
-		}
+	conn = bt_conn_lookup_device_id(deviceHandle);
+	if (NULL == conn)
+	{
+		LOG_ERR("Connect is not found, invalid bd handle 0x%02X", deviceHandle);
+		return;
+	}
 
-		bt_conn_unref(conn);
+	bt_conn_unref(conn);
 
 #if (defined(CONFIG_BT_CLASSIC) && ((CONFIG_BT_CLASSIC) > 0U))
         smp = smp_br_chan_get(conn);
@@ -7134,25 +7122,25 @@ void appl_smp_lesc_xtxp_ltk_complete(SMP_LESC_LK_LTK_GEN_PL * xtxp)
             return;
         }
 
-		bt_addr_copy(&peer_addr.a, &conn->br.dst);
-		peer_addr.type = BT_ADDR_LE_PUBLIC;
+	bt_addr_copy(&peer_addr.a, &conn->br.dst);
+	peer_addr.type = BT_ADDR_LE_PUBLIC;
 
-		keys = bt_keys_get_type(BT_KEYS_LTK, conn->id, &peer_addr);
-		if (!keys)
-		{
-			LOG_ERR("Unable to get keys for %s", bt_addr_le_str(&peer_addr));
-			return;
-		}
-		memcpy(keys->ltk.val, xtxp->ltk, sizeof(keys->ltk.val));
+	keys = bt_keys_get_type(BT_KEYS_LTK, conn->id, &peer_addr);
+	if (!keys)
+	{
+		LOG_ERR("Unable to get keys for %s", bt_addr_le_str(&peer_addr));
+		return;
+	}
+	memcpy(keys->ltk.val, xtxp->ltk, sizeof(keys->ltk.val));
 
-		if (lkey_type == HCI_LINK_KEY_AUTHENTICATED_P_256) {
-			keys->flags |= BT_KEYS_AUTHENTICATED;
-		} else {
-			keys->flags &= ~BT_KEYS_AUTHENTICATED;
-		}
+	if (lkey_type == HCI_LINK_KEY_AUTHENTICATED_P_256) {
+		keys->flags |= BT_KEYS_AUTHENTICATED;
+	} else {
+		keys->flags &= ~BT_KEYS_AUTHENTICATED;
+	}
 
-		k_work_cancel_delayable(&smp->auth_timeout);
-		k_work_cancel_delayable(&smp->auth_complete);
+	k_work_cancel_delayable(&smp->auth_timeout);
+	k_work_cancel_delayable(&smp->auth_complete);
         k_work_submit(&smp->auth_complete.work);
 #endif
     }
@@ -8225,8 +8213,7 @@ static void hci_acl_smp_handler(struct net_buf *buf)
         }
 
         smp->status = hdr->pdu.status;
-        k_work_cancel_delayable(&smp->auth_complete);
-        k_work_submit(&smp->auth_complete.work);
+	smp_auth_complete(smp);
 	/* Take the semaphore until security level updated, don't need wait too long. */
         int err = k_sem_take(&conn->sec_lvl_updated, K_MSEC(1));
 	if(err < 0)
@@ -8378,9 +8365,8 @@ static void hci_acl_smp_handler(struct net_buf *buf)
 			}
 		}
 
-        memcpy(&smp->auth, auth, sizeof(smp->auth));
-        k_work_schedule(&smp->auth_starting, BT_MSEC(1));
-
+	memcpy(&smp->auth, auth, sizeof(smp->auth));
+	smp_auth_starting(smp);
         break;
 
     case SMP_PASSKEY_ENTRY_REQUEST:
@@ -8570,7 +8556,7 @@ static void hci_acl_smp_handler(struct net_buf *buf)
 							SMP_FALSE
 						);
 			smp->status = SMP_REMOTE_SIDE_PIN_KEY_MISSING;
-			k_work_schedule(&smp->auth_complete, BT_MSEC(1));
+			smp_auth_complete(smp);
 		}
         break;
 
