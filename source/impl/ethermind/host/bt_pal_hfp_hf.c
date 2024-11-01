@@ -93,7 +93,7 @@ static struct bt_hfp_hf_em s_HfpHfInstances[HFP_UNIT_MAX_CONNECTIONS];
 static struct bt_hfp_hf_cb *bt_hf_cb;
 #define SDP_CLIENT_USER_BUF_LEN 512U
 #define HF_CMD_RETRY_TIME          BT_SECONDS(2)
-#define HF_CMD_RETRY_COUNT         5
+#define HF_CMD_RETRY_COUNT         10
 NET_BUF_POOL_FIXED_DEFINE(sdp_client_pool, CONFIG_BT_MAX_CONN, SDP_CLIENT_USER_BUF_LEN, CONFIG_NET_BUF_USER_DATA_SIZE, NULL);
 struct bt_hfp_sdp
 {
@@ -341,7 +341,6 @@ static int bt_hfp_hf_notify_at_cmd_finished(struct bt_hfp_hf_em *hf, uint16_t re
     EDGEFAST_HFP_HF_LOCK;
     if (hf->hfp_work_retry_at_cmds != 0)
     {
-        k_work_cancel_delayable(&hf->hf_at_cmd_retry_delayed_work);
         k_work_reschedule(&hf->hf_at_cmd_retry_delayed_work, K_NO_WAIT);
     }
     EDGEFAST_HFP_HF_UNLOCK;
@@ -412,8 +411,7 @@ static API_RESULT bt_hfp_hf_cmd_retry_ret_handling (struct bt_hfp_hf_em *hf, API
     }
     else
     {
-        k_work_cancel_delayable(&hf->hf_at_cmd_retry_delayed_work);
-        k_work_reschedule(&hf->hf_at_cmd_retry_delayed_work, K_NO_WAIT);
+        k_work_reschedule(&hf->hf_at_cmd_retry_delayed_work, HF_CMD_RETRY_TIME);
     }
     EDGEFAST_HFP_HF_UNLOCK;
     return retval;
