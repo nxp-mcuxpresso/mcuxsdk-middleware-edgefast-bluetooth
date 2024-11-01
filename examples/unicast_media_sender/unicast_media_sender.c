@@ -1850,6 +1850,11 @@ void unicast_media_sender_task(void *param)
 							PRINTF("\nEnable stream %d err %d\n", i, err);
 						}
 
+						err = connect_streams(i);
+						if (err) {
+							PRINTF("\nConnect stream %d err %d\n", i, err);
+						}
+
 						err = start_streams(i);
 						if(err)
 						{
