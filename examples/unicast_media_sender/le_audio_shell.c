@@ -21,8 +21,7 @@
 shell_handle_t s_shellHandle;
 SDK_ALIGN(static uint8_t s_shellHandleBuffer[SHELL_HANDLE_SIZE], 4);
 extern serial_handle_t g_serialHandle;
-
-extern int device_scan(void);
+extern OSA_SEMAPHORE_HANDLE_DEFINE(sem_scan);
 extern int device_select(int index);
 extern int open_wav_file(char *path);
 extern int select_lc3_preset(char *preset_name);
@@ -73,15 +72,7 @@ static shell_status_t lc3_preset(shell_handle_t shellHandle, int32_t argc, char 
 
 static shell_status_t scan(shell_handle_t shellHandle, int32_t argc, char **argv)
 {
-	int ret = device_scan();
-
-	if(ret)
-	{
-		PRINTF("Device scan failed!\n");
-		return kStatus_SHELL_Error;
-	}
-
-	PRINTF("Scanning successfully started\n");
+	(void)OSA_SemaphorePost(sem_scan);
 
 	return kStatus_SHELL_Success;
 }

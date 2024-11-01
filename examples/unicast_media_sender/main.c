@@ -27,6 +27,8 @@ extern void BOARD_InitHardware(void);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
+static StackType_t xStack[ configMINIMAL_STACK_SIZE * 8 ];
+static StaticTask_t xTaskBuffer;
 
 /*******************************************************************************
  * Code
@@ -37,14 +39,14 @@ int main(void)
     BOARD_InitHardware();
 
 #if defined(CONFIG_BT_A2DP_SINK) && (CONFIG_BT_A2DP_SINK > 0)
-    if (xTaskCreate(app_a2dp_sink_task, "app_a2dp_sink_task", configMINIMAL_STACK_SIZE * 8, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+    if (NULL == xTaskCreateStatic(app_a2dp_sink_task, "app_a2dp_sink_task", configMINIMAL_STACK_SIZE * 8, NULL, tskIDLE_PRIORITY + 1, xStack, &xTaskBuffer))
     {
         PRINTF("a2dp task creation failed!\r\n");
         while (1)
             ;
     }
 #else
-    if (xTaskCreate(unicast_media_sender_task, "unicast_media_sender_task", configMINIMAL_STACK_SIZE * 8, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+    if (NULL == xTaskCreateStatic(unicast_media_sender_task, "unicast_media_sender_task", configMINIMAL_STACK_SIZE * 8, NULL, tskIDLE_PRIORITY + 1, xStack, &xTaskBuffer))
     {
         PRINTF("unicast_media_sender_task creation failed!\r\n");
         while (1)

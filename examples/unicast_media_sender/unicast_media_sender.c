@@ -169,6 +169,7 @@ static struct bt_le_conn_param conn_param = {
 
 static OSA_SEMAPHORE_HANDLE_DEFINE(sem_wav_opened);
 static OSA_SEMAPHORE_HANDLE_DEFINE(sem_lc3_preset);
+OSA_SEMAPHORE_HANDLE_DEFINE(sem_scan);
 static OSA_SEMAPHORE_HANDLE_DEFINE(sem_device_selected);
 static OSA_SEMAPHORE_HANDLE_DEFINE(sem_connected);
 static OSA_SEMAPHORE_HANDLE_DEFINE(sem_csip_discovered);
@@ -1012,6 +1013,7 @@ static int init(void)
 {
 	(void)OSA_SemaphoreCreate(sem_wav_opened, 0);
 	(void)OSA_SemaphoreCreate(sem_lc3_preset, 0);
+	(void)OSA_SemaphoreCreate(sem_scan, 0);
 	(void)OSA_SemaphoreCreate(sem_device_selected, 0);
 	(void)OSA_SemaphoreCreate(sem_connected, 0);
 	(void)OSA_SemaphoreCreate(sem_csip_discovered, 0);
@@ -1532,6 +1534,7 @@ static void reset_data(void)
 {
 	(void)OSA_SemaphoreDestroy(sem_wav_opened);
 	(void)OSA_SemaphoreDestroy(sem_lc3_preset);
+	(void)OSA_SemaphoreDestroy(sem_scan);
 	(void)OSA_SemaphoreDestroy(sem_device_selected);
 	(void)OSA_SemaphoreDestroy(sem_connected);
 	(void)OSA_SemaphoreDestroy(sem_csip_discovered);
@@ -1551,6 +1554,7 @@ static void reset_data(void)
 
 	(void)OSA_SemaphoreCreate(sem_wav_opened, 0);
 	(void)OSA_SemaphoreCreate(sem_lc3_preset, 0);
+	(void)OSA_SemaphoreCreate(sem_scan, 0);
 	(void)OSA_SemaphoreCreate(sem_device_selected, 0);
 	(void)OSA_SemaphoreCreate(sem_connected, 0);
 	(void)OSA_SemaphoreCreate(sem_csip_discovered, 0);
@@ -1729,6 +1733,19 @@ void unicast_media_sender_task(void *param)
 		PRINTF("Unicast group created\n");
 
 		PRINTF("Please scan and connect the devices you want!\n");
+		err = OSA_SemaphoreWait(sem_scan, osaWaitForever_c);
+		if (err != 0) {
+			PRINTF("failed to take sem_scan (err %d)\n", err);
+			break;
+		}
+
+		err = device_scan();
+		if (err != 0) {
+			PRINTF("device scan err %d\n", err);
+			break;
+		}
+		PRINTF("Scanning successfully started\n");
+
 		err = OSA_SemaphoreWait(sem_device_selected, osaWaitForever_c);
 		if (err != 0) {
 			PRINTF("failed to take sem_device_selected (err %d)\n", err);

@@ -304,6 +304,9 @@ static void bt_ready(int err)
     app_edgefast_a2dp_init();
 }
 
+static StackType_t xStack[ configMINIMAL_STACK_SIZE * 8 ];
+static StaticTask_t xTaskBuffer;
+
 void app_a2dp_sink_task(void *pvParameters)
 {
     int err = 0;
@@ -350,7 +353,7 @@ void app_a2dp_sink_task(void *pvParameters)
         PRINTF("Switch role cmd create fail\r\n");
     }
 
-    if (xTaskCreate(unicast_media_sender_task, "unicast_media_sender_task", configMINIMAL_STACK_SIZE * 8, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+    if (NULL == xTaskCreateStatic(unicast_media_sender_task, "unicast_media_sender_task", configMINIMAL_STACK_SIZE * 8, NULL, tskIDLE_PRIORITY + 1, xStack, &xTaskBuffer))
     {
         PRINTF("unicast_media_sender_task creation failed!\r\n");
         while (1)
