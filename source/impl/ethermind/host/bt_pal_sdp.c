@@ -683,6 +683,7 @@ int bt_sdp_register_service(struct bt_sdp_record *service)
     uint8_t supp_features_buf[4] = {0};
     uint8_t uint8_data = 0;
     uint8_t l2cap_psm[2] = {0};
+    uint8_t value_network;
     /* Create Record */
     for (index = 0; index < service->attr_count; index++)
     {
@@ -977,6 +978,22 @@ int bt_sdp_register_service(struct bt_sdp_record *service)
             if (API_SUCCESS != retval)
             {
                 LOG_ERR("BT_SDP_ATTR_SUPPORTED_FEATURES BT_SDP_ATTR_SUPPORTED_REPOSITORIES  FAILED");
+                return -1;
+            }
+            break;
+        case BT_SDP_ATTR_EXTERNAL_NETWORK:
+            lookfor_uint8_data(&service->attrs[index].val,
+                &value_network, &count);
+            retval = BT_dbase_add_attribute_type_uint
+            (
+                record_handle,
+                BT_SDP_ATTR_EXTERNAL_NETWORK,
+                count,
+                &value_network
+            );
+            if (API_SUCCESS != retval)
+            {
+                LOG_ERR("BT_dbase_add_attribute_type_uint BT_SDP_ATTR_EXTERNAL_NETWORK  FAILED");
                 return -1;
             }
             break;
