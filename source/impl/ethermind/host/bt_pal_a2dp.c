@@ -2565,7 +2565,9 @@ int bt_a2dp_deinit(void)
 int bt_a2dp_register_endpoint(struct bt_a2dp_endpoint *endpoint, uint8_t media_type, uint8_t role)
 {
     AVDTP_SEP_CAP sep_cap;
+#ifndef SDP_DYNAMIC_DB
     uint32_t a2dpRecordHandle;
+#endif
     uint8_t index;
     API_RESULT retval;
 
