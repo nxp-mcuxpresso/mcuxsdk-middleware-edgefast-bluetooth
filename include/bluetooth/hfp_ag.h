@@ -228,6 +228,34 @@ struct bt_hfp_ag_cb
      *  @param index   Multiparty call index.
      */
      void (*chld)(struct bt_hfp_ag *hfp_ag, uint8_t option, uint8_t index);
+     
+     /** AG receive Standard list current calls command callback
+     *
+     *  If this callback is provided it will be called whenever the
+     *  AT command `AT+CLCC` is received.
+     *
+     *  @param hfp_ag  bt hfp ag Connection object.
+     */
+     void (*clcc)(struct bt_hfp_ag *ag);
+     
+    /** AG memory dialing request Callback
+     *
+     *  If this callback is provided it will be called whenever a
+     *  new call is requested with memory dialing from HFP unit
+     *
+     *  @param ag HFP AG object.
+     *  @param location AG memory call location
+     */
+    void (*memory_dial)(struct bt_hfp_ag *ag, uint32_t location);
+    
+     /** AG last dialing request Callback
+     *
+     *  If this callback is provided it will be called whenever a
+     *  new call is requested with last dialing from HFP unit side.
+     *
+     *  @param ag HFP AG object.
+     */
+    void (*last_dial)(struct bt_hfp_ag *ag);
     /** AG unkown at Callback
      *
      *  This callback provides AG unkown at  value to the application, the unkown at command could be handled by application
@@ -622,6 +650,32 @@ int bt_hfp_ag_send_ccwa_indicator(struct bt_hfp_ag *hfp_ag, char *number);
  *  of error.
  */
 int bt_hfp_ag_codec_selector(struct bt_hfp_ag *hfp_ag, uint8_t value);
+
+
+/** @brief hfp ag set current call list to hfp hp
+ *
+ *  This function is hfp ag set odec selector to hfp hp for codec negotiation
+ *
+ *  @param phfp_ag  pointer to bt hfp ag connection object
+ *  @param call_list  point to current call list
+ *
+ *  @return 0 in case of success or otherwise in case
+ *  of error.
+ */
+int bt_hfp_ag_set_clcc(struct bt_hfp_ag *hfp_ag, char *call_list);
+
+/** @brief hfp ag set call hold status indicator to hfp hp
+ *
+ *  This function is hfp ag set call hold status indicator to hfp hp
+ *
+ *  @param phfp_ag  pointer to bt hfp ag connection object
+ *  @param value    value of call hold status indicator
+ *
+ *  @return 0 in case of success or otherwise in case
+ *  of error.
+ */
+int bt_hfp_ag_send_callheld_indicator(struct bt_hfp_ag *hfp_ag, uint8_t value);
+
 
 /** @brief hfp ag set unknown at command response to hfp fp
  *

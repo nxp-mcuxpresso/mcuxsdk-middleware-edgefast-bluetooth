@@ -675,7 +675,14 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
 
                                     case '0':
                                         LOG_DBG("NREC Disbled\n");
-                                        bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
+                                        if (s_actived_bt_hfp_ag->ag_features | BT_HFP_AG_FEATURE_ECNR )
+                                        {
+                                            bt_hfp_ag_send_at_rsp(HFAG_ERROR, NULL);
+                                        }
+                                        else
+                                        {
+                                             bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
+                                        }
                                         break;
 
                                     default:
@@ -770,6 +777,13 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
                             bt_hfp_ag_send_at_rsp(HFAG_BCS, NULL);
                             break;
 
+                        case AT_CLCC:
+                            if ((bt_hfp_ag_cb) && (bt_hfp_ag_cb->clcc))
+                            {
+                                bt_hfp_ag_cb->clcc(s_actived_bt_hfp_ag);
+                            }
+                            bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
+                            break;
                         case AT_BCS:
                             bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
                             if ((bt_hfp_ag_cb) && (bt_hfp_ag_cb->codec_negotiate))
@@ -841,7 +855,7 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
                                 BT_str_copy(s_actived_bt_hfp_ag->bt_hfp_ag_config->bt_hfp_ag_phnum,
                                             &at_response.global_at_str[at_response.param->start_of_value_index]);
                             }
-                            bt_hfp_ag_send_rsp(recvd_data, buffer_size);
+
                             if ((bt_hfp_ag_cb) && (bt_hfp_ag_cb->dial))
                             {
                                 bt_hfp_ag_cb->dial(
@@ -852,16 +866,29 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
                             break;
 
                         case ATDM:
-                        case AT_BLDN:
                             if ((!s_actived_bt_hfp_ag->bt_hfp_ag_config) || (!s_actived_bt_hfp_ag->bt_hfp_ag_config->bt_hfp_ag_dial))
                             {
                                 bt_hfp_ag_send_at_rsp(HFAG_ERROR, NULL);
                                 break;
                             }
 
-                            BT_mem_set(cmd, 0, sizeof(cmd));
-                            sprintf((CHAR *)cmd, "ATD7654321;\r");
-                            bt_hfp_ag_send_rsp(cmd, (uint16_t)BT_str_len(cmd));
+                            if ((bt_hfp_ag_cb) && (bt_hfp_ag_cb->memory_dial))
+                            {
+                                bt_hfp_ag_cb->memory_dial(
+                                    s_actived_bt_hfp_ag, at_response.global_at_str[at_response.param->start_of_value_index] - '0');
+                            }
+                            break;
+                        case AT_BLDN:
+                            if ((!s_actived_bt_hfp_ag->bt_hfp_ag_config) || (!s_actived_bt_hfp_ag->bt_hfp_ag_config->bt_hfp_ag_dial))
+                            {
+                                bt_hfp_ag_send_at_rsp(HFAG_ERROR, NULL);
+                                break;
+                            }
+                            if ((bt_hfp_ag_cb) && (bt_hfp_ag_cb->last_dial))
+                            {
+                                bt_hfp_ag_cb->last_dial(
+                                    s_actived_bt_hfp_ag);
+                            }
                             break;
                         case AT_BTRH_READ:
                             /* todo , will impletment on full feature release*/
@@ -1144,6 +1171,9 @@ static void bt_hfp_ag_send_at_rsp(uint8_t rsp_code, void *value)
         case HFAG_CCWA:
             sprintf((response + length), "\"%s\",129\r\n", (CHAR *)value);
             break;
+        case HFAG_CLCC:
+            sprintf((response + length), "%s\r\n", (CHAR *)value);
+            break;
 
         case HFAG_BTRH:
         case HFAG_CALL:
@@ -1151,6 +1181,7 @@ static void bt_hfp_ag_send_at_rsp(uint8_t rsp_code, void *value)
         case HFAG_SERVICE:
         case HFAG_SIGNAL:
         case HFAG_ROAMING:
+        case HFAG_CALLHELD:
         case HFAG_BATTERY:
             sprintf((response + length), "%d\r\n", *((uint8_t *)value));
             break;
@@ -1406,6 +1437,20 @@ int bt_hfp_ag_set_phnum_tag(struct bt_hfp_ag *hfp_ag, char *name)
     bt_hfp_ag_send_at_rsp(HFAG_BINP, NULL);
     return 0;
 }
+int bt_hfp_ag_set_clcc(struct bt_hfp_ag *hfp_ag, char *call_list)
+{
+    if (!hfp_ag)
+    {
+        return -EINVAL;
+    }
+    if ((!call_list) || (!hfp_ag->bt_hfp_ag_config))
+    {
+        return -EINVAL;
+    }
+
+    bt_hfp_ag_send_at_rsp(HFAG_CLCC, call_list);
+    return 0;
+}
 int bt_hfp_ag_set_cops(struct bt_hfp_ag *hfp_ag, char *name)
 {
     if (!hfp_ag)
@@ -1560,6 +1605,16 @@ int bt_hfp_ag_send_call_indicator(struct bt_hfp_ag *hfp_ag, uint8_t value)
     }
     hfp_ag->cind.call_state = value;
     bt_hfp_ag_send_at_rsp(HFAG_CALL, &value);
+    return 0;
+}
+int bt_hfp_ag_send_callheld_indicator(struct bt_hfp_ag *hfp_ag, uint8_t value)
+{
+    if (!hfp_ag)
+    {
+        return -EINVAL;
+    }
+    hfp_ag->cind.call_state = value;
+    bt_hfp_ag_send_at_rsp(HFAG_CALLHELD, &value);
     return 0;
 }
 int bt_hfp_ag_send_callsetup_indicator(struct bt_hfp_ag *hfp_ag, uint8_t value)
