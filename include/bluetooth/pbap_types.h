@@ -191,7 +191,6 @@ struct bt_pbap_push_response_hdr
 {
     uint8_t opcode;
     uint16_t packet_length;
-    struct bt_obex_hdr_u32 conn_id;
     struct bt_obex_hdr_u8 srm;
     struct bt_obex_hdr_u8 srmp;
 } __packed;
