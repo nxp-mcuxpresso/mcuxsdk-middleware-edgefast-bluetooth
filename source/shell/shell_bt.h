@@ -2019,7 +2019,7 @@ enum shell_vt100_color {
  */
 #define SHELL_ERROR	SHELL_VT100_COLOR_RED
 
-#define shell_fprintf(sh, mode, fmt, ...)					\
+#define shell_fprintf_eol(sh, mode, fmt, ...)					\
 do {										\
 	(void)sh;								\
 	if (mode >= VT100_COLOR_END) {						\
@@ -2031,7 +2031,7 @@ do {										\
 	}									\
 } while(0)
 
-#define shell_fprintf_dump(sh, mode, fmt, ...)					\
+#define shell_fprintf(sh, mode, fmt, ...)					\
 do {										\
 	(void)sh;								\
 	if (mode >= VT100_COLOR_END) {						\
@@ -2043,11 +2043,11 @@ do {										\
 	}									\
 } while(0)
 
-#define shell_dump(sh, fmt, ...) shell_fprintf_dump(sh, SHELL_OPTION, fmt, ##__VA_ARGS__)
-#define shell_print(sh, fmt, ...) shell_fprintf(sh, SHELL_NORMAL, fmt, ##__VA_ARGS__)
-#define shell_info(sh, fmt, ...) shell_fprintf(sh, SHELL_INFO, fmt, ##__VA_ARGS__)
-#define shell_warn(sh, fmt, ...) shell_fprintf(sh, SHELL_WARNING, fmt, ##__VA_ARGS__)
-#define shell_error(sh, fmt, ...) shell_fprintf(sh, SHELL_ERROR, fmt, ##__VA_ARGS__)
+#define shell_dump(sh, fmt, ...) shell_fprintf(sh, SHELL_OPTION, fmt, ##__VA_ARGS__)
+#define shell_print(sh, fmt, ...) shell_fprintf_eol(sh, SHELL_NORMAL, fmt, ##__VA_ARGS__)
+#define shell_info(sh, fmt, ...) shell_fprintf_eol(sh, SHELL_INFO, fmt, ##__VA_ARGS__)
+#define shell_warn(sh, fmt, ...) shell_fprintf_eol(sh, SHELL_WARNING, fmt, ##__VA_ARGS__)
+#define shell_error(sh, fmt, ...) shell_fprintf_eol(sh, SHELL_ERROR, fmt, ##__VA_ARGS__)
 #define shell_help(...)
 
 void conn_addr_str(struct bt_conn *conn, char *addr, size_t len);
