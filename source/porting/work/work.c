@@ -606,21 +606,21 @@ int k_work_schedule_for_queue(struct k_work_q *queue,
 	SYS_PORT_TRACING_OBJ_FUNC_ENTER(k_work, schedule_for_queue, queue, dwork, delay);
 
 	struct k_work *work = &dwork->work;
-	int ret = 0;
+	int ret = -EBUSY;
 	k_spinlock_key_t key = k_spin_lock(&lock);
 
 	/* Schedule the work item if it's idle or running. */
 	if (((flags_get(&work->flags) & K_WORK_MASK) & ~K_WORK_RUNNING) == 0U) {
 		if (K_TIMEOUT_EQ(delay, K_NO_WAIT))
 		{
-		ret = k_work_submit_to_queue(queue, work);
+			ret = k_work_submit_to_queue(queue, work);
 		}
 		else
 		{
-		flag_set(&work->flags, K_WORK_DELAYED_BIT);
-		dwork->queue = queue;
+			flag_set(&work->flags, K_WORK_DELAYED_BIT);
+			dwork->queue = queue;
 
-		k_work_delay_queue_append(dwork, delay);
+			k_work_delay_queue_append(dwork, delay);
 		}
 	}
 
