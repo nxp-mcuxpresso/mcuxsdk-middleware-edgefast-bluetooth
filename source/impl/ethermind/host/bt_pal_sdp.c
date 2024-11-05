@@ -693,7 +693,7 @@ int bt_sdp_register_service(struct bt_sdp_record *service)
             switch(service_uuids[0].uuid_16)
             {
                 case BT_SDP_PBAP_PSE_SVCLASS:
-                    retval = BT_dbase_create_record(DB_RECORD_PBAP_PSE, 1U, &record_handle);
+                    retval = BT_dbase_create_record(DB_RECORD_PBAP_PSE, 0U, &record_handle);
                     break;
 
                 case BT_SDP_PBAP_PCE_SVCLASS:
