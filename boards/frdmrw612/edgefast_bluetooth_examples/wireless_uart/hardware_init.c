@@ -79,8 +79,8 @@ button_config_t g_buttonConfig[] = {{
     .gpio =
         {
             .direction       = kHAL_GpioDirectionIn,
-            .port            = 0,
-            .pin             = 25,
+            .port            = BOARD_SW2_GPIO_PORT,
+            .pin             = BOARD_SW2_GPIO_PIN,
             .pinStateDefault = 1,
         },
 }};
