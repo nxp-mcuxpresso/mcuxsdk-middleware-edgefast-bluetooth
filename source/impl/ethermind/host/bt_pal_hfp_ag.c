@@ -692,6 +692,16 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
                             }
                             break;
 
+                        case AT_VTS:
+                            LOG_DBG("DTMF codes received \n");
+                            bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
+                            if ((bt_hfp_ag_cb) && (bt_hfp_ag_cb->recv_dtmf_codes))
+                            {
+                                bt_hfp_ag_cb->recv_dtmf_codes(
+                                    s_actived_bt_hfp_ag,
+                                    at_response.global_at_str[at_response.param->start_of_value_index]);
+                            }
+                            break;
                         case AT_BVRA:
                             switch (at_response.global_at_str[at_response.param->start_of_value_index])
                             {
@@ -1313,6 +1323,25 @@ int bt_hfp_ag_disconnect(struct bt_hfp_ag *hfp_ag)
 {
     bt_hfp_ag_close_audio(hfp_ag);
     BT_hfp_ag_disconnect(hfp_ag->peerAddr);
+    return 0;
+}
+int bt_hfp_ag_get_cind_setting(struct bt_hfp_ag *hfp_ag, hfp_ag_cind_t *cind_setting)
+{
+    if ( (!hfp_ag) || (!cind_setting))
+    {
+        return -EINVAL;
+    }
+    memcpy(cind_setting, &s_actived_bt_hfp_ag->bt_cind_setting, sizeof(hfp_ag_cind_t));
+    return 0;
+}
+int bt_hfp_ag_set_cind_setting(struct bt_hfp_ag *hfp_ag, hfp_ag_cind_t *cind_setting)
+{
+    if ( (!hfp_ag) || (!cind_setting))
+    {
+        return -EINVAL;
+    }
+    memcpy(&s_actived_bt_hfp_ag->bt_cind_setting, cind_setting, sizeof(hfp_ag_cind_t));
+
     return 0;
 }
 int bt_hfp_ag_send_enable_voice_recognition(struct bt_hfp_ag *hfp_ag)

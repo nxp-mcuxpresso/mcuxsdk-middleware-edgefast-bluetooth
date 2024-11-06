@@ -256,6 +256,18 @@ struct bt_hfp_ag_cb
      *  @param ag HFP AG object.
      */
     void (*last_dial)(struct bt_hfp_ag *ag);
+    
+   
+     /** AG received a DTMF Code callback
+     *
+     *  If this callback is provided it will be called whenever the
+     *  AT command 'AT+VTS=<code>' is received from HFP unit side.
+     *
+     *  @param ag HFP AG object.
+     *  @param dtmf_code A specific DTMF code
+     */
+     void (*recv_dtmf_codes)(struct bt_hfp_ag *ag, char dtmf_code);
+     
     /** AG unkown at Callback
      *
      *  This callback provides AG unkown at  value to the application, the unkown at command could be handled by application
@@ -676,6 +688,30 @@ int bt_hfp_ag_set_clcc(struct bt_hfp_ag *hfp_ag, char *call_list);
  */
 int bt_hfp_ag_send_callheld_indicator(struct bt_hfp_ag *hfp_ag, uint8_t value);
 
+/** @brief hfp ag get supported indicators for HFP AG
+ *
+ *  This function is user set supported indicators for HFP AG
+ *
+ *  @param phfp_ag  pointer to bt hfp ag connection object
+ *  @param cind_setting   point to value of supported indicators
+ *
+ *  @return 0 in case of success or otherwise in case
+ *  of error.
+ */
+int bt_hfp_ag_get_cind_setting(struct bt_hfp_ag *hfp_ag, hfp_ag_cind_t *cind_setting);
+
+/** @brief hfp ag set supported indicators for HFP AG
+ *
+ *  This function is set supported indicators for HFP AG
+ *
+ *  @param phfp_ag  pointer to bt hfp ag connection object
+ *  @param cind_setting   point to value of supported indicators
+ *
+ *  @return 0 in case of success or otherwise in case
+ *  of error.
+ */
+
+int bt_hfp_ag_set_cind_setting(struct bt_hfp_ag *hfp_ag, hfp_ag_cind_t *cind_setting);
 
 /** @brief hfp ag set unknown at command response to hfp fp
  *
