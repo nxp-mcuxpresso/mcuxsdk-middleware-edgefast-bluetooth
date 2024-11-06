@@ -278,6 +278,16 @@ struct bt_hfp_hf_cb {
       void (*cmd_complete_cb)(struct bt_conn *conn,
                             struct bt_hfp_hf_cmd_complete *cmd);
 
+      /** HF notify inband ringtone set status callback to application
+       *
+       *  If this callback is provided it will be called whenever there
+       *  is an volume update event.
+       *
+       * @param conn Connection object.
+       * @param set inband ringtone set status
+       */      
+      void (*ringtone_inband_set)(struct bt_conn *conn, uint8_t set);
+
       /** Get config before connection.
        *
        *  This callback is used to get config #hfp_hf_get_config
@@ -538,7 +548,28 @@ int bt_hfp_hf_trigger_codec_connection(struct bt_conn *conn);
  *  @return 0 in case of success or negative value in case of error.
  *
  */
+ 
 int bt_hfp_hf_get_peer_indicator_status(struct bt_conn *conn);
+
+/** @brief hfp hf open audio for codec
+ *
+ *  This function is to open audio codec for hfp funciton
+ *
+ * @param  conn  Connection object.
+ * @param  codec HFP Codec Id.
+ *
+ *  @return 0 in case of success or negative value in case of error.
+ */
+int bt_hfp_hf_open_audio(struct bt_conn *conn, uint8_t codec);
+
+/** @brief hfp hf close audio for codec
+ *
+ *  This function is to close audio codec for hfp funciton
+ *
+ *  @return 0 in case of success or negative value in case of error.
+ *
+ */
+int bt_hfp_hf_close_audio(struct bt_conn *sco_conn);
 
 #ifdef __cplusplus
 }

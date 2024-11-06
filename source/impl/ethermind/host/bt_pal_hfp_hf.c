@@ -1336,6 +1336,10 @@ static API_RESULT bt_hfp_hf_callback_registered_with_hfu(HFP_UNIT_HANDLE handle,
             LOG_DBG("\n> Event         : HFP_UNIT_BSIR_IND\n");
             LOG_DBG("> Instance      : 0x%02X\n", (unsigned int)handle);
             LOG_DBG("> Data Received : %d\n", app_parser_result.result_param.uchar_result);
+            if (bt_hf_cb->ringtone_inband_set)
+            {
+                bt_hf_cb->ringtone_inband_set(hfp_hf->bt_conn, app_parser_result.result_param.uchar_result);
+            }
             break;
 
         case HFP_UNIT_VGM_IND:
@@ -2595,6 +2599,49 @@ int bt_hfp_hf_get_last_voice_tag_number(struct bt_conn *conn)
 
     return status;
 }
+int bt_hfp_hf_open_audio(struct bt_conn *conn, uint8_t codec)
+{
+    struct bt_conn *bt_so_conn;
+    struct bt_hfp_hf_em *hfp_hf;
+
+    hfp_hf = bt_hfp_hf_lookup_bt_conn(conn);
+    if (!hfp_hf)
+    {
+        return -EINVAL;
+    }
+    if (hfp_hf->sco_chan.sco != NULL)
+    {
+        return -EEXIST;
+    }
+
+    /* Update the eSCO channel paramters for Codec */
+    bt_hfp_hf_set_esco_channel_parameters(BT_FALSE, bt_hfp_esco_params[codec]);
+    LOG_DBG("> bt_hfp_hf_set_esco_channel_parameters \n");
+
+    hfp_hf->sco_chan.ops = &hf_sco_chan_ops;
+    bt_so_conn           = bt_conn_create_sco((const bt_addr_t *)hfp_hf->peerAddr, &hfp_hf->sco_chan);
+    if (NULL == bt_so_conn)
+    {
+        LOG_ERR("FAILED !! bt_conn_create_sco \n");
+    }
+    else
+    {
+        bt_conn_unref(bt_so_conn);
+    }
+    LOG_DBG(" bt_conn_create_sco  Sucuss\n");
+    return 0;
+}
+int bt_hfp_hf_close_audio(struct bt_conn *sco_conn)
+{
+    int err;
+    if (sco_conn == NULL)
+    {
+        return -EINVAL;
+    }
+
+    err = bt_conn_disconnect(sco_conn, 0x13U);
+    return err;
+}
 
 int bt_hfp_hf_trigger_codec_connection(struct bt_conn *conn)
 {
@@ -2680,6 +2727,7 @@ int bt_hfp_hf_disconnect(struct bt_conn *conn)
         LOG_ERR("No HF connection found");
         return -ENOTCONN;
     }
+    bt_hfp_hf_close_audio(hf->sco_chan.sco);
     api_retval = BT_hfp_unit_disconnect(hf->handle);
     if (api_retval)
     {
