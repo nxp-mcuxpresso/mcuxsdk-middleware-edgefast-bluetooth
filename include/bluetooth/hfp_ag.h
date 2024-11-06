@@ -710,8 +710,19 @@ int bt_hfp_ag_get_cind_setting(struct bt_hfp_ag *hfp_ag, hfp_ag_cind_t *cind_set
  *  @return 0 in case of success or otherwise in case
  *  of error.
  */
-
 int bt_hfp_ag_set_cind_setting(struct bt_hfp_ag *hfp_ag, hfp_ag_cind_t *cind_setting);
+
+/** @brief hfp ag send the standard calling line identification notification unsolicited result code.
+ *
+ *  This function is send the standard calling line identification notification unsolicited result code to hf
+ *
+ *  @param phfp_ag  pointer to bt hfp ag connection object
+ *  @param clip_result   point to standard calling line identification result
+ *
+ *  @return 0 in case of success or otherwise in case
+ *  of error.
+ */
+int  bt_hfp_ag_send_clip(struct bt_hfp_ag *hfp_ag, uint8_t *clip_result);
 
 /** @brief hfp ag set unknown at command response to hfp fp
  *
