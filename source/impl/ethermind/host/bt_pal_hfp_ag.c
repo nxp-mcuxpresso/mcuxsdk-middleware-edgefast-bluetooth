@@ -702,6 +702,7 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
                                     at_response.global_at_str[at_response.param->start_of_value_index]);
                             }
                             break;
+
                         case AT_BVRA:
                             switch (at_response.global_at_str[at_response.param->start_of_value_index])
                             {
@@ -1178,6 +1179,7 @@ static void bt_hfp_ag_send_at_rsp(uint8_t rsp_code, void *value)
         case HFAG_BIND_TEST:
             break;
 
+        case HFAG_CLIP:
         case HFAG_CCWA:
             sprintf((response + length), "\"%s\",129\r\n", (CHAR *)value);
             break;
@@ -1325,6 +1327,7 @@ int bt_hfp_ag_disconnect(struct bt_hfp_ag *hfp_ag)
     BT_hfp_ag_disconnect(hfp_ag->peerAddr);
     return 0;
 }
+
 int bt_hfp_ag_get_cind_setting(struct bt_hfp_ag *hfp_ag, hfp_ag_cind_t *cind_setting)
 {
     if ( (!hfp_ag) || (!cind_setting))
@@ -1626,6 +1629,7 @@ void bt_hfp_ag_send_callring(struct bt_hfp_ag *hfp_ag)
     /* Ring */
     bt_hfp_ag_send_at_rsp(HFAG_RING, NULL);
 }
+
 int bt_hfp_ag_send_call_indicator(struct bt_hfp_ag *hfp_ag, uint8_t value)
 {
     if (!hfp_ag)
@@ -1716,7 +1720,15 @@ int bt_hfp_ag_codec_selector(struct bt_hfp_ag *hfp_ag, uint8_t value)
     bt_hfp_ag_send_at_rsp(HFAG_BCS, NULL);
     return 0;
 }
-
+int  bt_hfp_ag_send_clip(struct bt_hfp_ag *hfp_ag, uint8_t *clip_result)
+{
+    if (!hfp_ag)
+    {
+        return -EINVAL;
+    }
+    bt_hfp_ag_send_at_rsp(HFAG_CLIP, clip_result);
+    return 0;
+}
 static uint8_t bt_hfp_ag_sdp_user(struct bt_conn *conn, struct bt_sdp_client_result *result)
 {
     uint16_t param;
