@@ -1792,6 +1792,63 @@ config BT_HFP_HF
       Bluetooth Handsfree profile HF Role support [EXPERIMENTAL], if the macro is set to 0, feature is disabled, if 1, feature is enabled.
       This option enables Bluetooth HF support
       This symbol is a config macro.
+if BT_HFP_HF
+config BT_HFP_HF_ECNR
+    bool "EC and/or NR function for HFP HF [EXPERIMENTAL]"
+    help
+      This option enables EC and/or NR function for HFP HF
+      
+config BT_HFP_HF_3WAY_CALL
+    bool "Three-way calling for HFP HF [EXPERIMENTAL]"
+    help
+      This option enables Three-way calling for HFP HF
+      
+config BT_HFP_HF_CLI
+    bool "CLI presentation capability for HFP HF [EXPERIMENTAL]"
+    default y
+    help
+      This option enables CLI presentation capability for HFP HF
+
+config BT_HFP_HF_VOLUME
+    bool "Remote audio volume control for HFP HF [EXPERIMENTAL]"
+    default y
+    help
+      This option enables Remote audio volume control for HFP HF
+      
+config BT_HFP_HF_VOICE_RECG
+    bool "Voice recognition activation for HFP HF [EXPERIMENTAL]"
+    help
+      This option enables Voice recognition activation for HFP HF
+      
+config BT_HFP_HF_ECS
+    bool "Enhanced Call Status for HFP HF [EXPERIMENTAL]"
+    default y if BT_HFP_HF_3WAY_CALL
+    help
+      This option enables Enhanced Call Status for HFP HF
+
+config BT_HFP_HF_ECC
+    bool "Enhanced Call Control for HFP HF [EXPERIMENTAL]"
+    default y if BT_HFP_HF_3WAY_CALL
+    help
+      This option enables Enhanced Call Control for HFP HF
+      
+config BT_HFP_HF_CODEC_NEG
+    bool "Codec Negotiation for HFP HF [EXPERIMENTAL]"
+    default y
+    help
+      This option enables Codec Negotiation for HFP HF
+
+config BT_HFP_HF_HF_IND
+    bool "HF Indicators for HFP HF [EXPERIMENTAL]"
+    help
+      This option enables HF Indicators for HFP HF
+
+config BT_HFP_HF_ESCO_S4
+    bool "eSCO S4 Settings for HFP HF [EXPERIMENTAL]"
+    default y
+    help
+      This option enables eSCO S4 Settings for HFP HF
+endif # BT_HFP_HF
 
 config BT_HFP_AG
     bool "BT_HFP_AG"
@@ -1801,6 +1858,74 @@ config BT_HFP_AG
       This option enables Bluetooth HFP AG support
       This symbol is a config macro.
 
+if BT_HFP_AG
+config BT_HFP_AG_3WAY_CALL
+    bool "Three-way calling for HFP AG [EXPERIMENTAL]"
+    default y
+    help
+      This option enables Three-way calling for HFP AG
+      
+config BT_HFP_AG_ECNR
+    bool "EC and/or NR function for HFP AG [EXPERIMENTAL]"
+    help
+      This option enables EC and/or NR function for HFP AG
+      
+config BT_HFP_AG_VOICE_RECG
+    bool "Voice recognition activation for HFP AG [EXPERIMENTAL]"
+    help
+      This option enables Voice recognition activation for HFP AG
+
+config BT_HFP_AG_INBAND_RING_TONE
+    bool "In-band ring capability for HFP AG [EXPERIMENTAL]"
+    help
+      This option enables In-band ring capability for HFP AG
+
+config BT_HFP_AG_VOICE_TAG
+    bool "Ability to Attach no. to voice tag for HFP AG [EXPERIMENTAL]"
+    help
+      This option enables Attach no. to voice tag for HFP AG
+      
+config BT_HFP_AG_REJECT_CALL
+    bool "Ability to reject a call for HFP AG [EXPERIMENTAL]"
+    default y
+    help
+      This option enables ability to reject a call for HFP AG
+      
+config BT_HFP_AG_ECS
+    bool "Enhanced call status for HFP AG [EXPERIMENTAL]"
+    default y if BT_HFP_AG_3WAY_CALL
+    help
+      This option enables Enhanced call status for HFP AG
+
+config BT_HFP_AG_ECC
+    bool "Enhanced call control for HFP AG [EXPERIMENTAL]"
+    default y if BT_HFP_AG_3WAY_CALL
+    help
+      This option enables Enhanced call control for HFP AG
+    
+config BT_HFP_AG_EXT_ERR
+    bool "Extended Error Result Codes for HFP AG [EXPERIMENTAL]"
+    help
+      This option enables Extended Error Result Codes for HFP AG
+
+config BT_HFP_AG_CODEC_NEG
+    bool "Codec Negotiation for HFP AG [EXPERIMENTAL]"
+    default y
+    help
+      This option enables Codec Negotiation for HFP AG
+
+config BT_HFP_AG_HF_IND
+    bool "HF Indicators for HFP AG [EXPERIMENTAL]"
+    default y
+    help
+      This option enables HF Indicators for HFP AG
+
+config BT_HFP_AG_ESCO_S4
+    bool "eSCO S4 Settings for HFP AG [EXPERIMENTAL]"
+    default y
+    help
+      This option enables eSCO S4 Settings for HFP AG
+endif # BT_HFP_AG
 
 config BT_PBAP_PCE
     bool "BT_PBAP_PCE"
