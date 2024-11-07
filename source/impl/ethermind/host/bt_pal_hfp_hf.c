@@ -2028,13 +2028,13 @@ static struct bt_hfp_hf_em* hfp_hf_connected(struct bt_conn *conn)
     }
 
     memcpy(hfp_hf->peerAddr, conn->br.dst.val, BT_BD_ADDR_SIZE);
+    hfp_hf->actived     = 1U;
+    hfp_hf->bt_conn     = conn;
+    hfp_hf->hf_features = BT_HFP_HF_SUPPORTED_FEATURES;
     if (bt_hf_cb->connected)
     {
         bt_hf_cb->connected(conn);
     }
-    hfp_hf->actived     = 1U;
-    hfp_hf->bt_conn     = conn;
-    hfp_hf->hf_features = BT_HFP_HF_SUPPORTED_FEATURES;
 
     return hfp_hf;
 }
