@@ -1189,9 +1189,6 @@ struct net_buf *l2cap_data_pull(struct bt_conn *conn,
 	/* EDGEFAST: Flag the channel is busy. */
 	lechan->_pdu_remaining = pdu->len + sizeof(struct bt_l2cap_hdr);
 
-	/* EDGEFAST: Set channel inactive. */
-	lower_data_ready(lechan);
-
 	/* EDGEFAST: Send out the data. */
 	err = l2cap_chan_le_send_sdu(lechan, &pdu, 0);
 	if (err < 0) {
@@ -1212,7 +1209,16 @@ struct net_buf *l2cap_data_pull(struct bt_conn *conn,
 
 	net_buf_unref(b);
 
-	LOG_DBG("done sending PDU");
+	LOG_DBG("chan %p done", lechan);
+
+	/* EDGEFAST: Set channel inactive. */
+	lower_data_ready(lechan);
+
+	/* EDGEFAST: Append channel to list if it still has data */
+	if (chan_has_data(lechan)) {
+		LOG_DBG("chan %p ready", lechan);
+		raise_data_ready(lechan);
+	}
 #else
 	(void)conn;
 	(void)amount;
