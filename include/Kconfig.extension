@@ -70,4 +70,10 @@ config BT_DISABLE_SMP_PAIRING
       It is used to disable SMP pairing feature.
       This symbol is a config macro.
 
+config BT_BLE_PLATFORM_INIT_ESCAPE
+    bool "BT_BLE_PLATFORM_INIT_ESCAPE"
+    help
+      This symbol is a config macro.
+      No prefix in generated macro
+
 endmenu
