@@ -621,6 +621,7 @@ int k_work_schedule_for_queue(struct k_work_q *queue,
 			dwork->queue = queue;
 
 			k_work_delay_queue_append(dwork, delay);
+			ret = 0;
 		}
 	}
 
