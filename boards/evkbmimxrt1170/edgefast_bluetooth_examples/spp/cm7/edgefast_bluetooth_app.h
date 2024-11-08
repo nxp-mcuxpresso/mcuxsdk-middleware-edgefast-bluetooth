@@ -41,5 +41,3 @@
 #undef SD_TIMING_MAX
 #define SD_TIMING_MAX kSD_TimingDDR50Mode
 #endif /*#define WIFI_IW612_BOARD_MURATA_2EL_M2*/
-
-#define CONFIG_BT_DISABLE_SMP_PAIRING 1
