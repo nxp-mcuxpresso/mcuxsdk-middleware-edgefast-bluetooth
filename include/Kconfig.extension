@@ -63,4 +63,11 @@ config BT_GATT_SERVER
     help
       This symbol is a config macro.
 
+config BT_DISABLE_SMP_PAIRING
+    bool "BT_DISABLE_SMP_PAIRING"
+    default y if BT_BLE_DISABLE
+    help
+      It is used to disable SMP pairing feature.
+      This symbol is a config macro.
+
 endmenu
