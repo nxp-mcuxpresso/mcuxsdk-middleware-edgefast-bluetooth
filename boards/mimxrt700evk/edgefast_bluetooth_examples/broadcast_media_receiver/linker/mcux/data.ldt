@@ -1,0 +1,13 @@
+        <#if memory.name=="SRAM_DTC">
+        *mflash_drv.o(.text*)
+        *fsl_xspi.o(.text*)
+        *srCvtFrm.o(.text*)
+        *libethermind_ble_lc3_ndsp_common.a(.text*)
+        *libethermind_ble_lc3_ndsp_decoder.a(.text*)
+        *libethermind_ble_lc3_ndsp_encoder.a(.text*)
+        *fsl_edma.o(.text*)
+        *fsl_sai.o(.text*)
+        *fsl_sai_edma.o(.text*)
+        *hardware_init.o(.text*)
+        *main.o(.text*)
+        </#if>
