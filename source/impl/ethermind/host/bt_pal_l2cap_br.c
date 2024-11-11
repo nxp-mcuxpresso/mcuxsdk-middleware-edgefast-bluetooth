@@ -2262,8 +2262,10 @@ void bt_l2cap_br_recv(struct bt_conn *conn, struct net_buf *buf)
 {
 	struct bt_l2cap_hdr *hdr;
 	struct bt_l2cap_chan *chan;
+#ifdef L2CAP_SUPPORT_CBFC_MODE
 	struct bt_l2cap_br_chan *br_chan;
 	uint16_t credit = 0;
+#endif
 	uint16_t cid;
 	int err;
 
@@ -2292,6 +2294,7 @@ void bt_l2cap_br_recv(struct bt_conn *conn, struct net_buf *buf)
 		return;
 	}
 
+#ifdef L2CAP_SUPPORT_CBFC_MODE
 	br_chan = BR_CHAN(chan);
 	credit = ceiling_fraction((buf->len + 2), br_chan->rx.mps);
 
@@ -2301,9 +2304,11 @@ void bt_l2cap_br_recv(struct bt_conn *conn, struct net_buf *buf)
              sys_cpu_to_le16(br_chan->rx.cid),
              sys_cpu_to_le16(credit)
          );
+#endif
 	net_buf_unref(buf);
 }
 
+#if 0 /* EDGEFAST Bluetooth: it is not used */
 int bt_l2cap_br_chan_recv_complete(struct bt_l2cap_chan *chan, struct net_buf *buf)
 {
 	struct bt_l2cap_br_chan *br_chan = BR_CHAN(chan);
@@ -2342,6 +2347,7 @@ int bt_l2cap_br_chan_recv_complete(struct bt_l2cap_chan *chan, struct net_buf *b
 
 	return 0;
 }
+#endif
 
 struct bt_l2cap_chan *ethermind_find_br_sig_chan(struct bt_conn *conn)
 {
