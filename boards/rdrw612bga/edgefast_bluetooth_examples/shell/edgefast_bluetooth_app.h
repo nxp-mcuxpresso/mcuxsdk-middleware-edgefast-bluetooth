@@ -17,8 +17,6 @@
 #define CONFIG_BT_PER_ADV 1
 #endif
 
-#define CONFIG_BLE_ADV_REPORT_BUFFER_FILTER 1
-
 #if 0
 #define CONFIG_BT_SMP_SELFTEST 1
 
