@@ -4733,7 +4733,9 @@ int bt_disable(void)
 		return -EHOSTDOWN;
 	}
 
+#if (defined(CONFIG_BT_ISO) && (CONFIG_BT_ISO > 0))
 	(void)BT_hci_register_iso_data_handler(NULL);
+#endif
 
 #if (defined(CONFIG_BT_SNOOP) && (CONFIG_BT_SNOOP > 0))
 	BT_snoop_logging_disable();
