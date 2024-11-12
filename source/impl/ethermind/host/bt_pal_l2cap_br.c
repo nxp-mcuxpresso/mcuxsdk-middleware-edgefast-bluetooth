@@ -2165,7 +2165,7 @@ static int l2cap_br_recv(struct bt_l2cap_chan *chan, struct net_buf *buf)
 #endif
 	return 0;
 }
-#if 0
+
 static void l2cap_br_conn_pend(struct bt_l2cap_chan *chan, uint8_t status)
 {
 	struct net_buf *buf;
@@ -2227,16 +2227,13 @@ static void l2cap_br_conn_pend(struct bt_l2cap_chan *chan, uint8_t status)
 				       L2CAP_BR_CONN_TIMEOUT);
 	}
 }
-#endif
 
 void l2cap_br_encrypt_change(struct bt_conn *conn, uint8_t hci_status)
 {
 	struct bt_l2cap_chan *chan;
 
 	SYS_SLIST_FOR_EACH_CONTAINER(&conn->channels, chan, node) {
-#if 0
 		l2cap_br_conn_pend(chan, hci_status);
-#endif
 		if (chan->ops && chan->ops->encrypt_change) {
 			chan->ops->encrypt_change(chan, hci_status);
 		}
