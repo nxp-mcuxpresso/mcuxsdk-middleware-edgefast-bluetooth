@@ -2805,7 +2805,9 @@ static void unicast_client_stream_configured(struct bt_bap_stream *stream,
     stream_base = (struct stream_state *)stream;
 
     atomic_set_bit(stream_base->flags, BT_STREAM_STATE_CONFIGURED);
-    (void)OSA_SemaphorePost(stream_base->sem);
+    if (stream_base->sem != NULL) {
+        (void)OSA_SemaphorePost(stream_base->sem);
+    }
 }
 
 static void unicast_client_stream_qos_set(struct bt_bap_stream *stream)
@@ -2817,7 +2819,9 @@ static void unicast_client_stream_qos_set(struct bt_bap_stream *stream)
     stream_base = (struct stream_state *)stream;
 
     atomic_set_bit(stream_base->flags, BT_STREAM_STATE_QOS);
-    (void)OSA_SemaphorePost(stream_base->sem);
+    if (stream_base->sem != NULL) {
+        (void)OSA_SemaphorePost(stream_base->sem);
+    }
 }
 
 static void unicast_client_stream_enabled(struct bt_bap_stream *stream)
@@ -2857,7 +2861,9 @@ static void unicast_client_stream_enabled(struct bt_bap_stream *stream)
     }
 
     atomic_set_bit(stream_base->flags, BT_STREAM_STATE_ENABLED);
-    (void)OSA_SemaphorePost(stream_base->sem);
+    if (stream_base->sem != NULL) {
+        (void)OSA_SemaphorePost(stream_base->sem);
+    }
 }
 
 static void unicast_client_stream_connected(struct bt_bap_stream *stream)
@@ -2869,7 +2875,9 @@ static void unicast_client_stream_connected(struct bt_bap_stream *stream)
     stream_base = (struct stream_state *)stream;
 
     atomic_set_bit(stream_base->flags, BT_STREAM_STATE_CONNECTED);
-    (void)OSA_SemaphorePost(stream_base->sem);
+    if (stream_base->sem != NULL) {
+        (void)OSA_SemaphorePost(stream_base->sem);
+    }
 }
 
 static void unicast_client_stream_started(struct bt_bap_stream *stream)
@@ -2991,7 +2999,9 @@ static void unicast_client_stream_started(struct bt_bap_stream *stream)
 #endif /* UNICAST_AUDIO_SYNC_MODE */
 
     atomic_set_bit(stream_base->flags, BT_STREAM_STATE_STARTED);
-    (void)OSA_SemaphorePost(stream_base->sem);
+    if (stream_base->sem != NULL) {
+        (void)OSA_SemaphorePost(stream_base->sem);
+    }
 
     (void)snk;
 }
@@ -3030,7 +3040,9 @@ static void unicast_client_stream_disabled(struct bt_bap_stream *stream)
     }
 
     atomic_clear_bit(stream_base->flags, BT_STREAM_STATE_ENABLED);
-    (void)OSA_SemaphorePost(stream_base->sem);
+    if (stream_base->sem != NULL) {
+        (void)OSA_SemaphorePost(stream_base->sem);
+    }
 }
 
 static void unicast_client_stream_stopped(struct bt_bap_stream *stream, uint8_t reason)
@@ -3055,7 +3067,9 @@ static void unicast_client_stream_stopped(struct bt_bap_stream *stream, uint8_t 
     }
 
     atomic_clear_bit(stream_base->flags, BT_STREAM_STATE_STARTED);
-    (void)OSA_SemaphorePost(stream_base->sem);
+    if (stream_base->sem != NULL) {
+        (void)OSA_SemaphorePost(stream_base->sem);
+    }
 }
 
 static void unicast_client_stream_released(struct bt_bap_stream *stream)
@@ -3087,7 +3101,9 @@ static void unicast_client_stream_released(struct bt_bap_stream *stream)
     atomic_clear_bit(stream_base->flags, BT_STREAM_STATE_CONNECTED);
     atomic_clear_bit(stream_base->flags, BT_STREAM_STATE_STARTED);
 
-    (void)OSA_SemaphorePost(stream_base->sem);
+    if (stream_base->sem != NULL) {
+        (void)OSA_SemaphorePost(stream_base->sem);
+    }
 
     (void)stream_base;
 }
