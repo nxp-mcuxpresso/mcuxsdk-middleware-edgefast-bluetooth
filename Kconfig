@@ -13,10 +13,13 @@ menuconfig MCUX_COMPONENT_middleware.edgefast_bluetooth.pal
     select MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.crypto.ethermind
     select MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.host_msd_fatfs.ethermind
     select MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.db_gen.ethermind
-    # Since mbedtls3x is on the way, this denpendcy will be removed
-    # 1. move it into board level
-    # 2. use imply
-    imply MCUX_COMPONENT_middleware.mbedtls
+    select MCUX_COMPONENT_middleware.mbedtls if MCUX_HW_DEVICE_MIMXRT1042 || MCUX_HW_DEVICE_MIMXRT1062 || \
+                                               MCUX_HW_DEVICE_MIMXRT685S || MCUX_HW_DEVICE_MIMXRT1176 || \
+                                               MCUX_HW_DEVICE_MIMXRT595S || MCUX_HW_DEVICE_MIMXRT1052 || \
+                                               MCUX_HW_DEVICE_MIMXRT1189 || MCUX_HW_DEVICE_MIMXRT1187 || \
+                                               MCUX_HW_DEVICE_MIMXRT1166 || MCUX_HW_DEVICE_MCXN547 || \
+                                               MCUX_HW_DEVICE_MCXN947    || MCUX_HW_DEVICE_RW612
+    select MCUX_COMPONENT_middleware.mbedtls3x if MCUX_HW_DEVICE_MIMXRT798S
 
 if MCUX_COMPONENT_middleware.edgefast_bluetooth.pal
 
