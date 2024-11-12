@@ -74,13 +74,6 @@ config BLE_ADV_REPORT_BUFFER_FILTER
     help
       This symbol is a config macro.
 
-config BT_DISABLE_SMP_PAIRING
-    bool "BT_DISABLE_SMP_PAIRING"
-    default y if BT_BLE_DISABLE
-    help
-      It is used to disable SMP pairing feature.
-      This symbol is a config macro.
-
 config BT_BLE_PLATFORM_INIT_ESCAPE
     bool "BT_BLE_PLATFORM_INIT_ESCAPE"
     help
