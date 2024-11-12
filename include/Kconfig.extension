@@ -14,6 +14,12 @@ config CONTROLLER_ID
       This symbol is a config macro.
       No prefix in generated macro
 
+config WORK_QUEUE_TASK_PRIORITY
+    string "WORK_QUEUE_TASK_PRIORITY"
+    default "(configMAX_PRIORITIES - 2)"
+    help
+      This symbol is a config macro.
+
 config WORK_QUEUE_TASK_STACK_SIZE
     int "WORK_QUEUE_TASK_STACK_SIZE"
     default 4096 if BT_SMP
