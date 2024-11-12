@@ -10,7 +10,7 @@
 /*! @brief Work queue task priority.
  */
 #ifndef CONFIG_WORK_QUEUE_TASK_PRIORITY
-    #define CONFIG_WORK_QUEUE_TASK_PRIORITY 4
+    #define CONFIG_WORK_QUEUE_TASK_PRIORITY (configMAX_PRIORITIES - 2)
 #endif
 
 /*! @brief Work queue task stack size.
