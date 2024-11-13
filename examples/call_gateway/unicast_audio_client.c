@@ -211,6 +211,13 @@ struct sink_info
     uint16_t seq_num;
 };
 
+enum {
+    BT_ACL_CONN_STATE_DISCONNECTING,
+
+    /* Total number of flags - must be at the end of the enum */
+    BT_ACL_CONN_STATE_NUM_FLAGS,
+};
+
 struct conn_state
 {
     struct bt_conn *conn;
@@ -229,6 +236,7 @@ struct conn_state
     struct bt_bap_lc3_preset snk_codec_configuration;
     uint32_t cis_tx;
     uint32_t cis_rx;
+    ATOMIC_DEFINE(flags, BT_ACL_CONN_STATE_NUM_FLAGS);
 };
 
 struct ringtone_prime_work
@@ -3072,6 +3080,110 @@ static void unicast_client_stream_stopped(struct bt_bap_stream *stream, uint8_t 
     }
 }
 
+static void release_stream(struct bt_bap_stream *stream)
+{
+	struct stream_state * stream_base;
+	struct lc3_decoder * decoder;
+	struct lc3_encoder * encoder;
+	bool done = false;
+
+	stream_base = (struct stream_state *)stream;
+
+	for (uint32_t index = 0; index < ARRAY_SIZE(server_state); index++)
+	{
+		if(!atomic_test_bit(server_state[index].flags, BT_ACL_CONN_STATE_DISCONNECTING))
+		{
+			continue;
+		}
+
+		for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SRC_COUNT; ep_index++)
+		{
+			if (server_state[index].src[ep_index].stream == stream_base)
+			{
+				if (NULL != stream_base->sem)
+				{
+					(void)OSA_SemaphoreDestroy(stream_base->sem);
+					stream_base->sem = NULL;
+				}
+				bt_fifo_put(&free_streams, stream_base);
+				server_state[index].src[ep_index].stream = NULL;
+				if (server_state[index].src[ep_index].decoder != NULL)
+				{
+					decoder = server_state[index].src[ep_index].decoder;
+					bt_fifo_put(&free_decoders, decoder);
+					server_state[index].src[ep_index].decoder = NULL;
+				}
+				done = true;
+				break;
+			}
+		}
+
+		if (done) {
+			break;
+		}
+
+		for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SNK_COUNT; ep_index++)
+		{
+			if (server_state[index].snk[ep_index].stream == stream_base)
+			{
+				if (NULL != stream_base->sem)
+				{
+					(void)OSA_SemaphoreDestroy(stream_base->sem);
+					stream_base->sem = NULL;
+				}
+				bt_fifo_put(&free_streams, stream_base);
+				server_state[index].snk[ep_index].stream = NULL;
+				if (server_state[index].snk[ep_index].encoder != NULL)
+				{
+					encoder = server_state[index].snk[ep_index].encoder;
+					bt_fifo_put(&free_encoders, encoder);
+					server_state[index].snk[ep_index].encoder = NULL;
+				}
+				done = true;
+				break;
+			}
+		}
+
+		if (done) {
+			break;
+		}
+	}
+
+	for (uint32_t index = 0; index < ARRAY_SIZE(server_state); index++)
+	{
+		for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SRC_COUNT; ep_index++)
+		{
+			if (server_state[index].src[ep_index].stream != NULL)
+			{
+				return;
+			}
+		}
+
+		for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SNK_COUNT; ep_index++)
+		{
+			if (server_state[index].snk[ep_index].stream != NULL)
+			{
+				return;
+			}
+		}
+
+		if (atomic_test_bit(server_state[index].flags, BT_ACL_CONN_STATE_DISCONNECTING))
+		{
+			server_state[index].conn = NULL;
+			memset(&server_state[index], 0, sizeof(server_state[index]));
+		}
+	}
+
+	for (uint32_t index = 0; index < ARRAY_SIZE(server_state); index++)
+	{
+		if (server_state[index].conn != NULL) {
+			return;
+		}
+	}
+
+	unicast_client_delete_group();
+}
+
 static void unicast_client_stream_released(struct bt_bap_stream *stream)
 {
     struct stream_state * stream_base;
@@ -3105,6 +3217,7 @@ static void unicast_client_stream_released(struct bt_bap_stream *stream)
         (void)OSA_SemaphorePost(stream_base->sem);
     }
 
+    release_stream(stream);
     (void)stream_base;
 }
 
@@ -3324,79 +3437,144 @@ static void connected(struct bt_conn *conn, uint8_t err)
 
 static void disconnected(struct bt_conn *conn, uint8_t reason)
 {
-    struct stream_state * stream_base;
-    struct lc3_decoder * decoder;
-    struct lc3_encoder * encoder;
+	struct stream_state * stream_base;
+	struct lc3_decoder * decoder;
+	struct lc3_encoder * encoder;
+	bool no_stream;
 
 #if (defined(UNICAST_AUDIO_SYNC_MODE) && (UNICAST_AUDIO_SYNC_MODE > 0))
-    if (sync_timer_started > 0)
-    {
-        sync_timer_started = 0;
-        BORAD_SyncTimer_Stop();
-    }
+	if (sync_timer_started > 0)
+	{
+		sync_timer_started = 0;
+		BORAD_SyncTimer_Stop();
+	}
 #endif /* UNICAST_AUDIO_SYNC_MODE */
 
-    unicast_client_disable_streams_of_conn(conn);
-    unicast_client_release_streams_of_conn(conn);
+	for (uint32_t index = 0; index < ARRAY_SIZE(server_state); index++)
+	{
+		if (conn == server_state[index].conn)
+		{
+			atomic_set_bit(server_state[index].flags, BT_ACL_CONN_STATE_DISCONNECTING);
+			break;
+		}
+	}
 
-    if (1U == source_connect_count())
-    {
-        unicast_client_delete_group();
-    }
 
-    for (uint32_t index = 0; index < ARRAY_SIZE(server_state); index++)
-    {
-        if (conn == server_state[index].conn)
-        {
-            for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SRC_COUNT; ep_index++)
-            {
-                if (server_state[index].src[ep_index].stream != NULL)
-                {
-                    stream_base = (struct stream_state *)server_state[index].src[ep_index].stream;
-                    if (NULL != stream_base->sem)
-                    {
-                        (void)OSA_SemaphoreDestroy(stream_base->sem);
-                        stream_base->sem = NULL;
-                    }
-                    bt_fifo_put(&free_streams, stream_base);
-                    server_state[index].src[ep_index].stream = NULL;
-                }
+	for (uint32_t index = 0; index < ARRAY_SIZE(server_state); index++)
+	{
+		for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SRC_COUNT; ep_index++)
+		{
+			stream_base = server_state[index].src[ep_index].stream;
+			if (stream_base != NULL)
+			{
+				if (!atomic_test_bit(stream_base->flags, BT_STREAM_STATE_RELEASED)) {
+					continue;
+				}
+				if (NULL != stream_base->sem)
+				{
+					(void)OSA_SemaphoreDestroy(stream_base->sem);
+					stream_base->sem = NULL;
+				}
+				bt_fifo_put(&free_streams, stream_base);
+				server_state[index].src[ep_index].stream = NULL;
+				if (server_state[index].src[ep_index].decoder != NULL)
+				{
+					decoder = server_state[index].src[ep_index].decoder;
+					bt_fifo_put(&free_decoders, decoder);
+					server_state[index].src[ep_index].decoder = NULL;
+				}
+			}
+		}
 
-                if (server_state[index].src[ep_index].decoder != NULL)
-                {
-                    decoder = server_state[index].src[ep_index].decoder;
-                    bt_fifo_put(&free_decoders, decoder);
-                    server_state[index].src[ep_index].decoder = NULL;
-                }
-            }
+		for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SNK_COUNT; ep_index++)
+		{
+			stream_base = server_state[index].snk[ep_index].stream;
+			if (stream_base != NULL)
+			{
+				if (!atomic_test_bit(stream_base->flags, BT_STREAM_STATE_RELEASED)) {
+					continue;
+				}
+				if (NULL != stream_base->sem)
+				{
+					(void)OSA_SemaphoreDestroy(stream_base->sem);
+					stream_base->sem = NULL;
+				}
+				bt_fifo_put(&free_streams, stream_base);
+				server_state[index].snk[ep_index].stream = NULL;
+				if (server_state[index].snk[ep_index].encoder != NULL)
+				{
+					encoder = server_state[index].snk[ep_index].encoder;
+					bt_fifo_put(&free_encoders, encoder);
+					server_state[index].snk[ep_index].encoder = NULL;
+				}
+			}
+		}
+	}
 
-            for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SNK_COUNT; ep_index++)
-            {
-                if (server_state[index].snk[ep_index].stream != NULL)
-                {
-                    stream_base = (struct stream_state *)server_state[index].snk[ep_index].stream;
-                    if (NULL != stream_base->sem)
-                    {
-                        (void)OSA_SemaphoreDestroy(stream_base->sem);
-                        stream_base->sem = NULL;
-                    }
-                    bt_fifo_put(&free_streams, stream_base);
-                    server_state[index].snk[ep_index].stream = NULL;
-                }
+	no_stream = true;
+	for (uint32_t index = 0; index < ARRAY_SIZE(server_state); index++)
+	{
+		if (server_state[index].conn != conn) {
+			continue;
+		}
 
-                if (server_state[index].snk[ep_index].encoder != NULL)
-                {
-                    encoder = server_state[index].snk[ep_index].encoder;
-                    bt_fifo_put(&free_encoders, encoder);
-                    server_state[index].snk[ep_index].encoder = NULL;
-                }
-            }
-            server_state[index].conn = NULL;
-            memset(&server_state[index], 0, sizeof(server_state[index]));
-            break;
-        }
-    }
-    /* TODO: Disconnected event */
+		for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SRC_COUNT; ep_index++)
+		{
+			if (server_state[index].src[ep_index].stream != NULL)
+			{
+				no_stream = false;
+				break;
+			}
+		}
+
+		for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SNK_COUNT; ep_index++)
+		{
+			if (server_state[index].snk[ep_index].stream != NULL)
+			{
+				no_stream = false;
+				break;
+			}
+		}
+
+		if (no_stream) {
+			server_state[index].conn = NULL;
+			memset(&server_state[index], 0, sizeof(server_state[index]));
+		}
+	}
+
+	no_stream = true;
+	for (uint32_t index = 0; index < ARRAY_SIZE(server_state); index++)
+	{
+		for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SRC_COUNT; ep_index++)
+		{
+			if (server_state[index].src[ep_index].stream != NULL)
+			{
+				no_stream = false;
+				break;
+			}
+		}
+
+		if (no_stream) {
+			break;
+		}
+
+		for (uint32_t ep_index = 0U; ep_index < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SNK_COUNT; ep_index++)
+		{
+			if (server_state[index].snk[ep_index].stream != NULL)
+			{
+				no_stream = false;
+				break;
+			}
+		}
+
+		if (no_stream) {
+			break;
+		}
+	}
+
+	if (no_stream) {
+		unicast_client_delete_group();
+	}
 }
 
 static void att_mtu_updated(struct bt_conn *conn, uint16_t tx, uint16_t rx)
