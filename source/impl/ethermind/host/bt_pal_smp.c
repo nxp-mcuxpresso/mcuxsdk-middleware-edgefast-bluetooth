@@ -6108,6 +6108,7 @@ int bt_smp_le_oob_set_tk(struct bt_conn *conn, const uint8_t *tk)
 
 	LOG_DBG("%s", bt_hex(tk, 16));
 
+	memset(&oob, 0, sizeof(SMP_OOB_DATA));
 	memcpy(bdaddr.addr, conn->le.dst.a.val, sizeof(bdaddr.addr));
 	bdaddr.type = conn->le.dst.type;
 
@@ -6298,6 +6299,7 @@ int bt_smp_le_oob_set_sc_data(struct bt_conn *conn,
 		return -EINVAL;
 	}
 
+	memset(&oob, 0, sizeof(SMP_OOB_DATA));
 	memcpy(bdaddr.addr, conn->le.dst.a.val, sizeof(bdaddr.addr));
 	bdaddr.type = conn->le.dst.type;
 
