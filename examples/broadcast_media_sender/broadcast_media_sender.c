@@ -305,7 +305,16 @@ static int audio_stream_encode(void)
 	for(int i = 0; i < CONFIG_BT_BAP_BROADCAST_SRC_STREAM_COUNT; i++)
 	{
 		do {
-			buf[i] = net_buf_alloc(&tx_pool, 10);
+			int timeout;
+			if(lc3_codec_info.frame_duration_us == 7500)
+			{
+				timeout = 20; /* 2 * 7.5 + 5 = 20ms */
+			}
+			else
+			{
+				timeout = 15; /* 10 + 5 = 15 ms */
+			}
+			buf[i] = net_buf_alloc(&tx_pool, timeout);
 			if(buf[i] == NULL)
 			{
 				PRINTF("iso net buff alloc timeout!\n");

@@ -325,7 +325,16 @@ static int audio_stream_encode(bool mute)
 	for(int i = 0; i < CONFIG_BT_BAP_UNICAST_CLIENT_ASE_SNK_COUNT; i++)
 	{
 		do {
-			buf[i] = net_buf_alloc(tx_pool[i], 10);
+			int timeout;
+			if(lc3_codec_info.frame_duration_us == 7500)
+			{
+				timeout = 20; /* 2 * 7.5 + 5 = 20ms */
+			}
+			else
+			{
+				timeout = 15; /* 10 + 5 = 15 ms */
+			}
+			buf[i] = net_buf_alloc(tx_pool[i], timeout);
 			if(buf[i] == NULL)
 			{
 				PRINTF("iso net buff alloc timeout!\n");
