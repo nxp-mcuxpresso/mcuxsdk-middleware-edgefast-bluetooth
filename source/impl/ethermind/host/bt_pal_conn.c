@@ -1538,6 +1538,15 @@ void bt_conn_unref(struct bt_conn *conn)
 	conn_handle = conn->handle;
 
 	old = atomic_dec(&conn->ref);
+
+#if (defined(CONFIG_BT_CLASSIC) && ((CONFIG_BT_CLASSIC) > 0U))
+    if ((atomic_get(&conn->ref) == 0) && (NULL != conn->br.pending_l2cap_ecbfc_req))
+    {
+        net_buf_unref(conn->br.pending_l2cap_ecbfc_req);
+        conn->br.pending_l2cap_ecbfc_req = NULL;
+    }
+#endif
+
 	/* Prevent from accessing connection object */
 	conn = NULL;
 	deallocated = (atomic_get(&old) == 1);
@@ -1552,14 +1561,6 @@ void bt_conn_unref(struct bt_conn *conn)
 	if (deallocated) {
 		notify_recycled_conn_slot();
 	}
-
-#if (defined(CONFIG_BT_CLASSIC) && ((CONFIG_BT_CLASSIC) > 0U))
-    if ((atomic_get(&conn->ref) == 0) && (NULL != conn->br.pending_l2cap_ecbfc_req))
-    {
-        net_buf_unref(conn->br.pending_l2cap_ecbfc_req);
-        conn->br.pending_l2cap_ecbfc_req = NULL;
-    }
-#endif
 
 	if (IS_ENABLED(CONFIG_BT_PERIPHERAL) && conn_type == BT_CONN_TYPE_LE &&
 	    conn_role == BT_CONN_ROLE_PERIPHERAL && deallocated) {
