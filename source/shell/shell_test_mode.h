@@ -23,8 +23,8 @@ struct bt_hci_le_config {
 } __packed;
 
 struct bt_hci_command {
-	uint8_t ogf;
-	uint8_t ocf;
+	uint16_t ogf;
+	uint16_t ocf;
 	uint16_t opcode;
 	uint8_t param_len;
 };
