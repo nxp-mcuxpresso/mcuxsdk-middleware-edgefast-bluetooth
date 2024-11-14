@@ -2702,33 +2702,33 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.host_low_power)
     mcux_add_source(
         BASE_PATH ${SdkRootDirPath}
         SOURCES
-            examples/common/project_segments/wireless/rw61x/low_power/board_lp.c
-            examples/common/project_segments/wireless/rw61x/low_power/board_lp.h
+            examples/_common/project_segments/wireless/rw61x/low_power/board_lp.c
+            examples/_common/project_segments/wireless/rw61x/low_power/board_lp.h
         DEVICE_IDS RW612 RW610
     )
     mcux_add_include(
         BASE_PATH ${SdkRootDirPath}
-        INCLUDES examples/common/project_segments/wireless/rw61x/low_power
+        INCLUDES examples/_common/project_segments/wireless/rw61x/low_power
         DEVICE_IDS RW612 RW610
     )
     mcux_add_source(
         BASE_PATH ${SdkRootDirPath}
-        SOURCES examples/common/project_segments/wireless/rw61x/app_common/app_services_init.c
+        SOURCES examples/_common/project_segments/wireless/rw61x/app_common/app_services_init.c
         DEVICE_IDS RW612 RW610
     )
     mcux_add_include(
         BASE_PATH ${SdkRootDirPath}
-        INCLUDES examples/${board}
+        INCLUDES examples/_boards/${board}
         DEVICE_IDS MIMXRT595S
     )
     mcux_add_source(
         BASE_PATH ${SdkRootDirPath}
-        SOURCES examples/${board}/fwk_board_lp.h
+        SOURCES examples/_boards/${board}/fwk_board_lp.h
         DEVICE_IDS MIMXRT595S
     )
     mcux_add_source(
         BASE_PATH ${SdkRootDirPath}
-        SOURCES examples/${board}/fwk_board_lp.c
+        SOURCES examples/_boards/${board}/fwk_board_lp.c
         DEVICE_IDS MIMXRT595S
     )
     mcux_add_source(
