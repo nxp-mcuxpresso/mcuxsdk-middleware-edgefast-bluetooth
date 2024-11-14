@@ -421,7 +421,13 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.lc3_nod
         SOURCES ../wireless/ethermind/bluetooth/private/utils/lc3_nodsp/export/include/LC3_ndsp_api.h
     )
     mcux_add_source(
+        SOURCES ../wireless/ethermind/bluetooth/private/utils/lc3_nodsp/private/fixed/common/lc3_ndsp_defines.h
+    )
+    mcux_add_source(
         SOURCES ../wireless/ethermind/bluetooth/private/utils/lc3_nodsp/private/fixed/common/lc3_ndsp_internal.h
+    )
+    mcux_add_source(
+        SOURCES ../wireless/ethermind/bluetooth/private/utils/lc3_nodsp/private/fixed/config/LC3_ndsp_features.h
     )
     mcux_add_source(
         SOURCES ../wireless/ethermind/bluetooth/private/utils/lc3_nodsp/private/fixed/config/LC3_ndsp_limits.h
