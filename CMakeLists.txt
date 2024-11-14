@@ -123,10 +123,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind)
         INCLUDES ../wireless/ethermind/port/pal/mcux/ethal
     )
     mcux_add_include(
-        INCLUDES ../wireless/ethermind/port/pal/mcux/toolspec/mcuxpresso
-        TOOLCHAINS mcux
-    )
-    mcux_add_include(
         INCLUDES ../wireless/ethermind/port/pal/mcux/sbc
     )
     mcux_add_include(
@@ -356,10 +352,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind)
     )
     mcux_add_source(
         SOURCES ../wireless/ethermind/port/pal/mcux/sbc/sbc_os.h
-    )
-    mcux_add_source(
-        SOURCES ../wireless/ethermind/port/pal/mcux/toolspec/mcuxpresso/*.*
-        TOOLCHAINS mcux
     )
     mcux_add_source(
         SOURCES ../wireless/ethermind/port/pal/mcux/EM_platform.c
@@ -2464,33 +2456,6 @@ endif ()
 #     )
 # endif ()
 
-# if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.mcux.linker.template)
-#     mcux_add_source(
-#         SOURCES boards/template/dummy.txt
-#     )
-#     mcux_add_source(
-#         SOURCES ${board}/edgefast_bluetooth_examples/template/linker/mcux/end_text.ldt
-#         TOOLCHAINS mcux
-#     )
-#     mcux_add_source(
-#         SOURCES ${board}/edgefast_bluetooth_examples/template/linker/mcux/main_data.ldt
-#         TOOLCHAINS mcux
-#     )
-#     mcux_add_source(
-#         SOURCES ${board}/edgefast_bluetooth_examples/template/linker/mcux/main_text.ldt
-#         TOOLCHAINS mcux
-#     )
-#     mcux_add_source(
-#         SOURCES ${board}/edgefast_bluetooth_examples/template/linker/mcux/symbols.ldt
-#         TOOLCHAINS mcux
-#     )
-#     mcux_add_source(
-#         SOURCES ${board}/edgefast_bluetooth_examples/template/linker/mcux/data.ldt
-#         TOOLCHAINS mcux
-#         DEVICES MIMXRT1052 MIMXRT1062 MIMXRT1042 MIMXRT1189 MIMXRT1187 MCXN547
-#     )
-# endif ()
-
 if (CONFIG_MCUX_PRJSEG_middleware.edgefast_bluetooth.sdio.template)
     # mcux_add_source(
     #     SOURCES boards/template/dummy.txt
@@ -3270,138 +3235,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_a2dp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_avrcp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_bip.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_bpp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_core.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_ctn.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_ftp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_core_arch}/mcuxpresso/libethermind_bt_ga.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_gatt.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_hfp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_hid.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_map.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_opp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_pan.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_pbap.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_protocol.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_sap.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_spp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_bt_util.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_sbc_common.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_sbc_decoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_sbc_encoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_a2dp.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
@@ -3777,126 +3610,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_a2dp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_avrcp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_bip.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_bpp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_core.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_ctn.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_ftp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_hfp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_hid.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_map.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_opp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_pan.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_pbap.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_protocol.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_sap.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_spp.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_util.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_sbc_common.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_sbc_decoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mcuxpresso/libethermind_br_sbc_encoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_a2dp.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
@@ -4080,36 +3793,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mcuxpresso/libethermind_ble_core.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mcuxpresso/libethermind_ble_gatt.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mcuxpresso/libethermind_ble_protocol.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mcuxpresso/libethermind_ble_util.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mcuxpresso/libethermind_ble_ga.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mdk/libethermind_ble_core.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
@@ -4179,24 +3862,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib.lc3)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_lc3_common.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_lc3_decoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_lc3_encoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_lc3_common.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
@@ -4250,24 +3915,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib.lc3)
     mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_lc3_encoder.a
         TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_lc3_common.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_lc3_decoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mcuxpresso/libethermind_lc3_encoder.a
-        TOOLCHAINS mcux
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
@@ -4329,24 +3976,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib.lc3)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mcuxpresso/libethermind_lc3_decoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mcuxpresso/libethermind_lc3_encoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mcuxpresso/libethermind_lc3_common.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mdk/libethermind_lc3_common.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
@@ -4404,24 +4033,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib.lc3_
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/cm33nodsp/mcuxpresso/libethermind_lc3_ndsp_common.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/cm33nodsp/mcuxpresso/libethermind_lc3_ndsp_decoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/cm33nodsp/mcuxpresso/libethermind_lc3_ndsp_encoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/cm33nodsp/mdk/libethermind_lc3_ndsp_common.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
@@ -4475,24 +4086,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib.lc3_no
     mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/iar/libethermind_ble_lc3_ndsp_encoder.a
         TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/mcuxpresso/libethermind_ble_lc3_ndsp_decoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/mcuxpresso/libethermind_ble_lc3_ndsp_encoder.a
-        TOOLCHAINS mcux
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/mcuxpresso/libethermind_ble_lc3_ndsp_common.a
-        TOOLCHAINS mcux
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
