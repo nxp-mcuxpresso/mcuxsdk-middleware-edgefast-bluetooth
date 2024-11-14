@@ -1,7 +1,5 @@
 mcux_set_variable(wireless_ble_core_arch ${CONFIG_MCUX_HW_CORE})
 mcux_set_variable(wireless_ble_lib_sel_dsp ${CONFIG_MCUX_HW_DSP})
-# message("CONFIG_MCUX_HW_CORE=${CONFIG_MCUX_HW_CORE}.")
-# message("CONFIG_MCUX_HW_DSP=${CONFIG_MCUX_HW_DSP}.")
 if (NOT((CONFIG_MCUX_HW_CORE STREQUAL "cm33") AND (CONFIG_MCUX_HW_DSP STREQUAL "NO_DSP")))
     mcux_set_variable(wireless_ble_lib_sel ${CONFIG_MCUX_HW_CORE})
 endif()
@@ -10,15 +8,9 @@ if ((CONFIG_MCUX_HW_CORE STREQUAL "cm33") AND (CONFIG_MCUX_HW_DSP STREQUAL "NO_D
 endif()
 
 if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.pal)
-    # mcux_add_include(
-    #     INCLUDES boards/${board}/edgefast_bluetooth_examples/configs
-    # )
     mcux_add_source(
         SOURCES boards/template/dummy.txt
     )
-    # mcux_add_source(
-    #     SOURCES boards/${board}/edgefast_bluetooth_examples/configs/FreeRTOSConfig.h
-    # )
 endif ()
 
 if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci)
@@ -1521,26 +1513,16 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.wifi_nxp.controller.wifi
     )
 endif ()
 
-# test
 if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.config.template)
-    # mcux_add_source(
-    #     SOURCES edgefast_bluetooth_config_include.h
-    # )
 endif ()
 
 if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.cap)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_cap.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/cap.h
     )
@@ -1568,15 +1550,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.aics)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_aics.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/aics.h
     )
@@ -1595,15 +1571,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.vocs)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_vocs.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/vocs.h
     )
@@ -1622,15 +1592,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.vcp)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_vcp.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/vcp.h
     )
@@ -1649,15 +1613,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.micp)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_micp.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/micp.h
     )
@@ -1676,15 +1634,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.csip)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_csip.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/csip.h
     )
@@ -1709,9 +1661,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.ccid)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
@@ -1727,15 +1676,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.mcs)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_mcs.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/mcs.h
     )
@@ -1751,15 +1694,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.mcc)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_mcs.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/mcc.h
     )
@@ -1775,18 +1712,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.mpl)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_mpl.h
-    # )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_mctl.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/media_proxy.h
     )
@@ -1808,24 +1736,12 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.bap)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
     mcux_add_include(
         INCLUDES source/impl/ethermind
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_ascs.h
-    # )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_bap.h
-    # )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_pacs.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/audio.h
     )
@@ -1904,15 +1820,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.bass)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_bass.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/bap.h
     )
@@ -1931,15 +1841,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.has)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_has.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/has.h
     )
@@ -1958,15 +1862,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.tbs)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_tbs.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/tbs.h
     )
@@ -1985,15 +1883,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.tmap)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_tmap.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/tmap.h
     )
@@ -2006,15 +1898,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.gmap)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_gmap.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/gmap.h
     )
@@ -2033,15 +1919,9 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.le_audio.pbp)
     mcux_add_include(
         INCLUDES include/bluetooth/audio
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/audio/config
-    # )
     mcux_add_include(
         INCLUDES source/impl/ethermind/audio
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/audio/config/config_pbp.h
-    # )
     mcux_add_source(
         SOURCES include/bluetooth/audio/pbp.h
     )
@@ -2183,9 +2063,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.ots)
     mcux_add_include(
         INCLUDES include/bluetooth/services
     )
-    # mcux_add_include(
-    #     INCLUDES include/bluetooth/services/config
-    # )
     mcux_add_source(
         SOURCES source/services/ots/ots.c
     )
@@ -2231,9 +2108,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.ots)
     mcux_add_source(
         SOURCES include/bluetooth/services/ots.h
     )
-    # mcux_add_source(
-    #     SOURCES include/bluetooth/services/config/config_ots.h
-    # )
 endif ()
 
 if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.profile.wu)
@@ -2333,10 +2207,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.host_msd_fatfs.ether
     mcux_add_source(
         SOURCES source/impl/ethermind/platform/configs/ffconf.h
     )
-    # the config are converted into Kconfig symbol in middleware/usb
-    # mcux_add_source(
-    #     SOURCES source/impl/ethermind/platform/configs/usb_host_config.h
-    # )
 endif ()
 
 if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.pal.db_gen.ethermind)
@@ -2436,30 +2306,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.porting.work_queue)
     )
 endif ()
 
-# if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.config.template)
-#     mcux_add_include(
-#         INCLUDES include
-#         TARGET_FILES edgefast_bluetooth_config.h
-#     )
-#     mcux_add_include(
-#         INCLUDES examples/template/app_bluetooth_config
-#         TARGET_FILES app_bluetooth_config.h
-#     )
-#     mcux_add_source(
-#         SOURCES include/edgefast_bluetooth_config.h
-#     )
-#     mcux_add_source(
-#         SOURCES include/edgefast_bluetooth_debug_config.h
-#     )
-#     mcux_add_source(
-#         SOURCES examples/template/app_bluetooth_config/app_bluetooth_config.h
-#     )
-# endif ()
-
 if (CONFIG_MCUX_PRJSEG_middleware.edgefast_bluetooth.sdio.template)
-    # mcux_add_source(
-    #     SOURCES boards/template/dummy.txt
-    # )
 endif ()
 
 if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.template)
@@ -2983,37 +2830,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_bip.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_bpp.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_core.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_ctn.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_ftp.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_ga.a
         TOOLCHAINS armgcc
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3031,25 +2848,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_hid.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_map.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_opp.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_pan.a
         TOOLCHAINS armgcc
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3062,12 +2861,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib)
     )
     mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_protocol.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/gcc/libethermind_bt_sap.a
         TOOLCHAINS armgcc
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3115,37 +2908,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_bip.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_bpp.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_core.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_ctn.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_ftp.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_ga.a
         TOOLCHAINS iar
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3163,25 +2926,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_hid.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_map.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_opp.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_pan.a
         TOOLCHAINS iar
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3194,12 +2939,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib)
     )
     mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_protocol.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/iar/libethermind_bt_sap.a
         TOOLCHAINS iar
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3247,37 +2986,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_bip.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_bpp.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_core.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_ctn.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_ftp.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_ga.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3295,25 +3004,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_hid.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_map.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_opp.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_pan.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3326,12 +3017,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.btble.ethermind.lib)
     )
     mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_protocol.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/btdm/${wireless_ble_lib_sel}/mdk/libethermind_bt_sap.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3382,18 +3067,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_bip.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_bpp.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_core.a
         TOOLCHAINS armgcc
         CORES ${wireless_ble_core_arch}
@@ -3406,37 +3079,13 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_ftp.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_hfp.a
         TOOLCHAINS armgcc
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_hid.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_map.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_opp.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_pan.a
         TOOLCHAINS armgcc
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3449,12 +3098,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib)
     )
     mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_protocol.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/gcc/libethermind_br_sap.a
         TOOLCHAINS armgcc
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3502,31 +3145,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_bip.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_bpp.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_core.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_ctn.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_ftp.a
         TOOLCHAINS iar
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3538,25 +3157,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_hid.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_map.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_opp.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_pan.a
         TOOLCHAINS iar
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3569,12 +3170,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib)
     )
     mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_protocol.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/iar/libethermind_br_sap.a
         TOOLCHAINS iar
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3622,31 +3217,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_bip.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_bpp.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_core.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_ctn.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_ftp.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3658,25 +3229,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_hid.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_map.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_opp.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_pan.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3689,12 +3242,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.br.ethermind.lib)
     )
     mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_protocol.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/br/${wireless_ble_lib_sel}/mdk/libethermind_br_sap.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
@@ -3757,12 +3304,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/gcc/libethermind_ble_ga.a
-        TOOLCHAINS armgcc
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/iar/libethermind_ble_core.a
         TOOLCHAINS iar
         CORES ${wireless_ble_core_arch}
@@ -3787,12 +3328,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib)
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/iar/libethermind_ble_ga.a
-        TOOLCHAINS iar
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mdk/libethermind_ble_core.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
@@ -3812,12 +3347,6 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib)
     )
     mcux_add_library(
         LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mdk/libethermind_ble_util.lib
-        TOOLCHAINS mdk
-        CORES ${wireless_ble_core_arch}
-        DSP ${wireless_ble_lib_sel_dsp}
-    )
-    mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/${wireless_ble_lib_sel}/mdk/libethermind_ble_ga.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
