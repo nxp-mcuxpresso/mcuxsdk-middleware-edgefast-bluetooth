@@ -302,7 +302,7 @@ static int hci_cmd_interface(const struct shell *sh, size_t argc, char **argv)
     command_buffer.ogf = strtol(argv[1],NULL,16);
     command_buffer.ocf = strtol(argv[2],NULL,16);
 
-    command_buffer.opcode = ( command_buffer.ocf | (command_buffer.ogf << 10 ));
+    command_buffer.opcode = ((command_buffer.ocf & 0x3ff) | (command_buffer.ogf << 10));
     command_buffer.param_len = argc - 3 ;
 
     uint8_t *bt_hci_cmd_params = NULL;
