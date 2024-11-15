@@ -3467,7 +3467,7 @@ static void disconnected(struct bt_conn *conn, uint8_t reason)
 			stream_base = server_state[index].src[ep_index].stream;
 			if (stream_base != NULL)
 			{
-				if (!atomic_test_bit(stream_base->flags, BT_STREAM_STATE_RELEASED)) {
+				if ((atomic_get(stream_base->flags) != 0) && !atomic_test_bit(stream_base->flags, BT_STREAM_STATE_RELEASED)) {
 					continue;
 				}
 				if (NULL != stream_base->sem)
@@ -3491,7 +3491,7 @@ static void disconnected(struct bt_conn *conn, uint8_t reason)
 			stream_base = server_state[index].snk[ep_index].stream;
 			if (stream_base != NULL)
 			{
-				if (!atomic_test_bit(stream_base->flags, BT_STREAM_STATE_RELEASED)) {
+				if ((atomic_get(stream_base->flags) != 0) && !atomic_test_bit(stream_base->flags, BT_STREAM_STATE_RELEASED)) {
 					continue;
 				}
 				if (NULL != stream_base->sem)
