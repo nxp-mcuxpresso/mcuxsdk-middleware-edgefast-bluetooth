@@ -1927,6 +1927,16 @@ config BT_HFP_AG_ESCO_S4
       This option enables eSCO S4 Settings for HFP AG
 endif # BT_HFP_AG
 
+config BT_PBAP
+    bool "BT_PBAP"
+    default 0
+    help
+      Bluetooth PBAP Profile.
+      This option enables the PBAP profile
+      This symbol is a config macro.
+
+if BT_PBAP
+
 config BT_PBAP_PCE
     bool "BT_PBAP_PCE"
     default 0
@@ -1950,7 +1960,7 @@ config BT_PBAP_PCE_MAX_PKT_LEN
       This symbol defines the max packet length supported by PCE by default.
       This symbol is a config macro.
 
-endif
+endif #BT_PBAP_PCE
 
 config BT_PBAP_PSE
     bool "BT_PBAP_PSE"
@@ -1975,7 +1985,8 @@ config BT_PBAP_PSE_SUPPORTED_REPOSITORIES
       This symbol defines the repositories supported by PSE by default.
       This symbol is a config macro.
 
-endif
+endif #BT_PBAP_PSE
+endif #BT_PBAP
 
 config BT_AVDTP
     bool "BT_AVDTP"
@@ -1984,6 +1995,16 @@ config BT_AVDTP
       Bluetooth AVDTP protocol support [EXPERIMENTAL], if the macro is set to 0, feature is disabled, if 1, feature is enabled.
       This option enables Bluetooth AVDTP support
       This symbol is a config macro.
+
+config BT_MAP
+    bool "BT_MAP"
+    default 0
+    help
+      Bluetooth BT_MAP Profile.
+      This option enables the BT_MAP profile
+      This symbol is a config macro.
+
+if BT_MAP
 
 config BT_MAP_MCE
     bool "BT_MAP_MCE"
@@ -2029,7 +2050,7 @@ config BT_MAP_MCE_MAS_SUPPORTED_FEATURES
       This symbol defines the features supported by MCE MAS by default.
       This symbol is a config macro.
 
-endif
+endif #BT_MAP_MCE
 
 config BT_MAP_MSE
     bool "BT_MAP_MSE"
@@ -2075,7 +2096,8 @@ config BT_MAP_MSE_MNS_SUPPORTED_FEATURES
       This symbol defines the features supported by MSE MNS by default.
       This symbol is a config macro.
 
-endif
+endif #BT_MAP_MSE
+endif #BT_MAP
 
 config BT_A2DP
     bool "BT_A2DP"
