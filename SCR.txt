@@ -9,4 +9,6 @@ Description and comments: EdgeFast Bluetooth PAL
 Release Location: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-edgefast-bluetooth
 Origin: 
       NXP (BSD-3-Clause)
+      NXP (Apache-2.0)
       Zephyr BT/BLE Host stack (Apache-2.0) - https://github.com/zephyrproject-rtos/zephyr/tree/v3.7-branch/subsys/bluetooth
+      Electronic Lives Mfg. by ChaN of Ageo city, Japan (FatFs License) - http://elm-chan.org/fsw/ff/00index_e.html
