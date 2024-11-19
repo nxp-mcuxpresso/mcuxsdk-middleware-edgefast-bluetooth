@@ -5034,6 +5034,9 @@ void bt_CommandInit(shell_handle_t shell)
 #if (defined(CONFIG_BT_CSIP_SET_MEMBER) && (CONFIG_BT_CSIP_SET_MEMBER > 0))
 	bt_ShellCsipSetMemberInit(shell);
 #endif
+#if (defined(CONFIG_BT_CSIP_SET_COORDINATOR) && (CONFIG_BT_CSIP_SET_COORDINATOR > 0))
+	bt_ShellCsipSetCoordinatorInit(shell);
+#endif
 #if (defined(CONFIG_BT_HAS_CLIENT) && (CONFIG_BT_HAS_CLIENT > 0))
 	bt_ShellHasClientInit(shell);
 #endif
