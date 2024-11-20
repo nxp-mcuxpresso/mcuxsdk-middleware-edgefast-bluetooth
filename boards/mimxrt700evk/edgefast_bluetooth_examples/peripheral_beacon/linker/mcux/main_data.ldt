@@ -8,3 +8,9 @@
 	    KEEP(*(SORT(._k_mem_slab*)))
 	    _k_mem_slab_list_end = .;
 	    . = ALIGN(4);
+	    <#if memory.name=="SRAM">
+	    *fsl_xspi.o(.text*)
+        *fsl_xspi.o(.rodata*)
+        *mflash_drv.o(.text*)
+        *mflash_drv.o(.rodata*)
+        </#if>
