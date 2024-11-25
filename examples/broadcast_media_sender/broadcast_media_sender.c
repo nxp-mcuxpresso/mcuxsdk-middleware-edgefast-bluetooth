@@ -306,13 +306,13 @@ static int audio_stream_encode(void)
 	{
 		do {
 			int timeout;
-			if(lc3_codec_info.frame_duration_us == 7500)
+			if(lc3_preset.qos.framing == BT_AUDIO_CODEC_QOS_FRAMING_FRAMED)
 			{
-				timeout = 20; /* 2 * 7.5 + 5 = 20ms */
+				timeout = (lc3_codec_info.frame_duration_us * 2 + 5000) / 1000;
 			}
 			else
 			{
-				timeout = 15; /* 10 + 5 = 15 ms */
+				timeout = (lc3_codec_info.frame_duration_us + 5000) / 1000;
 			}
 			buf[i] = net_buf_alloc(&tx_pool, timeout);
 			if(buf[i] == NULL)
