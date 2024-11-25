@@ -1289,7 +1289,6 @@ static int device_connect(int index)
 	err = bt_conn_set_security(default_conn[index], BT_SECURITY_L2);
 	if (err != 0) {
 		PRINTF("failed to set security (err %d)\n", err);
-		return err;
 	}
 
 	err = OSA_SemaphoreWait(sem_security_updated, osaWaitForever_c);
