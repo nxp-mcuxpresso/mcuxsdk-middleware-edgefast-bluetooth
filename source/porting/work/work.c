@@ -23,6 +23,10 @@
 #endif /* CONFIG_BT_SMP */
 #endif
 
+enum {
+	K_WORK_DELAY_Q_TIMER = 0,
+};
+
 /** @brief A structure used to hold work until it can be processed. */
 struct k_work_delay_q {
     /* The thread that animates the work. */
@@ -38,6 +42,9 @@ struct k_work_delay_q {
 	sys_slist_t pending;
 
 	uint32_t tick;
+
+	/* Flags describing queue state. */
+	atomic_t flags;
 };
 
 /* Lock to protect the internal state of all work items, work queues,
@@ -545,11 +552,13 @@ static void k_work_delay_queue_main( TimerHandle_t xTimer )
 
 	if (bt_list_is_empty(&k_sys_work_delay_q.pending))
 	{
-		/* k_spin_unlock(&lock, key); */
-	ret = xTimerStop(xTimer, (TickType_t)1000);
-	assert(pdPASS == ret);
-	(void)ret;
-	/* key = k_spin_lock(&lock); */
+		if (atomic_test_and_clear_bit(&k_sys_work_delay_q.flags, K_WORK_DELAY_Q_TIMER)) {
+			/* k_spin_unlock(&lock, key); */
+			ret = xTimerStop(xTimer, (TickType_t)1000);
+			assert(pdPASS == ret);
+			(void)ret;
+			/* key = k_spin_lock(&lock); */
+		}
 	}
 
 	k_spin_unlock(&lock, key);
@@ -585,7 +594,7 @@ static void k_work_delay_queue_append(struct k_work_delayable *dwork, k_timeout_
 
 	k_spin_unlock(&lock, key);
 
-	if (xTimerIsTimerActive( k_sys_work_delay_q.timer ) == pdFALSE)
+	if (!atomic_test_and_set_bit(&k_sys_work_delay_q.flags, K_WORK_DELAY_Q_TIMER))
 	{
 		ret = xTimerStart(k_sys_work_delay_q.timer, (TickType_t)10);
 		assert(pdPASS == ret);
