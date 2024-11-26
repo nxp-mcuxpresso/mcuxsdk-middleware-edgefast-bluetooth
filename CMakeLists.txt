@@ -355,8 +355,8 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind)
         SOURCES ../wireless/ethermind/bluetooth/private/utils/sbc/*.h
     )
     mcux_add_configuration(
-        CC "-DLFS_NO_INTRINSICS=1 -DLFS_NO_ERROR=1"
-        CX "-DLFS_NO_INTRINSICS=1 -DLFS_NO_ERROR=1"
+        CC "-DLFS_NO_INTRINSICS=1 -DLFS_NO_ERROR=1 -DLFS_THREADSAFE=1"
+        CX "-DLFS_NO_INTRINSICS=1 -DLFS_NO_ERROR=1 -DLFS_THREADSAFE=1"
     )
 endif ()
 
