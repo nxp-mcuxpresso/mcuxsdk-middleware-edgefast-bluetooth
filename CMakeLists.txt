@@ -3583,55 +3583,55 @@ endif ()
 
 if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind.lib.lc3_nodsp)
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/gcc/libethermind_ble_lc3_ndsp_common.a
+        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/gcc/libethermind_lc3_ndsp_common.a
         TOOLCHAINS armgcc
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/gcc/libethermind_ble_lc3_ndsp_decoder.a
+        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/gcc/libethermind_lc3_ndsp_decoder.a
         TOOLCHAINS armgcc
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/gcc/libethermind_ble_lc3_ndsp_encoder.a
+        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/gcc/libethermind_lc3_ndsp_encoder.a
         TOOLCHAINS armgcc
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/iar/libethermind_ble_lc3_ndsp_common.a
+        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/iar/libethermind_lc3_ndsp_common.a
         TOOLCHAINS iar
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/iar/libethermind_ble_lc3_ndsp_decoder.a
+        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/iar/libethermind_lc3_ndsp_decoder.a
         TOOLCHAINS iar
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/iar/libethermind_ble_lc3_ndsp_encoder.a
+        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/iar/libethermind_lc3_ndsp_encoder.a
         TOOLCHAINS iar
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/mdk/libethermind_ble_lc3_ndsp_common.lib
+        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/mdk/libethermind_lc3_ndsp_common.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/mdk/libethermind_ble_lc3_ndsp_decoder.lib
+        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/mdk/libethermind_lc3_ndsp_decoder.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
     )
     mcux_add_library(
-        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/mdk/libethermind_ble_lc3_ndsp_encoder.lib
+        LIBS ../wireless/ethermind/bluetooth/private/lib/mcux/default/ble/cm33nodsp/mdk/libethermind_lc3_ndsp_encoder.lib
         TOOLCHAINS mdk
         CORES ${wireless_ble_core_arch}
         DSP ${wireless_ble_lib_sel_dsp}
