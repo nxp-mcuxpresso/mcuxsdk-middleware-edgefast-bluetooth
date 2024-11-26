@@ -900,6 +900,28 @@ void bt_hci_io_capa_resp(struct net_buf *buf)
 #endif
 }
 
+#if defined(CONFIG_BT_SMP_APP_PAIRING_ACCEPT)
+API_RESULT sm_pairing_accept(BT_DEVICE_ADDR* device_addr)
+{
+	struct bt_conn *conn = NULL;
+	API_RESULT ret = API_SUCCESS;
+
+	conn = bt_conn_lookup_addr_br((const bt_addr_t *)&device_addr->addr[0]);
+	if (conn != NULL) {
+		if (bt_auth && bt_auth->pairing_accept) {
+			enum bt_security_err err;
+
+			err = bt_auth->pairing_accept(conn, NULL);
+			if (err != BT_SECURITY_ERR_SUCCESS) {
+				ret = HC_PAIRING_NOT_ALLOWED;
+			}
+		}
+		bt_conn_unref(conn);
+	}
+	return ret;
+}
+#endif
+
 void bt_hci_io_capa_req(struct net_buf *buf)
 {
 #if 0
