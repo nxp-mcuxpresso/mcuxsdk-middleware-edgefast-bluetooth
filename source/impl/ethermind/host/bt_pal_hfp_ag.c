@@ -417,7 +417,6 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
     uint16_t i;
     uint8_t *recvd_data;
     uint8_t option, index;
-    uint8_t cmd[16];
     struct bt_hfp_ag *hfp_ag;
 
     switch (hfp_ag_event)
