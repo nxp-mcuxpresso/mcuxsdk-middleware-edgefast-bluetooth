@@ -131,7 +131,7 @@ static struct bt_bap_broadcast_source *broadcast_source;
 NET_BUF_POOL_FIXED_DEFINE(tx_pool,
 			  TOTAL_BUF_NEEDED,
 			  BT_ISO_SDU_BUF_SIZE(CONFIG_BT_ISO_TX_MTU), CONFIG_NET_BUF_USER_DATA_SIZE, NULL);
-static uint16_t seq_num;
+static uint32_t seq_num;
 static uint64_t tx_samples = 0;
 static uint32_t tx_time_stamp_start;
 
@@ -342,7 +342,7 @@ static int audio_stream_encode(void)
 
 	for(int i = 0; i < CONFIG_BT_BAP_BROADCAST_SRC_STREAM_COUNT; i++)
 	{
-		int ret = bt_bap_stream_send_ts(&streams[i].stream, buf[i], seq_num, sdu_time_stamp);
+		int ret = bt_bap_stream_send_ts(&streams[i].stream, buf[i], (uint16_t)(seq_num & 0xffff), sdu_time_stamp);
 		if (ret < 0) {
 			/* This will end broadcasting on this stream. */
 			PRINTF("Unable to broadcast data on %p: %d\n", &streams[i], ret);
