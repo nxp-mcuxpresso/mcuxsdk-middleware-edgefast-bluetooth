@@ -7,4 +7,11 @@
 	    _k_mem_slab_list_start = .;
 	    KEEP(*(SORT(._k_mem_slab*)))
 	    _k_mem_slab_list_end = .;
-	    . = ALIGN(4);
+	    . = ALIGN(32);
+        *(m_usb_dma_init_data)
+        . = ALIGN(32);
+        <#if memory.name=="SRAM">
+        *libethermind_lc3_ndsp_common.a(.text .text* .rodata .rodata*)
+        *libethermind_lc3_ndsp_encoder.a(.text .text* .rodata .rodata*)
+        *libethermind_lc3_ndsp_decoder.a(.text .text* .rodata .rodata*)
+        </#if>
