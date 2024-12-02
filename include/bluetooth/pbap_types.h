@@ -72,16 +72,16 @@
  *
  * Constant Definitions for PBAP profile supported featur
  */
-#define BT_PBAP_FEATURE_DOWNLOAD                     (0UL << 1U)
+#define BT_PBAP_FEATURE_DOWNLOAD                     (1UL << 0U)
 #define BT_PBAP_FEATURE_BROWSING                     (1UL << 1U)
-#define BT_PBAP_FEATURE_DATABASE_IDENTIFIER          (2UL << 1U)
-#define BT_PBAP_FEATURE_FOLDER_VERSION_COUNTERS      (3UL << 1U)
-#define BT_PBAP_FEATURE_VCARD_SELECTING              (4UL << 1U)
-#define BT_PBAP_FEATURE_ENHANCED_MISSED_CALLS        (5UL << 1U)
-#define BT_PBAP_FEATURE_X_BT_UCL_VCARD_PROPERTY      (6UL << 1U)
-#define BT_PBAP_FEATURE_X_BT_UID_VCARD_PROPERTY      (7UL << 1U)
-#define BT_PBAP_FEATURE_CONTACT_REFERENCING          (8UL << 1U)
-#define BT_PBAP_FEATURE_DEFAULT_CONTACT_IMAGE_FORMAT (9UL << 1U)
+#define BT_PBAP_FEATURE_DATABASE_IDENTIFIER          (1UL << 2U)
+#define BT_PBAP_FEATURE_FOLDER_VERSION_COUNTERS      (1UL << 3U)
+#define BT_PBAP_FEATURE_VCARD_SELECTING              (1UL << 4U)
+#define BT_PBAP_FEATURE_ENHANCED_MISSED_CALLS        (1UL << 5U)
+#define BT_PBAP_FEATURE_X_BT_UCL_VCARD_PROPERTY      (1UL << 6U)
+#define BT_PBAP_FEATURE_X_BT_UID_VCARD_PROPERTY      (1UL << 7U)
+#define BT_PBAP_FEATURE_CONTACT_REFERENCING          (1UL << 8U)
+#define BT_PBAP_FEATURE_DEFAULT_CONTACT_IMAGE_FORMAT (1UL << 9U)
 
 /**
  * @name PBAP Application Parameter Tag
