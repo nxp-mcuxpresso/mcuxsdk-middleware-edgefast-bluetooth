@@ -105,8 +105,8 @@ define block HEAP      with alignment = 8, size = __size_heap__     { };
 define block RO        { readonly };
 define block RW        { readwrite };
 define block ZI        { zi };
-define block USB_RW    with alignment = 32, end alignment = 32  { section m_usb_dma_init_data };
-define block USB_ZI    with alignment = 32, end alignment = 32  { section m_usb_dma_noninit_data };
+define block USB_RW    with alignment = 32, end alignment = 32  { section CacheLineData.init };
+define block USB_ZI    with alignment = 32, end alignment = 32  { section CacheLineData };
 define block NCACHE_VAR    { section NonCacheable , section NonCacheable.init };
 define block CORE1_IMAGE_BLOCK  with alignment = 16, maximum size = m_core1_image_maximum_size  { section  __core1_image };
 

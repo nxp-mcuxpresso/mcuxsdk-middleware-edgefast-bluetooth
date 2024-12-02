@@ -274,7 +274,7 @@ SECTIONS
     . = ALIGN(4);
     __DATA_RAM = .;
     __data_start__ = .;      /* create a global symbol at data start */
-    *(m_usb_dma_init_data)
+    *(CacheLineData.init)
     /* Explicit placement of flash and frequently executed functions in RAM */
     */fsl_adapter_flexspi_nor_flash.c.obj
     */mflash_drv.c.obj
@@ -332,7 +332,7 @@ SECTIONS
     . = ALIGN(4);
     __START_BSS = .;
     __bss_start__ = .;
-    *(m_usb_dma_noninit_data)
+    *(CacheLineData)
     *(.bss)
     *(.bss*)
     *(COMMON)

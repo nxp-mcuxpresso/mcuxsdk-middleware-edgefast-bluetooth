@@ -306,7 +306,7 @@ SECTIONS
     . = ALIGN(4);
     __DATA_RAM = .;
     __data_start__ = .;      /* create a global symbol at data start */
-    *(m_usb_dma_init_data)
+    *(CacheLineData.init)
     *(.data)                 /* .data sections */
     *(.data*)                /* .data* sections */
     *(DataQuickAccess)       /* quick access data section */
@@ -372,7 +372,7 @@ SECTIONS
     __START_BSS = .;
     __bss_start__ = .;
     . = ALIGN(32);
-    *(m_usb_dma_init_data)
+    *(CacheLineData.init)
     . = ALIGN(32);
     *(.bss)
     *(.bss*)

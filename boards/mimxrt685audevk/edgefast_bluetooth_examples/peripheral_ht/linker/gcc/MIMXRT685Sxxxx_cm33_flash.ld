@@ -288,7 +288,7 @@ SECTIONS
     __data_start__ = .;      /* create a global symbol at data start */
     *(CodeQuickAccess)       /* CodeQuickAccess sections */
     *(DataQuickAccess)       /* DataQuickAccess sections */
-    *(m_usb_dma_init_data)
+    *(CacheLineData.init)
     /* Explicit placement of flash and frequently executed functions in RAM */
     */fsl_adapter_flexspi_nor_flash.c.obj
     */NV_Flash.c.obj

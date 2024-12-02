@@ -8,7 +8,7 @@
 	    KEEP(*(SORT(._k_mem_slab*)))
 	    _k_mem_slab_list_end = .;
 	    . = ALIGN(32);
-        *(m_usb_dma_init_data)
+        *(CacheLineData.init)
         . = ALIGN(32);
         <#if memory.name=="SRAM">
         *mflash_drv.o(.text .text* .rodata .rodata*)

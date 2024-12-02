@@ -347,7 +347,7 @@ SECTIONS
     *(CodeQuickAccess)       /* CodeQuickAccess sections */
     *(DataQuickAccess)       /* DataQuickAccess sections */
     . = ALIGN(32);
-    *(m_usb_dma_init_data)
+    *(CacheLineData.init)
     . = ALIGN(32);
     /* Explicit placement of flash and frequently executed functions in RAM */
     */fsl_xspi.c.obj(.text .text* .rodata .rodata*)
@@ -422,7 +422,7 @@ SECTIONS
     __START_BSS = .;
     __bss_start__ = .;
     . = ALIGN(32);
-    *(m_usb_dma_noninit_data)
+    *(CacheLineData)
     . = ALIGN(32);
     *(.bss)
     *(.bss*)
