@@ -8,7 +8,7 @@ config MCUX_PRJSEG_middleware.edgefast_bluetooth.storage
 
 if MCUX_PRJSEG_middleware.edgefast_bluetooth.storage
 
-choice
+choice MCUX_PRJSEG_middleware.edgefast_bluetooth.storage_selection
     prompt "Local storage"
     default MCUX_PRJSEG_middleware.edgefast_bluetooth_flash_adapter_rt1170evkb if MCUX_HW_BOARD_evkbmimxrt1170
     default MCUX_PRJSEG_middleware.edgefast_bluetooth_flash_adapter_rt595evk if MCUX_HW_BOARD_evkmimxrt595
@@ -57,7 +57,7 @@ config MCUX_PRJSEG_middleware.edgefast_bluetooth.codec
 
 if MCUX_PRJSEG_middleware.edgefast_bluetooth.codec
 
-choice
+choice MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_selection
     prompt "CODEC selection"
     default MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_wm8960 if MCUX_HW_BOARD_evkbimxrt1050 || \
                                                                       MCUX_HW_BOARD_evkmimxrt1040
@@ -95,7 +95,7 @@ config MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_dialog7212
 
 endchoice
 
-choice
+choice  MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_data_bus_selection
     prompt "CODEC data bus selection"
     default MCUX_PRJSEG_middleware.edgefast_bluetooth.codec_sai_edma
     help

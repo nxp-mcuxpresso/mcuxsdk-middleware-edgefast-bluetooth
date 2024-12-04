@@ -45,7 +45,7 @@ config MCUX_COMPONENT_middleware.edgefast_bluetooth.config.ethermind
 
 
 # Bluetooth mode selection.
-choice
+choice MCUX_COMPONENT_middleware.edgefast_bluetooth.mode_selection
     prompt "Bluetooth mode selection"
     default MCUX_COMPONENT_middleware.edgefast_bluetooth.ble.ethermind
     help
@@ -118,7 +118,7 @@ config MCUX_COMPONENT_middleware.edgefast_bluetooth.porting
 
 if MCUX_COMPONENT_middleware.edgefast_bluetooth.porting
 
-choice
+choice MCUX_COMPONENT_middleware.edgefast_bluetooth.porting_debug_console_selection
     prompt "Debug Console Selection"
     default MCUX_COMPONENT_middleware.edgefast_bluetooth.porting_DEPEND_ANYOF_OPTION_1
     help
@@ -162,7 +162,7 @@ config MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci
 
 if MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci
 
-choice
+choice MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci_interface_selection
     prompt "Bluetooth HCI interface Selection"
     default MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci_platform if MCUX_HW_DEVICE_RW612
     default MCUX_COMPONENT_middleware.edgefast_bluetooth.common.ethermind.hci_uart
