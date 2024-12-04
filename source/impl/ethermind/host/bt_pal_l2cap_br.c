@@ -2314,7 +2314,9 @@ void bt_l2cap_br_recv(struct bt_conn *conn, struct net_buf *buf)
 
 int bt_l2cap_br_chan_recv_complete(struct bt_l2cap_chan *chan, struct net_buf *buf)
 {
+#ifdef L2CAP_SUPPORT_CBFC_MODE
 	struct bt_l2cap_br_chan *br_chan = BR_CHAN(chan);
+#endif
 	struct bt_conn *conn = chan->conn;
 
 	__ASSERT_NO_MSG(chan);
