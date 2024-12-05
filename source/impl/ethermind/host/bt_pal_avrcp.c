@@ -104,7 +104,9 @@ NET_BUF_POOL_FIXED_DEFINE(avrcp_rx_pool, AVRCP_RX_DATA_BUF_CNT, AVRCP_RX_DATA_BU
     }
 
 struct bt_avrcp_browsing_cmd *bt_avrcp_parse_browsing_cmd_data(uint8_t *data, uint32_t len);
+#if (defined(CONFIG_BT_AVRCP_CT) && ((CONFIG_BT_AVRCP_CT) > 0U))
 struct bt_avrcp_browsing_rsp *bt_avrcp_parse_browsing_rsp_data(uint8_t *data, uint32_t len);
+#endif
 
 static struct bt_conn *get_conn;
 static void avrcp_get_conn(struct bt_conn *conn, void *data)
@@ -391,6 +393,7 @@ static API_RESULT ethermind_avrcp_cb(
 
         case AVRCP_BOW_MESSAGE_IND:
         {
+#if (defined(CONFIG_BT_AVRCP_TG) && ((CONFIG_BT_AVRCP_TG) > 0U))
             if (avrcp_cbs.browsing_received != NULL)
             {
                 LOG_DBG("AVRCP_BOW_MESSAGE_IND");
@@ -398,11 +401,13 @@ static API_RESULT ethermind_avrcp_cb(
                 avrcp_cbs.browsing_received(avrcp->conn, bt_avrcp_parse_browsing_cmd_data(event_data, event_datalen),
                                             event_result);
             }
+#endif
             break;
         }
 
         case AVRCP_BOW_MESSAGE_RSP:
         {
+#if (defined(CONFIG_BT_AVRCP_CT) && ((CONFIG_BT_AVRCP_CT) > 0U))
             if (avrcp_cbs.browsing_rsp_received != NULL)
             {
                 LOG_DBG("AVRCP_BOW_MESSAGE_RSP");
@@ -410,6 +415,7 @@ static API_RESULT ethermind_avrcp_cb(
                 avrcp_cbs.browsing_rsp_received(
                     avrcp->conn, bt_avrcp_parse_browsing_rsp_data(event_data, event_datalen), event_result);
             }
+#endif
             break;
         }
 
@@ -572,6 +578,12 @@ int bt_avrcp_control_disconnect(struct bt_conn *conn)
 
     return 0;
 }
+
+#define CHECK_BUF_RET_0(check_len) \
+    if (buf->len < check_len) \
+    {\
+        return 0; \
+    }
 
 #if (defined(CONFIG_BT_AVRCP_TG) && ((CONFIG_BT_AVRCP_TG) > 0U))
 int bt_avrcp_response_info(struct bt_conn *conn, uint8_t subunit, uint8_t subunit_type, uint8_t tl)
@@ -810,12 +822,6 @@ int bt_avrcp_response_vendor_dependent(
 
     return 0;
 }
-
-#define CHECK_BUF_RET_0(check_len) \
-    if (buf->len < check_len) \
-    {\
-        return 0; \
-    }
 
 static int bt_avrcp_parse_vendor_cmd_internal(struct bt_avrcp_vendor *vendor_cmd)
 {
@@ -2058,147 +2064,6 @@ int bt_avrcp_get_total_num_of_items(struct bt_conn *conn, uint8_t scope)
 
     return 0;
 }
-#endif /* CONFIG_BT_AVRCP_CT */
-
-#if (defined(CONFIG_BT_AVRCP_TG) && ((CONFIG_BT_AVRCP_TG) > 0U))
-static uint16_t get_item_len(struct bt_avrcp_item *item)
-{
-    uint16_t len = 0;
-
-    switch (item->item_type)
-    {
-        case AVRCP_ITEM_MEDIA_PLAYER:
-            len = AVRCP_PLAYER_ITEM_LEN + item->player_item.name_len;
-            break;
-        case AVRCP_ITEM_FOLDER:
-            len = AVRCP_FOLDER_ITEM_LEN + item->folder_item.name_len;
-            break;
-        case AVRCP_ITEM_MEDIA_ELEMENT:
-            len = AVRCP_MEDIA_ITEM_LEN + item->media_item.name_len;
-            len += 1;
-            for (uint8_t index = 0; index < item->media_item.num_of_attr; index++)
-            {
-                len += 8;
-                len += item->media_item.attrs[index].value_len;
-            }
-            break;
-        default:
-            break;
-    }
-
-    return len;
-}
-
-struct bt_avrcp_browsing_cmd *bt_avrcp_parse_browsing_cmd_data(uint8_t *data, uint32_t len)
-{
-    struct net_buf data_buf;
-    struct net_buf *buf;
-    struct bt_avrcp_browsing_cmd *browsing_cmd = (struct bt_avrcp_browsing_cmd *)&parse_data[0];
-
-    if ((data == NULL) || (len == 0U))
-    {
-        return NULL;
-    }
-    data_buf.__buf = data;
-    data_buf.data  = data;
-    data_buf.size  = len;
-    data_buf.len   = len;
-    buf            = &data_buf;
-
-    CHECK_BUF_RET_NULL(4)
-    browsing_cmd->header.tl_pt_cr_ipid = net_buf_pull_u8(buf);
-    // browsing_cmd->header.pid = net_buf_pull_be16(buf);
-    browsing_cmd->header.pdu_id        = net_buf_pull_u8(buf);
-    browsing_cmd->header.parameter_len = net_buf_pull_be16(buf);
-    switch (browsing_cmd->header.pdu_id)
-    {
-        case BT_AVRCP_PDU_ID_GET_FOLDER_ITEMS:
-        {
-            struct bt_avrcp_get_folder_items_cmd *cmd = &browsing_cmd->folder_items;
-
-            CHECK_BUF_RET_NULL(10)
-            cmd->scope      = net_buf_pull_u8(buf);
-            cmd->start_item = net_buf_pull_be32(buf);
-            cmd->end_item   = net_buf_pull_be32(buf);
-            cmd->attr_count = net_buf_pull_u8(buf);
-
-            for (uint8_t index = 0; index < cmd->attr_count; index++)
-            {
-                CHECK_BUF_RET_NULL(4)
-                cmd->attr_list[index] = net_buf_pull_be32(buf);
-            }
-            break;
-        }
-
-        case BT_AVRCP_PDU_ID_SET_BROWSED_PLAYER:
-        {
-            struct bt_avrcp_set_browsed_player_cmd *cmd = &browsing_cmd->set_browsed_player;
-
-            CHECK_BUF_RET_NULL(2)
-            cmd->player_id = net_buf_pull_be16(buf);
-            break;
-        }
-
-        case BT_AVRCP_PDU_ID_CHANGE_PATH:
-        {
-            uint8_t *data;
-            struct bt_avrcp_change_path_cmd *cmd = &browsing_cmd->change_path;
-
-            CHECK_BUF_RET_NULL(11)
-            cmd->uid_counter = net_buf_pull_be16(buf);
-            cmd->direction   = net_buf_pull_u8(buf);
-            data             = net_buf_pull_mem(buf, 8u);
-            memcpy(cmd->folder_uid, data, 8u);
-            break;
-        }
-
-        case BT_AVRCP_PDU_ID_GET_ITEM_ATTRIBUTES:
-        {
-            uint8_t *data;
-            struct bt_avrcp_get_item_attrs_cmd *cmd = &browsing_cmd->get_item_attrs;
-
-            CHECK_BUF_RET_NULL(12)
-            cmd->scope = net_buf_pull_u8(buf);
-            data       = net_buf_pull_mem(buf, 8u);
-            memcpy(cmd->uid, data, 8u);
-            cmd->uid_counter = net_buf_pull_be16(buf);
-            cmd->num_of_attr = net_buf_pull_u8(buf);
-            for (uint8_t index = 0; index < cmd->num_of_attr; index++)
-            {
-                CHECK_BUF_RET_NULL(4)
-                cmd->attr_list[index] = net_buf_pull_be32(buf);
-            }
-            break;
-        }
-
-        case BT_AVRCP_PDU_ID_SEARCH:
-        {
-            struct bt_avrcp_search_cmd *cmd = &browsing_cmd->search;
-
-            CHECK_BUF_RET_NULL(4)
-            cmd->char_set = net_buf_pull_be16(buf);
-            cmd->length   = net_buf_pull_be16(buf);
-            CHECK_BUF_RET_NULL(cmd->length)
-            cmd->str      = net_buf_pull_mem(buf, cmd->length);
-            break;
-        }
-
-        case BT_AVRCP_PDU_ID_GET_TOTAL_NUM_ITEMS:
-        {
-            struct bt_avrcp_get_total_num_of_items_cmd *cmd = &browsing_cmd->get_total_num_of_items;
-
-            CHECK_BUF_RET_NULL(1)
-            cmd->scope = net_buf_pull_u8(buf);
-            break;
-        }
-
-        default:
-            browsing_cmd = NULL;
-            break;
-    }
-
-    return browsing_cmd;
-}
 
 struct bt_avrcp_browsing_rsp *bt_avrcp_parse_browsing_rsp_data(uint8_t *data, uint32_t len)
 {
@@ -2417,6 +2282,147 @@ struct bt_avrcp_browsing_rsp *bt_avrcp_parse_browsing_rsp_data(uint8_t *data, ui
 
     return browsing_rsp;
 }
+#endif /* CONFIG_BT_AVRCP_CT */
+
+#if (defined(CONFIG_BT_AVRCP_TG) && ((CONFIG_BT_AVRCP_TG) > 0U))
+static uint16_t get_item_len(struct bt_avrcp_item *item)
+{
+    uint16_t len = 0;
+
+    switch (item->item_type)
+    {
+        case AVRCP_ITEM_MEDIA_PLAYER:
+            len = AVRCP_PLAYER_ITEM_LEN + item->player_item.name_len;
+            break;
+        case AVRCP_ITEM_FOLDER:
+            len = AVRCP_FOLDER_ITEM_LEN + item->folder_item.name_len;
+            break;
+        case AVRCP_ITEM_MEDIA_ELEMENT:
+            len = AVRCP_MEDIA_ITEM_LEN + item->media_item.name_len;
+            len += 1;
+            for (uint8_t index = 0; index < item->media_item.num_of_attr; index++)
+            {
+                len += 8;
+                len += item->media_item.attrs[index].value_len;
+            }
+            break;
+        default:
+            break;
+    }
+
+    return len;
+}
+
+struct bt_avrcp_browsing_cmd *bt_avrcp_parse_browsing_cmd_data(uint8_t *data, uint32_t len)
+{
+    struct net_buf data_buf;
+    struct net_buf *buf;
+    struct bt_avrcp_browsing_cmd *browsing_cmd = (struct bt_avrcp_browsing_cmd *)&parse_data[0];
+
+    if ((data == NULL) || (len == 0U))
+    {
+        return NULL;
+    }
+    data_buf.__buf = data;
+    data_buf.data  = data;
+    data_buf.size  = len;
+    data_buf.len   = len;
+    buf            = &data_buf;
+
+    CHECK_BUF_RET_NULL(4)
+    browsing_cmd->header.tl_pt_cr_ipid = net_buf_pull_u8(buf);
+    // browsing_cmd->header.pid = net_buf_pull_be16(buf);
+    browsing_cmd->header.pdu_id        = net_buf_pull_u8(buf);
+    browsing_cmd->header.parameter_len = net_buf_pull_be16(buf);
+    switch (browsing_cmd->header.pdu_id)
+    {
+        case BT_AVRCP_PDU_ID_GET_FOLDER_ITEMS:
+        {
+            struct bt_avrcp_get_folder_items_cmd *cmd = &browsing_cmd->folder_items;
+
+            CHECK_BUF_RET_NULL(10)
+            cmd->scope      = net_buf_pull_u8(buf);
+            cmd->start_item = net_buf_pull_be32(buf);
+            cmd->end_item   = net_buf_pull_be32(buf);
+            cmd->attr_count = net_buf_pull_u8(buf);
+
+            for (uint8_t index = 0; index < cmd->attr_count; index++)
+            {
+                CHECK_BUF_RET_NULL(4)
+                cmd->attr_list[index] = net_buf_pull_be32(buf);
+            }
+            break;
+        }
+
+        case BT_AVRCP_PDU_ID_SET_BROWSED_PLAYER:
+        {
+            struct bt_avrcp_set_browsed_player_cmd *cmd = &browsing_cmd->set_browsed_player;
+
+            CHECK_BUF_RET_NULL(2)
+            cmd->player_id = net_buf_pull_be16(buf);
+            break;
+        }
+
+        case BT_AVRCP_PDU_ID_CHANGE_PATH:
+        {
+            uint8_t *data;
+            struct bt_avrcp_change_path_cmd *cmd = &browsing_cmd->change_path;
+
+            CHECK_BUF_RET_NULL(11)
+            cmd->uid_counter = net_buf_pull_be16(buf);
+            cmd->direction   = net_buf_pull_u8(buf);
+            data             = net_buf_pull_mem(buf, 8u);
+            memcpy(cmd->folder_uid, data, 8u);
+            break;
+        }
+
+        case BT_AVRCP_PDU_ID_GET_ITEM_ATTRIBUTES:
+        {
+            uint8_t *data;
+            struct bt_avrcp_get_item_attrs_cmd *cmd = &browsing_cmd->get_item_attrs;
+
+            CHECK_BUF_RET_NULL(12)
+            cmd->scope = net_buf_pull_u8(buf);
+            data       = net_buf_pull_mem(buf, 8u);
+            memcpy(cmd->uid, data, 8u);
+            cmd->uid_counter = net_buf_pull_be16(buf);
+            cmd->num_of_attr = net_buf_pull_u8(buf);
+            for (uint8_t index = 0; index < cmd->num_of_attr; index++)
+            {
+                CHECK_BUF_RET_NULL(4)
+                cmd->attr_list[index] = net_buf_pull_be32(buf);
+            }
+            break;
+        }
+
+        case BT_AVRCP_PDU_ID_SEARCH:
+        {
+            struct bt_avrcp_search_cmd *cmd = &browsing_cmd->search;
+
+            CHECK_BUF_RET_NULL(4)
+            cmd->char_set = net_buf_pull_be16(buf);
+            cmd->length   = net_buf_pull_be16(buf);
+            CHECK_BUF_RET_NULL(cmd->length)
+            cmd->str      = net_buf_pull_mem(buf, cmd->length);
+            break;
+        }
+
+        case BT_AVRCP_PDU_ID_GET_TOTAL_NUM_ITEMS:
+        {
+            struct bt_avrcp_get_total_num_of_items_cmd *cmd = &browsing_cmd->get_total_num_of_items;
+
+            CHECK_BUF_RET_NULL(1)
+            cmd->scope = net_buf_pull_u8(buf);
+            break;
+        }
+
+        default:
+            browsing_cmd = NULL;
+            break;
+    }
+
+    return browsing_cmd;
+}
 
 int bt_avrcp_response_browsing(struct bt_conn *conn,
     uint8_t pdu_id, uint8_t tl, void *rsp_param, uint16_t param_len)
@@ -2634,6 +2640,7 @@ int bt_avrcp_register_cover_art_cb(struct bt_avrcp_cover_art_cb *cb)
     return 0;
 }
 
+#if (defined(CONFIG_BT_AVRCP_COVER_ART_INITIATOR) && ((CONFIG_BT_AVRCP_COVER_ART_INITIATOR) > 0U))
 static API_RESULT ethermind_avrcp_cai_cb(AVRCP_CA_HANDLE *avrcp_ca_handle,
                                          UINT8 event_type,
                                          UINT16 event_result,
@@ -2714,6 +2721,7 @@ static API_RESULT ethermind_avrcp_cai_cb(AVRCP_CA_HANDLE *avrcp_ca_handle,
     }
     return API_SUCCESS;
 }
+#endif
 
 API_RESULT ethermind_avrcp_car_cb(AVRCP_CA_HANDLE *avrcp_ca_handle,
                                   UINT8 event_type,
