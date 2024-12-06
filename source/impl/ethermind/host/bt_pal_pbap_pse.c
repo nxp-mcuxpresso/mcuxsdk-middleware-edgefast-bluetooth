@@ -551,7 +551,7 @@ static int8_t bt_pal_pull_vcard_entry_param(PBAP_HEADERS *pbap_headers)
     name = (char *)pbap_headers->pbap_req_info->name->value;
     if (endwith(name, ".vcf") == 0)
     {
-        if(startwith(name, "X-BT-UID:") == 1)
+        if(startwith(name, "X-BT-UID:") == 0)
         {
             return -EINVAL;
         }
