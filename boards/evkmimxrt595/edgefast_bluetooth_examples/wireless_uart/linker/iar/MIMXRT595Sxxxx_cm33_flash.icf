@@ -100,7 +100,9 @@ initialize by copy { readwrite, section .textrw, section CodeQuickAccess, sectio
   object fsl_adapter_flexspi_nor_flash.o,
   object mflash_drv.o,
   object  fsl_cache.o,
-  object fsl_flexspi.o,};
+  object fsl_flexspi.o,
+  object fsl_reset.o,
+};
 
 do not initialize  { section .noinit, section m_usb_bdt, section m_usb_global  };
 

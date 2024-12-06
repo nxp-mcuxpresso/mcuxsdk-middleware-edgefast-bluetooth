@@ -90,6 +90,7 @@ SECTIONS
         */fsl_adapter_flexspi_nor_flash.c.obj
         */mflash_drv.c.obj
         */fsl_flexspi.c.obj
+        */fsl_reset.c.obj
         */controller_low_power.c.obj
         */board_lp.c.obj
         */fwk_platform.c.obj
@@ -108,6 +109,7 @@ SECTIONS
         */fsl_adapter_flexspi_nor_flash.c.obj
         */mflash_drv.c.obj
         */fsl_flexspi.c.obj
+        */fsl_reset.c.obj
         */controller_low_power.c.obj
         */board_lp.c.obj
         */fwk_platform.c.obj
@@ -126,6 +128,7 @@ SECTIONS
         */fsl_adapter_flexspi_nor_flash.c.obj
         */mflash_drv.c.obj
         */fsl_flexspi.c.obj
+        */fsl_reset.c.obj
         */controller_low_power.c.obj
         */board_lp.c.obj
         */fwk_platform.c.obj
@@ -144,6 +147,7 @@ SECTIONS
         */fsl_adapter_flexspi_nor_flash.c.obj
         */mflash_drv.c.obj
         */fsl_flexspi.c.obj
+        */fsl_reset.c.obj
         */controller_low_power.c.obj
         */board_lp.c.obj
         */fwk_platform.c.obj
@@ -326,6 +330,7 @@ SECTIONS
     */fsl_adapter_flexspi_nor_flash.c.obj
     */mflash_drv.c.obj
     */fsl_flexspi.c.obj
+    */fsl_reset.c.obj
     */controller_low_power.c.obj
     */board_lp.c.obj
     */fwk_platform.c.obj

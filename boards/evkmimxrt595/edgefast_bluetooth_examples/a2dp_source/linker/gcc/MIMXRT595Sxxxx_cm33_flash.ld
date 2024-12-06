@@ -90,12 +90,14 @@ SECTIONS
         */fsl_adapter_flexspi_nor_flash.c.obj
         */mflash_drv.c.obj
         */fsl_flexspi.c.obj
+        */fsl_reset.c.obj
     ) .text)                 /* .text sections (code) */
     *(EXCLUDE_FILE(
         /* Exclude flash and frequently executed functions from XIP */
         */fsl_adapter_flexspi_nor_flash.c.obj
         */mflash_drv.c.obj
         */fsl_flexspi.c.obj
+        */fsl_reset.c.obj
     ) .text*)                /* .text* sections (code) */
     *(.rodata)               /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)              /* .rodata* sections (constants, strings, etc.) */
@@ -268,6 +270,7 @@ SECTIONS
     */fsl_adapter_flexspi_nor_flash.c.obj
     */mflash_drv.c.obj
     */fsl_flexspi.c.obj
+    */fsl_reset.c.obj
     *(.data)                 /* .data sections */
     *(.data*)                /* .data* sections */
     KEEP(*(.jcr*))

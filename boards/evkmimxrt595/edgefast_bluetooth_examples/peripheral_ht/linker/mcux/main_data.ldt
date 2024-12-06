@@ -11,6 +11,7 @@
         <#if memory.name=="SRAM">
         *fsl_adapter_flexspi_nor_flash.o(.text .text* .rodata .rodata*)
         *fsl_flexspi.o(.text .text* .rodata .rodata*)
+        *fsl_reset.o(.text .text* .rodata .rodata*)
         *mflash_drv.o(.text .text* .rodata .rodata*)
 		*controller_low_power.o(.text .text* .rodata .rodata*)
         *board_lp.o(.text .text* .rodata .rodata*)

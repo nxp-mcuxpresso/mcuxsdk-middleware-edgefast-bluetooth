@@ -101,6 +101,7 @@ initialize by copy { readwrite, section .textrw, section CodeQuickAccess, sectio
   object mflash_drv.o,
   object fsl_cache.o,
   object fsl_flexspi.o,
+  object fsl_reset.o,
   object controller_low_power.o,
   object board_lp.o,
   object fwk_platform.o,
