@@ -2514,7 +2514,7 @@ if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.controller_ind_reset)
     )
 endif ()
 
-if (CONFIG_MCUX_COMPONENT_middleware.edgefast_bluetooth.host_low_power)
+if (CONFIG_MCUX_PRJSEG_middleware.edgefast_bluetooth.host_low_power)
     mcux_add_source(
         BASE_PATH ${SdkRootDirPath}
         SOURCES

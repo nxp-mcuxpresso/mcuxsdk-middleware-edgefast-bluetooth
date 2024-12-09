@@ -269,10 +269,10 @@ menu "Low power"
 
 config MCUX_PRJSEG_middleware.edgefast_bluetooth.low_power
     bool "Low power(project segment)"
-    select MCUX_COMPONENT_middleware.edgefast_bluetooth.host_low_power
+    select MCUX_PRJSEG_middleware.edgefast_bluetooth.host_low_power
     select MCUX_COMPONENT_middleware.edgefast_bluetooth.controller_low_power if !MCUX_HW_DEVICE_RW612 && !MCUX_HW_DEVICE_RW610
 
-config MCUX_COMPONENT_middleware.edgefast_bluetooth.host_low_power
+config MCUX_PRJSEG_middleware.edgefast_bluetooth.host_low_power
     bool "Host low power"
     select MCUX_COMPONENT_middleware.wireless.framework
     select MCUX_COMPONENT_middleware.wireless.framework.lowpower
