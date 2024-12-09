@@ -14,7 +14,7 @@
         *fsl_reset.o(.text .text* .rodata .rodata*)
         *mflash_drv.o(.text .text* .rodata .rodata*)
 		*controller_low_power.o(.text .text* .rodata .rodata*)
-        *board_lp.o(.text .text* .rodata .rodata*)
+        *fwk_board_lp.o(.text .text* .rodata .rodata*)
         *fwk_platform.o(.text .text* .rodata .rodata*)
         *fwk_platform_lowpower.o(.text .text* .rodata .rodata*)
         *fsl_pm_core.o(.text .text* .rodata .rodata*)
