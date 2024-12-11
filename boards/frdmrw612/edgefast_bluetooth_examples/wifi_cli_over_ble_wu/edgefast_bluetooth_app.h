@@ -24,7 +24,9 @@
 #define BOARD_USER_BUTTON_IRQ  GPIO_INTA_IRQn
 #define BOARD_USER_BUTTON_NAME "SW2"
 
+#ifndef WIFI_BOARD_RW610
 #define WIFI_BOARD_RW610
+#endif
 
 #if defined(WIFI_BOARD_RW610)
 #define RW610
