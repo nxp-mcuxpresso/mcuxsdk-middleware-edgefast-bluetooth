@@ -1738,7 +1738,7 @@ static void app_pse_pull_phonebook_cb(struct bt_pbap_pse *pbap_pse,
             BT_PBAP_ADD_PARAMS_DATABASE_IDENTIFIER(buf, sample_database_identifier);
         }
         bt_pbap_pse_get_max_pkt_len(pbap_pse, &max_pkt_len);
-        max_pkt_len -= sizeof(struct bt_pbap_push_response_hdr);
+        max_pkt_len -= BT_PBAP_PSE_RSV_LEN_SEND_RESPONSE(pbap_pse);
         max_pkt_len -= buf->len;
         max_pkt_len -= sizeof(struct bt_obex_hdr_bytes);
         if (g_PbapPse.remaining_rsp <= max_pkt_len)
@@ -1990,7 +1990,7 @@ static void app_pse_pull_vcard_listing_cb(struct bt_pbap_pse *pbap_pse,
             BT_PBAP_ADD_PARAMS_DATABASE_IDENTIFIER(buf, sample_database_identifier);
         }
         bt_pbap_pse_get_max_pkt_len(pbap_pse, &max_pkt_len);
-        max_pkt_len -= sizeof(struct bt_pbap_push_response_hdr);
+        max_pkt_len -= BT_PBAP_PSE_RSV_LEN_SEND_RESPONSE(pbap_pse);
         max_pkt_len -= buf->len;
         max_pkt_len -= sizeof(struct bt_obex_hdr_bytes);
         if (g_PbapPse.remaining_rsp <= max_pkt_len)
@@ -2115,7 +2115,7 @@ static void app_pse_pull_vcard_entry_cb(struct bt_pbap_pse *pbap_pse,
             BT_PBAP_ADD_PARAMS_DATABASE_IDENTIFIER(buf, sample_database_identifier);
         }
         bt_pbap_pse_get_max_pkt_len(pbap_pse, &max_pkt_len);
-        max_pkt_len -= sizeof(struct bt_pbap_push_response_hdr);
+        max_pkt_len -= BT_PBAP_PSE_RSV_LEN_SEND_RESPONSE(pbap_pse);
         max_pkt_len -= buf->len;
         max_pkt_len -= sizeof(struct bt_obex_hdr_bytes);
         if (g_PbapPse.remaining_rsp <= max_pkt_len)
