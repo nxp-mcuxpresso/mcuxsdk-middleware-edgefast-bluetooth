@@ -771,8 +771,8 @@ static API_RESULT rfcomm_callback(uint8_t event_type, RFCOMM_HANDLE * handle, ui
     case RFCOMM_RESET:
         LOG_INF ("[RFCOMM] RFCOMM CB: Received RFCOMM Close/Reset. Result = 0x%04X\n",result);
 
-        if (((API_SUCCESS == result) && (RFCOMM_IN_DISCONNECT == dlc->state)) /** RFCOMM CLOSE event for initializing rfcomm disconnect */
-            || (RFCOMM_CONNECTED == dlc->state))      /** RFCOMM CLOSE event for accepting rfcomm disconnect */
+        if ((RFCOMM_IN_DISCONNECT == dlc->state) /** RFCOMM CLOSE event for initializing rfcomm disconnect */
+            || (RFCOMM_CONNECTED == dlc->state)) /** RFCOMM CLOSE event for accepting rfcomm disconnect */
         {
             (void)rfcomm_dlcs_remove_dlc(dlc, s_index);
 
