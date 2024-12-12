@@ -25,6 +25,7 @@
 #endif
 #define BOARD_USER_BUTTON_IRQ             GPIO00_IRQn
 #define BOARD_USER_BUTTON_NAME            "SW5"
+#define BUTTON_TASK_STACK_SIZE            (1500U)
 
 /* Controller config
  * Supported controller list,
