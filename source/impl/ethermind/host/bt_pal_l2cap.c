@@ -1794,17 +1794,6 @@ static uint16_t l2cap_check_security(struct bt_conn *conn,
 	const struct bt_keys *keys = bt_keys_find_addr(conn->id, &conn->le.dst);
 	bool ltk_present;
 
-	/* Try L2CAP_SC_CHECK_TIMEOUT to take semaphore to wait until the security level updated. */
-	int err = k_sem_take(&conn->sec_lvl_updated, L2CAP_SC_CHECK_TIMEOUT);
-	if(err >= 0)
-	{
-		k_sem_give(&conn->sec_lvl_updated);
-	}
-	else
-	{
-		LOG_ERR("conn: %p, security level semaphore wait fail %d", conn, err);
-		return BT_L2CAP_LE_ERR_AUTHENTICATION;
-	}
 
 #if (defined(CONFIG_BT_CONN_DISABLE_SECURITY) && ((CONFIG_BT_CONN_DISABLE_SECURITY) > 0U))
 	if (IS_ENABLED(CONFIG_BT_CONN_DISABLE_SECURITY)) {

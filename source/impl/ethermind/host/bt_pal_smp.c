@@ -2413,8 +2413,6 @@ static void smp_auth_complete(struct bt_smp *smp)
 		}
 	}
 
-	/* Give the semaphore back, security level updated. */
-	k_sem_give(&conn->sec_lvl_updated);
 }
 
 static void smp_id_add(struct k_work *work)
@@ -8470,12 +8468,7 @@ static void hci_acl_smp_handler(struct net_buf *buf)
 
         smp->status = hdr->pdu.status;
 	smp_auth_complete(smp);
-	/* Take the semaphore until security level updated, don't need wait too long. */
-        int err = k_sem_take(&conn->sec_lvl_updated, K_MSEC(1));
-	if(err < 0)
-	{
-		LOG_ERR("conn: %p, security level semaphore wait fail %d", conn, err);
-	}
+
         break;
 
 	case SMP_AUTHENTICATION_ERROR:
