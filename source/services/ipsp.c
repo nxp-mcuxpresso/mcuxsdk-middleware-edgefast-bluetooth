@@ -117,5 +117,12 @@ int ipsp_listen(void)
 
 int ipsp_send(struct net_buf *buf)
 {
-    return bt_l2cap_chan_send(&l2cap_chan.chan, buf);
+    int err = -ENOTCONN;
+    
+    if (l2cap_chan.state == BT_L2CAP_CONNECTED)
+    {
+        err = bt_l2cap_chan_send(&l2cap_chan.chan, buf);
+    }
+    return err;
 }
+
