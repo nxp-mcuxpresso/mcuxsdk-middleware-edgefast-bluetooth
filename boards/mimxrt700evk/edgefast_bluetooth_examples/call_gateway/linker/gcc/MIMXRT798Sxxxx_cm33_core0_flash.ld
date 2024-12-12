@@ -109,13 +109,9 @@ SECTIONS
 
         */srCvtFrm.c.obj
 
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_init.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_tables.c.obj
-        *libethermind_ble_lc3_ndsp_decoder.a:lc3_ndsp_decode.c.obj
-        *libethermind_ble_lc3_ndsp_encoder.a:lc3_ndsp_encode.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_common.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_fft.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_math_util.c.obj
+        *libethermind_lc3_ndsp_common.a
+        *libethermind_lc3_ndsp_decoder.a
+        *libethermind_lc3_ndsp_encoder.a
 
         */fsl_edma.c.obj
         */fsl_sai.c.obj
@@ -134,13 +130,9 @@ SECTIONS
 
         */srCvtFrm.c.obj
 
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_init.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_tables.c.obj
-        *libethermind_ble_lc3_ndsp_decoder.a:lc3_ndsp_decode.c.obj
-        *libethermind_ble_lc3_ndsp_encoder.a:lc3_ndsp_encode.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_common.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_fft.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_math_util.c.obj
+        *libethermind_lc3_ndsp_common.a
+        *libethermind_lc3_ndsp_decoder.a
+        *libethermind_lc3_ndsp_encoder.a
 
         */fsl_edma.c.obj
         */fsl_sai.c.obj
@@ -159,13 +151,9 @@ SECTIONS
 
         */srCvtFrm.c.obj
 
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_init.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_tables.c.obj
-        *libethermind_ble_lc3_ndsp_decoder.a:lc3_ndsp_decode.c.obj
-        *libethermind_ble_lc3_ndsp_encoder.a:lc3_ndsp_encode.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_common.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_fft.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_math_util.c.obj
+        *libethermind_lc3_ndsp_common.a
+        *libethermind_lc3_ndsp_decoder.a
+        *libethermind_lc3_ndsp_encoder.a
 
         */fsl_edma.c.obj
         */fsl_sai.c.obj
@@ -184,13 +172,9 @@ SECTIONS
 
         */srCvtFrm.c.obj
 
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_init.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_tables.c.obj
-        *libethermind_ble_lc3_ndsp_decoder.a:lc3_ndsp_decode.c.obj
-        *libethermind_ble_lc3_ndsp_encoder.a:lc3_ndsp_encode.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_common.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_fft.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_math_util.c.obj
+        *libethermind_lc3_ndsp_common.a
+        *libethermind_lc3_ndsp_decoder.a
+        *libethermind_lc3_ndsp_encoder.a
 
         */fsl_edma.c.obj
         */fsl_sai.c.obj
@@ -387,13 +371,9 @@ SECTIONS
 
     */srCvtFrm.c.obj(.text .text* .rodata .rodata*)
 
-    *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_init.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_tables.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_decoder.a:lc3_ndsp_decode.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_encoder.a:lc3_ndsp_encode.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_common.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_fft.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_math_util.c.obj(.text .text* .rodata .rodata*)
+    *libethermind_lc3_ndsp_common.a(.text .text* .rodata .rodata*)
+    *libethermind_lc3_ndsp_decoder.a(.text .text* .rodata .rodata*)
+    *libethermind_lc3_ndsp_encoder.a(.text .text* .rodata .rodata*)
 
     */fsl_edma.c.obj(.text .text* .rodata .rodata*)
     */fsl_sai.c.obj(.text .text* .rodata .rodata*)

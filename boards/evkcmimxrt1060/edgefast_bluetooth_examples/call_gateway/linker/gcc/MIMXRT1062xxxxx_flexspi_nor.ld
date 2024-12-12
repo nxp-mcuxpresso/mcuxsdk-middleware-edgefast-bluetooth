@@ -108,15 +108,9 @@ SECTIONS
         */mflash_drv.c.obj
         */fsl_flexspi.c.obj
         */srCvtFrm.c.obj
-        *libethermind_lc3_decoder.a:lc3_decoder_api.c.obj
-        *libethermind_lc3_decoder.a:lc3_decode.c.obj
-        *libethermind_lc3_encoder.a:lc3_encoder_api.c.obj
-        *libethermind_lc3_encoder.a:lc3_encode.c.obj
-        *libethermind_lc3_common.a:lc3_common.c.obj
-        *libethermind_lc3_common.a:lc3_fft.c.obj
-        *libethermind_lc3_common.a:lc3_init.c.obj
-        *libethermind_lc3_common.a:lc3_math_util.c.obj
-        *libethermind_lc3_common.a:lc3_tables.c.obj
+        *libethermind_lc3_decoder.a
+        *libethermind_lc3_encoder.a
+        *libethermind_lc3_common.a
     ) .text)                 /* .text sections (code) */
     *(EXCLUDE_FILE(
         /* Exclude flash and frequently executed functions from XIP */
@@ -124,15 +118,9 @@ SECTIONS
         */mflash_drv.c.obj
         */fsl_flexspi.c.obj
         */srCvtFrm.c.obj
-        *libethermind_lc3_decoder.a:lc3_decoder_api.c.obj
-        *libethermind_lc3_decoder.a:lc3_decode.c.obj
-        *libethermind_lc3_encoder.a:lc3_encoder_api.c.obj
-        *libethermind_lc3_encoder.a:lc3_encode.c.obj
-        *libethermind_lc3_common.a:lc3_common.c.obj
-        *libethermind_lc3_common.a:lc3_fft.c.obj
-        *libethermind_lc3_common.a:lc3_init.c.obj
-        *libethermind_lc3_common.a:lc3_math_util.c.obj
-        *libethermind_lc3_common.a:lc3_tables.c.obj
+        *libethermind_lc3_decoder.a
+        *libethermind_lc3_encoder.a
+        *libethermind_lc3_common.a
     ) .text*)                /* .text* sections (code) */
     *(EXCLUDE_FILE(
         /* Exclude flash and frequently executed functions from XIP */
@@ -140,15 +128,9 @@ SECTIONS
         */mflash_drv.c.obj
         */fsl_flexspi.c.obj
         */srCvtFrm.c.obj
-        *libethermind_lc3_decoder.a:lc3_decoder_api.c.obj
-        *libethermind_lc3_decoder.a:lc3_decode.c.obj
-        *libethermind_lc3_encoder.a:lc3_encoder_api.c.obj
-        *libethermind_lc3_encoder.a:lc3_encode.c.obj
-        *libethermind_lc3_common.a:lc3_common.c.obj
-        *libethermind_lc3_common.a:lc3_fft.c.obj
-        *libethermind_lc3_common.a:lc3_init.c.obj
-        *libethermind_lc3_common.a:lc3_math_util.c.obj
-        *libethermind_lc3_common.a:lc3_tables.c.obj
+        *libethermind_lc3_decoder.a
+        *libethermind_lc3_encoder.a
+        *libethermind_lc3_common.a
     ) .rodata)                /* .rodata sections (constants, strings, etc.) */
     *(EXCLUDE_FILE(
         /* Exclude flash and frequently executed functions from XIP */
@@ -156,15 +138,9 @@ SECTIONS
         */mflash_drv.c.obj
         */fsl_flexspi.c.obj
         */srCvtFrm.c.obj
-        *libethermind_lc3_decoder.a:lc3_decoder_api.c.obj
-        *libethermind_lc3_decoder.a:lc3_decode.c.obj
-        *libethermind_lc3_encoder.a:lc3_encoder_api.c.obj
-        *libethermind_lc3_encoder.a:lc3_encode.c.obj
-        *libethermind_lc3_common.a:lc3_common.c.obj
-        *libethermind_lc3_common.a:lc3_fft.c.obj
-        *libethermind_lc3_common.a:lc3_init.c.obj
-        *libethermind_lc3_common.a:lc3_math_util.c.obj
-        *libethermind_lc3_common.a:lc3_tables.c.obj
+        *libethermind_lc3_decoder.a
+        *libethermind_lc3_encoder.a
+        *libethermind_lc3_common.a
     ) .rodata*)                /* .rodata* sections (constants, strings, etc.) */
     *(.rodata)               /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)              /* .rodata* sections (constants, strings, etc.) */
@@ -339,15 +315,9 @@ SECTIONS
 
     */srCvtFrm.c.obj(.text .text* .rodata .rodata*)
 
-    *libethermind_lc3_decoder.a:lc3_decoder_api.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_lc3_decoder.a:lc3_decode.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_lc3_encoder.a:lc3_encoder_api.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_lc3_encoder.a:lc3_encode.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_lc3_common.a:lc3_common.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_lc3_common.a:lc3_fft.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_lc3_common.a:lc3_init.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_lc3_common.a:lc3_math_util.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_lc3_common.a:lc3_tables.c.obj(.text .text* .rodata .rodata*)
+    *libethermind_lc3_decoder.a(.text .text* .rodata .rodata*)
+    *libethermind_lc3_encoder.a(.text .text* .rodata .rodata*)
+    *libethermind_lc3_common.a(.text .text* .rodata .rodata*)
 
     *(.data)                 /* .data sections */
     *(.data*)                /* .data* sections */

@@ -107,13 +107,9 @@ SECTIONS
         *libc_a-memcpy-stub.o
         *libc_a-memset.o
 
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_init.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_tables.c.obj
-        *libethermind_ble_lc3_ndsp_decoder.a:lc3_ndsp_decode.c.obj
-        *libethermind_ble_lc3_ndsp_encoder.a:lc3_ndsp_encode.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_common.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_fft.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_math_util.c.obj
+        *libethermind_lc3_ndsp_common.a
+        *libethermind_lc3_ndsp_decoder.a
+        *libethermind_lc3_ndsp_encoder.a
 
     ) .text)                 /* .text sections (code) */
     *(EXCLUDE_FILE(
@@ -125,13 +121,9 @@ SECTIONS
         *libc_a-memcpy-stub.o
         *libc_a-memset.o
 
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_init.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_tables.c.obj
-        *libethermind_ble_lc3_ndsp_decoder.a:lc3_ndsp_decode.c.obj
-        *libethermind_ble_lc3_ndsp_encoder.a:lc3_ndsp_encode.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_common.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_fft.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_math_util.c.obj
+        *libethermind_lc3_ndsp_common.a
+        *libethermind_lc3_ndsp_decoder.a
+        *libethermind_lc3_ndsp_encoder.a
 
     ) .text*)                /* .text* sections (code) */
     *(EXCLUDE_FILE(
@@ -143,13 +135,9 @@ SECTIONS
         *libc_a-memcpy-stub.o
         *libc_a-memset.o
 
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_init.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_tables.c.obj
-        *libethermind_ble_lc3_ndsp_decoder.a:lc3_ndsp_decode.c.obj
-        *libethermind_ble_lc3_ndsp_encoder.a:lc3_ndsp_encode.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_common.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_fft.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_math_util.c.obj
+        *libethermind_lc3_ndsp_common.a
+        *libethermind_lc3_ndsp_decoder.a
+        *libethermind_lc3_ndsp_encoder.a
 
     ) .rodata)               /* .rodata sections (constants, strings, etc.) */
     *(EXCLUDE_FILE(
@@ -161,13 +149,9 @@ SECTIONS
         *libc_a-memcpy-stub.o
         *libc_a-memset.o
 
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_init.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_tables.c.obj
-        *libethermind_ble_lc3_ndsp_decoder.a:lc3_ndsp_decode.c.obj
-        *libethermind_ble_lc3_ndsp_encoder.a:lc3_ndsp_encode.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_common.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_fft.c.obj
-        *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_math_util.c.obj
+        *libethermind_lc3_ndsp_common.a
+        *libethermind_lc3_ndsp_decoder.a
+        *libethermind_lc3_ndsp_encoder.a
 
     ) .rodata*)              /* .rodata* sections (constants, strings, etc.) */
     *(.glue_7)               /* glue arm to thumb code */
@@ -357,13 +341,9 @@ SECTIONS
     *libc_a-memset.o(.text .text* .rodata .rodata*)
     */mflash_drv.c.obj(.text .text* .rodata .rodata*)
 
-    *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_init.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_tables.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_decoder.a:lc3_ndsp_decode.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_encoder.a:lc3_ndsp_encode.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_common.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_fft.c.obj(.text .text* .rodata .rodata*)
-    *libethermind_ble_lc3_ndsp_common.a:lc3_ndsp_math_util.c.obj(.text .text* .rodata .rodata*)
+    *libethermind_lc3_ndsp_common.a(.text .text* .rodata .rodata*)
+    *libethermind_lc3_ndsp_decoder.a(.text .text* .rodata .rodata*)
+    *libethermind_lc3_ndsp_encoder.a(.text .text* .rodata .rodata*)
 
     *(.data)                 /* .data sections */
     *(.data*)                /* .data* sections */
