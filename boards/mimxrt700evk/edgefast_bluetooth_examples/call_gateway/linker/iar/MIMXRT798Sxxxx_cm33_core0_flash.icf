@@ -116,9 +116,9 @@ initialize by copy { readwrite, section .textrw , section CodeQuickAccess, secti
 };
 
 initialize by copy { readwrite, section .textrw,
-  object libethermind_ble_lc3_ndsp_common.a,
-  object libethermind_ble_lc3_ndsp_decoder.a,
-  object libethermind_ble_lc3_ndsp_encoder.a,
+  object libethermind_lc3_ndsp_common.a,
+  object libethermind_lc3_ndsp_decoder.a,
+  object libethermind_lc3_ndsp_encoder.a,
   object srCvtFrm.o,
   object fsl_edma.o,
   object fsl_sai.o,
