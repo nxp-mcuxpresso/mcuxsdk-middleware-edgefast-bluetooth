@@ -371,6 +371,7 @@ uint32_t crc32_ieee(const uint8_t *data, size_t len)
 	return crc32_ieee_update(0x0, data, len);
 }
 
+#if (configSUPPORT_STATIC_ALLOCATION == 1) && (configKERNEL_PROVIDED_STATIC_MEMORY == 0)
 /* configUSE_STATIC_ALLOCATION is set to 1, so the application must provide an
  * implementation of vApplicationGetIdleTaskMemory() to provide the memory that is
  * used by the Idle task. */
@@ -427,3 +428,4 @@ void vApplicationGetTimerTaskMemory( StaticTask_t ** ppxTimerTaskTCBBuffer,
      * configMINIMAL_STACK_SIZE is specified in words, not bytes. */
     *puxTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
 }
+#endif /* (configSUPPORT_STATIC_ALLOCATION == 1) && (configKERNEL_PROVIDED_STATIC_MEMORY == 0) */
