@@ -2417,7 +2417,6 @@ struct bt_avrcp_browsing_cmd *bt_avrcp_parse_browsing_cmd_data(uint8_t *data, ui
         }
 
         default:
-            browsing_cmd = NULL;
             break;
     }
 
