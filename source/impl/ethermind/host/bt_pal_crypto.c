@@ -384,13 +384,15 @@ int bt_encrypt_le(const uint8_t key[16], const uint8_t plaintext[16],
 int bt_encrypt_be(const uint8_t key[16], const uint8_t plaintext[16],
 		  uint8_t enc_data[16])
 {
+	int err;
+
 	LOG_DBG("key %s plaintext %s", bt_hex(key, 16), bt_hex(plaintext, 16));
 
-	bt_aes_128_encrypt(plaintext, key, enc_data);
+	err = bt_aes_128_encrypt(plaintext, key, enc_data);
 
 	LOG_DBG("enc_data %s", bt_hex(enc_data, 16));
 
-	return 0;
+	return err;
 }
 
 int bt_aes_128_cmac_be(const uint8_t *key, const uint8_t *in, size_t len,

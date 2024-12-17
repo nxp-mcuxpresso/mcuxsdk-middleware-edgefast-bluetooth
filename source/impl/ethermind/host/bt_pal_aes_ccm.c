@@ -120,7 +120,10 @@ static int ccm_auth(const uint8_t key[16], uint8_t nonce[13],
 		return err;
 	}
 
-	ccm_calculate_X0(key, aad, aad_len, mic_size, msg_len, b, Xn);
+	err = ccm_calculate_X0(key, aad, aad_len, mic_size, msg_len, b, Xn);
+	if (err) {
+		return err;
+	}
 
 	for (j = 0; j < blk_cnt; j++) {
 		/* X_1 = e(AppKey, X_0 ^ Payload[0-15]) */
@@ -192,14 +195,21 @@ int bt_ccm_decrypt(const uint8_t key[16], uint8_t nonce[13],
 		   size_t aad_len, uint8_t *plaintext, size_t mic_size)
 {
 	uint8_t mic[16];
+	int err;
 
 	if (aad_len >= 0xff00 || mic_size > sizeof(mic) || len > UINT16_MAX) {
 		return -EINVAL;
 	}
 
-	ccm_crypt(key, nonce, enc_data, plaintext, len);
+	err = ccm_crypt(key, nonce, enc_data, plaintext, len);
+	if (err) {
+		return err;
+	}
 
-	ccm_auth(key, nonce, plaintext, len, aad, aad_len, mic, mic_size);
+	err = ccm_auth(key, nonce, plaintext, len, aad, aad_len, mic, mic_size);
+	if (err) {
+		return err;
+	}
 
 	if (memcmp(mic, enc_data + len, mic_size)) {
 		return -EBADMSG;
@@ -213,6 +223,7 @@ int bt_ccm_encrypt(const uint8_t key[16], uint8_t nonce[13],
 		   size_t aad_len, uint8_t *enc_data, size_t mic_size)
 {
 	uint8_t *mic = enc_data + len;
+	int err;
 
 	LOG_DBG("key %s", bt_hex(key, 16));
 	LOG_DBG("nonce %s", bt_hex(nonce, 13));
@@ -224,9 +235,15 @@ int bt_ccm_encrypt(const uint8_t key[16], uint8_t nonce[13],
 		return -EINVAL;
 	}
 
-	ccm_auth(key, nonce, plaintext, len, aad, aad_len, mic, mic_size);
+	err = ccm_auth(key, nonce, plaintext, len, aad, aad_len, mic, mic_size);
+	if (err) {
+		return err;
+	}
 
-	ccm_crypt(key, nonce, plaintext, enc_data, len);
+	err = ccm_crypt(key, nonce, plaintext, enc_data, len);
+	if (err) {
+		return err;
+	}
 
 	return 0;
 }
