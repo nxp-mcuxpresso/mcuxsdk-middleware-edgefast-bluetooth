@@ -418,6 +418,7 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
     uint8_t *recvd_data;
     uint8_t option, index;
     struct bt_hfp_ag *hfp_ag;
+    uint32_t codecs = 0;
 
     switch (hfp_ag_event)
     {
@@ -784,7 +785,10 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
 
                         case AT_BCC:
                             bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
-                            bt_hfp_ag_send_at_rsp(HFAG_BCS, NULL);
+                            if ((bt_hfp_ag_cb) && (bt_hfp_ag_cb->codec_connect_req))
+                            {
+                                bt_hfp_ag_cb->codec_connect_req(s_actived_bt_hfp_ag);
+                            }
                             break;
 
                         case AT_CLCC:
@@ -800,7 +804,7 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
                             {
                                 bt_hfp_ag_cb->codec_negotiate(
                                     s_actived_bt_hfp_ag,
-                                    at_response.global_at_str[at_response.param->start_of_value_index - '0'] );
+                                    at_response.global_at_str[at_response.param->start_of_value_index] - '0' );
                             }
 
                             if (s_actived_bt_hfp_ag->bt_hfp_ag_config)
@@ -817,15 +821,15 @@ static API_RESULT hfp_ag_callback(HFP_AG_EVENTS hfp_ag_event, API_RESULT result,
                             break;
 
                         case AT_BAC:
-
-                            if ((s_actived_bt_hfp_ag->bt_hfp_ag_config) && (s_actived_bt_hfp_ag->bt_hfp_ag_config->bt_hfp_ag_codec_negotiate == 1))
+                            for (i = 0; i < at_response.number_of_params; i++)
                             {
-                                bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
-                                s_actived_bt_hfp_ag->bt_hfp_ag_config->bt_hfp_ag_codec = 1;
+                                codecs |= at_response.global_at_str[at_response.param[i].start_of_value_index] - '0';
                             }
-                            else
+
+                            bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
+                            if ((bt_hfp_ag_cb) && (bt_hfp_ag_cb->codec))
                             {
-                                bt_hfp_ag_send_at_rsp(HFAG_OK, NULL);
+                                bt_hfp_ag_cb->codec(s_actived_bt_hfp_ag, codecs);
                             }
                             break;
 

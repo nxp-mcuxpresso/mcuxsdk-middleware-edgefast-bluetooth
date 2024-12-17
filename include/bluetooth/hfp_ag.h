@@ -218,7 +218,24 @@ struct bt_hfp_ag_cb
      */
      void (*codec_negotiate)(struct bt_hfp_ag *hfp_ag, uint32_t value);
 
+    /** AG connection request callback
+     *
+     *  This callback is provided it will be called whenever the
+     *  codec conenction request is triggered by HF, when "AT+BCC" AT
+     *  command received.
+     *
+     *  @param ag HFP AG object.
+     */
+    void (*codec_connect_req)(struct bt_hfp_ag *hfp_ag);
 
+    /** HF supported codec Ids callback
+     *
+     *  If this callback is provided it will be called whenever the
+     *  supported codec ids are updated.
+     *
+     *  @param ag HFP AG object.
+     */
+    void (*codec)(struct bt_hfp_ag *ag, uint32_t ids);
      /** AG multiparty call status indicator Callback
      *
      *  This callback provides multiparty call status indicator Callback of peer HF to the application
