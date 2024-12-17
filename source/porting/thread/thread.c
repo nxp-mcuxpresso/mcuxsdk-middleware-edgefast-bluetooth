@@ -139,10 +139,10 @@ k_tid_t k_thread_create(struct k_thread *new_thread,
 				  int prio, uint32_t options, k_timeout_t delay)
 {
     uint32_t add = (uint32_t)entry;
-    char buffer[sizeof(add) * 2 + 1] = "INVALID";
+    char buffer[configMAX_TASK_NAME_LEN + 1] = "INVALID";
     size_t ret;
 
-    ret = bin2hex((const uint8_t *)&add, sizeof(add), buffer, sizeof(buffer));
+    ret = bin2hex((const uint8_t *)&add, sizeof(add), buffer, sizeof(buffer) - 1);
     assert(ret > 0);
     (void)ret;
     if (0 == ret)
