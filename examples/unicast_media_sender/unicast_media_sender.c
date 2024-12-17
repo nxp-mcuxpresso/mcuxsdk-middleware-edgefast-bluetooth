@@ -550,7 +550,7 @@ int select_lc3_preset(char *preset_name)
 				return -1;
 			}
 			find = true;
-			memcpy(&lc3_preset, codec_cfg, sizeof(lc3_preset));
+			memcpy(&lc3_preset, &lc3_unicast_presets[i].preset, sizeof(lc3_preset));
 		}
 	}
 
