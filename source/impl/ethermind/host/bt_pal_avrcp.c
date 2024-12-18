@@ -63,9 +63,11 @@ static osa_mutex_handle_t avrcp_lock;
 LOG_MODULE_DEFINE(LOG_MODULE_NAME, kLOG_LevelTrace);
 
 /* the control channel's max transfer data length is 512 bytes */
-#define TRANSFER_DATA_BUFF_SIZE (512u)
+#ifndef CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE
+#define CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE (512U)
+#endif
 #define PARSE_DATA_BUFF_SIZE    (1024u)
-uint8_t send_data[TRANSFER_DATA_BUFF_SIZE];
+uint8_t send_data[CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE];
 #if (PARSE_DATA_BUFF_SIZE < ((AVCTP_DEFAULT_BROW_CH_L2CAP_MTU - 16) * 2u))
 #error "please increase PARSE_DATA_BUFF_SIZE"
 #endif
@@ -101,6 +103,12 @@ NET_BUF_POOL_FIXED_DEFINE(avrcp_rx_pool, AVRCP_RX_DATA_BUF_CNT, AVRCP_RX_DATA_BU
         return NULL; \
     } else {\
         left_parse_buf_size -= (check_len);\
+    }
+	
+#define CHECK_BUF_FREE(check_len) \
+    if ((buf->size - buf->len) < (check_len)) \
+    {\
+        return -ENOMEM; \
     }
 
 struct bt_avrcp_browsing_cmd *bt_avrcp_parse_browsing_cmd_data(uint8_t *data, uint32_t len);
@@ -648,7 +656,7 @@ int bt_avrcp_response_vendor_dependent(
 
     data_buf.__buf = &send_data[0];
     data_buf.data  = &send_data[0];
-    data_buf.size  = TRANSFER_DATA_BUFF_SIZE;
+    data_buf.size  = CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE;
     data_buf.len   = 0;
     buf            = &data_buf;
 
@@ -698,9 +706,11 @@ int bt_avrcp_response_vendor_dependent(
         {
             struct bt_avrcp_player_get_txt_rsp *rsp = (struct bt_avrcp_player_get_txt_rsp *)rsp_param;
 
+			CHECK_BUF_FREE(1)
             net_buf_add_u8(buf, rsp->num_of_id);
             for (uint8_t index = 0; index < rsp->num_of_id; index++)
             {
+				CHECK_BUF_FREE(4 + rsp->texts[index].string_len)
                 net_buf_add_u8(buf, rsp->texts[index].attr_value_id);
                 net_buf_add_be16(buf, rsp->texts[index].char_set);
                 net_buf_add_u8(buf, rsp->texts[index].string_len);
@@ -715,9 +725,11 @@ int bt_avrcp_response_vendor_dependent(
         {
             struct bt_avrcp_player_get_element_attr_rsp *rsp = (struct bt_avrcp_player_get_element_attr_rsp *)rsp_param;
 
+			CHECK_BUF_FREE(1)
             net_buf_add_u8(buf, rsp->num_of_attr);
             for (uint8_t index = 0; index < rsp->num_of_attr; index++)
             {
+				CHECK_BUF_FREE(8 + rsp->attrs[index].string_len)
                 net_buf_add_be32(buf, rsp->attrs[index].attr_id);
                 net_buf_add_be16(buf, rsp->attrs[index].char_set);
                 net_buf_add_be16(buf, rsp->attrs[index].string_len);
@@ -732,6 +744,7 @@ int bt_avrcp_response_vendor_dependent(
             struct bt_avrcp_play_status_rsp *rsp = (struct bt_avrcp_play_status_rsp *)rsp_param;
             ;
 
+			CHECK_BUF_FREE(9)
             net_buf_add_be32(buf, rsp->song_length);
             net_buf_add_be32(buf, rsp->song_pos);
             net_buf_add_u8(buf, rsp->play_status);
@@ -743,14 +756,17 @@ int bt_avrcp_response_vendor_dependent(
         {
             struct bt_avrcp_event_rsp *rsp = (struct bt_avrcp_event_rsp *)rsp_param;
 
+			CHECK_BUF_FREE(1)
             net_buf_add_u8(buf, rsp->event_id);
             switch (rsp->event_id)
             {
                 case BT_AVRCP_EVENT_PLAYBACK_STATUS_CHANGED:
+				    CHECK_BUF_FREE(1)
                     net_buf_add_u8(buf, rsp->play_status);
                     break;
 
                 case BT_AVRCP_EVENT_TRACK_CHANGED:
+				    CHECK_BUF_FREE(8)
                     net_buf_add_mem(buf, rsp->identifier, 8u);
                     break;
 
@@ -761,21 +777,26 @@ int bt_avrcp_response_vendor_dependent(
                     break;
 
                 case BT_AVRCP_EVENT_PLAYBACK_POS_CHANGED:
+				    CHECK_BUF_FREE(4)
                     net_buf_add_be32(buf, rsp->playback_pos);
                     break;
 
                 case BT_AVRCP_EVENT_BATT_STATUS_CHANGED:
+				    CHECK_BUF_FREE(1)
                     net_buf_add_u8(buf, rsp->battery_status);
                     break;
 
                 case BT_AVRCP_EVENT_SYSTEM_STATUS_CHANGED:
+				    CHECK_BUF_FREE(1)
                     net_buf_add_u8(buf, rsp->system_status);
                     break;
 
                 case BT_AVRCP_EVENT_PLAYER_APP_SETTING_CHANGED:
+                    CHECK_BUF_FREE(1)
                     net_buf_add_u8(buf, rsp->setting_changed.num_of_attr);
                     for (uint8_t index = 0; index < rsp->setting_changed.num_of_attr; index++)
                     {
+						CHECK_BUF_FREE(2)
                         net_buf_add_u8(buf, rsp->setting_changed.attr_vals[index].attr_id);
                         net_buf_add_u8(buf, rsp->setting_changed.attr_vals[index].value_id);
                     }
@@ -789,15 +810,18 @@ int bt_avrcp_response_vendor_dependent(
                     break;
 
                 case BT_AVRCP_EVENT_ADDRESSED_PLAYER_CHANGED:
+				    CHECK_BUF_FREE(4)
                     net_buf_add_be16(buf, rsp->addressed_player_changed.player_id);
                     net_buf_add_be16(buf, rsp->addressed_player_changed.uid_counter);
                     break;
 
                 case BT_AVRCP_EVENT_UIDS_CHANGED:
+				    CHECK_BUF_FREE(2)
                     net_buf_add_be16(buf, rsp->uid_counter);
                     break;
 
                 case BT_AVRCP_EVENT_VOLUME_CHANGED:
+				    CHECK_BUF_FREE(1)
                     net_buf_add_u8(buf, rsp->absolute_volume);
                     break;
 
@@ -809,6 +833,13 @@ int bt_avrcp_response_vendor_dependent(
             vd_rsp_info.vd_cmd_datalen = buf->len;
             break;
         }
+		
+		case BT_AVRCP_PDU_ID_REQUEST_CONTINUING_RESPONSE:
+		{
+			vd_rsp_info.packet_type = BT_AVRCP_PACKET_TYPE_CONTINUE;
+			break;
+		}
+		
         default:
             break;
     }
@@ -1563,10 +1594,11 @@ int bt_avrcp_send_vendor_dependent(struct bt_conn *conn, uint8_t pdu_id, void *p
 
             data_buf.__buf = &send_data[0];
             data_buf.data  = &send_data[0];
-            data_buf.size  = TRANSFER_DATA_BUFF_SIZE;
+            data_buf.size  = CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE;
             data_buf.len   = 0;
             buf            = &data_buf;
 
+			CHECK_BUF_FREE(5)
             net_buf_add_u8(buf, reg->event_id);
             net_buf_add_be32(buf, reg->playback_interval);
             pdu_info.cmd_type       = BT_AVRCP_COMMAND_TYPE_NOTIFY;
@@ -1638,13 +1670,15 @@ int bt_avrcp_send_vendor_dependent(struct bt_conn *conn, uint8_t pdu_id, void *p
 
             data_buf.__buf = &send_data[0];
             data_buf.data  = &send_data[0];
-            data_buf.size  = TRANSFER_DATA_BUFF_SIZE;
+            data_buf.size  = CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE;
             data_buf.len   = 0;
             buf            = &data_buf;
 
+			CHECK_BUF_FREE(1)
             net_buf_add_u8(buf, char_set->num_of_char);
             for (uint8_t index = 0; index < char_set->num_of_char; index++)
             {
+			    CHECK_BUF_FREE(2)
                 net_buf_add_be16(buf, char_set->char_sets[index]);
             }
 
@@ -1670,14 +1704,16 @@ int bt_avrcp_send_vendor_dependent(struct bt_conn *conn, uint8_t pdu_id, void *p
 
             data_buf.__buf = &send_data[0];
             data_buf.data  = &send_data[0];
-            data_buf.size  = TRANSFER_DATA_BUFF_SIZE;
+            data_buf.size  = CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE;
             data_buf.len   = 0;
             buf            = &data_buf;
 
+			CHECK_BUF_FREE(9)
             net_buf_add_mem(buf, &elem->identifier[0], 8u);
             net_buf_add_u8(buf, elem->num_of_attr);
             for (uint8_t index = 0; index < elem->num_of_attr; index++)
             {
+			    CHECK_BUF_FREE(4)
                 net_buf_add_be32(buf, elem->attr_ids[index]);
             }
 
@@ -1695,10 +1731,11 @@ int bt_avrcp_send_vendor_dependent(struct bt_conn *conn, uint8_t pdu_id, void *p
 
             data_buf.__buf = &send_data[0];
             data_buf.data  = &send_data[0];
-            data_buf.size  = TRANSFER_DATA_BUFF_SIZE;
+            data_buf.size  = CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE;
             data_buf.len   = 0;
             buf            = &data_buf;
 
+			CHECK_BUF_FREE(11)
             net_buf_add_u8(buf, add->scope);
             net_buf_add_mem(buf, add->uid, 8u);
             net_buf_add_be16(buf, add->uid_counter);
@@ -1717,10 +1754,11 @@ int bt_avrcp_send_vendor_dependent(struct bt_conn *conn, uint8_t pdu_id, void *p
 
             data_buf.__buf = &send_data[0];
             data_buf.data  = &send_data[0];
-            data_buf.size  = TRANSFER_DATA_BUFF_SIZE;
+            data_buf.size  = CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE;
             data_buf.len   = 0;
             buf            = &data_buf;
 
+			CHECK_BUF_FREE(11)
             net_buf_add_u8(buf, play->scope);
             net_buf_add_mem(buf, play->uid, 8u);
             net_buf_add_be16(buf, play->uid_counter);
@@ -2450,7 +2488,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
 
     data_buf.__buf = &send_data[0];
     data_buf.data  = &send_data[0];
-    data_buf.size  = TRANSFER_DATA_BUFF_SIZE;
+    data_buf.size  = CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE;
     data_buf.len   = 0;
     buf            = &data_buf;
 
@@ -2479,6 +2517,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
             uint8_t index;
             struct bt_avrcp_get_folder_items_rsp *rsp = (struct bt_avrcp_get_folder_items_rsp *)rsp_param;
 
+			CHECK_BUF_FREE(5)
             net_buf_add_u8(buf, rsp->status);
             net_buf_add_be16(buf, rsp->uid_counter);
             net_buf_add_be16(buf, rsp->num_of_items);
@@ -2491,11 +2530,13 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
                 item_len = get_item_len(item);
                 if (item_len < net_buf_tailroom(buf))
                 {
+				    CHECK_BUF_FREE(3)
                     net_buf_add_u8(buf, item->item_type);
                     net_buf_add_be16(buf, (item_len - 3));
                     switch (item->item_type)
                     {
                         case AVRCP_ITEM_MEDIA_PLAYER:
+						    CHECK_BUF_FREE(28 + item->player_item.name_len)
                             net_buf_add_be16(buf, item->player_item.player_id);
                             net_buf_add_u8(buf, item->player_item.player_type);
                             net_buf_add_be32(buf, item->player_item.player_subtype);
@@ -2506,6 +2547,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
                             net_buf_add_mem(buf, item->player_item.name, item->player_item.name_len);
                             break;
                         case AVRCP_ITEM_FOLDER:
+						    CHECK_BUF_FREE(14 + item->player_item.name_len)
                             net_buf_add_mem(buf, item->folder_item.folder_uid, 8u);
                             net_buf_add_u8(buf, item->folder_item.folder_type);
                             net_buf_add_u8(buf, item->folder_item.playable);
@@ -2514,6 +2556,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
                             net_buf_add_mem(buf, item->folder_item.name, item->folder_item.name_len);
                             break;
                         case AVRCP_ITEM_MEDIA_ELEMENT:
+                            CHECK_BUF_FREE(14 + item->media_item.name_len)
                             net_buf_add_mem(buf, item->media_item.media_uid, 8u);
                             net_buf_add_u8(buf, item->media_item.media_type);
                             net_buf_add_be16(buf, item->media_item.char_set);
@@ -2522,6 +2565,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
                             net_buf_add_u8(buf, item->media_item.num_of_attr);
                             for (uint8_t ind = 0; ind < item->media_item.num_of_attr; ind++)
                             {
+							    CHECK_BUF_FREE(8 + item->media_item.attrs[ind].value_len)
                                 net_buf_add_be32(buf, item->media_item.attrs[ind].attr_id);
                                 net_buf_add_be16(buf, item->media_item.attrs[ind].char_set);
                                 net_buf_add_be16(buf, item->media_item.attrs[ind].value_len);
@@ -2541,6 +2585,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
         {
             struct bt_avrcp_set_browsed_player_rsp *rsp = (struct bt_avrcp_set_browsed_player_rsp *)rsp_param;
 
+			CHECK_BUF_FREE(10)
             net_buf_add_u8(buf, rsp->status);
             net_buf_add_be16(buf, rsp->uid_counter);
             net_buf_add_be32(buf, rsp->num_of_items);
@@ -2549,6 +2594,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
 
             for (uint8_t index = 0; index < rsp->folder_depth; index++)
             {
+			    CHECK_BUF_FREE(2 + rsp->folder_names[index].folder_name_len)
                 net_buf_add_be16(buf, rsp->folder_names[index].folder_name_len);
                 net_buf_add_mem(buf, rsp->folder_names[index].folder_name, rsp->folder_names[index].folder_name_len);
             }
@@ -2559,6 +2605,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
         {
             struct bt_avrcp_change_path_rsp *rsp = (struct bt_avrcp_change_path_rsp *)rsp_param;
 
+			CHECK_BUF_FREE(5)
             net_buf_add_u8(buf, rsp->status);
             net_buf_add_be32(buf, rsp->num_of_items);
             break;
@@ -2568,6 +2615,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
         {
             struct bt_avrcp_get_item_attrs_rsp *rsp = (struct bt_avrcp_get_item_attrs_rsp *)rsp_param;
 
+			CHECK_BUF_FREE(2)
             net_buf_add_u8(buf, rsp->status);
             net_buf_add_u8(buf, rsp->num_of_attr);
             for (uint8_t index = 0; index < rsp->num_of_attr; index++)
@@ -2579,6 +2627,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
 
                 if (item_len < net_buf_tailroom(buf))
                 {
+				    CHECK_BUF_FREE(8 + item->value_len)
                     net_buf_add_be32(buf, item->attr_id);
                     net_buf_add_be16(buf, item->char_set);
                     net_buf_add_be16(buf, item->value_len);
@@ -2592,6 +2641,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
         {
             struct bt_avrcp_search_rsp *rsp = (struct bt_avrcp_search_rsp *)rsp_param;
 
+			CHECK_BUF_FREE(7)
             net_buf_add_u8(buf, rsp->status);
             net_buf_add_be16(buf, rsp->uid_counter);
             net_buf_add_be32(buf, rsp->num_of_items);
@@ -2602,6 +2652,7 @@ int bt_avrcp_response_browsing(struct bt_conn *conn,
         {
             struct bt_avrcp_get_total_num_of_items_rsp *rsp = (struct bt_avrcp_get_total_num_of_items_rsp *)rsp_param;
 
+			CHECK_BUF_FREE(7)
             net_buf_add_u8(buf, rsp->status);
             net_buf_add_be16(buf, rsp->uid_counter);
             net_buf_add_be32(buf, rsp->num_of_items);

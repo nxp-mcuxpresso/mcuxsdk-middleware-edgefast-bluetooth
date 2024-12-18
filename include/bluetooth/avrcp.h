@@ -1033,6 +1033,9 @@ int bt_avrcp_set_addressed_player(struct bt_conn *conn, uint16_t player_id);
  *  BT_AVRCP_PDU_ID_ADD_TO_NOW_PLAYING               struct bt_avrcp_add_to_now_playing
  *
  *  @return 0 in case of success and error code in case of error.
+ *  @return -ENOMEM in case of packet length exceeds CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE and the internal buffer is not enough to create the response packet.
+ * The CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE's default value is 512 which is AVRCP defined max response data length without Continuation function.
+ * Please reduce the replied content or increase CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE.
  */
 int bt_avrcp_send_vendor_dependent(struct bt_conn *conn, uint8_t pdu_id, void *parameter);
 
@@ -1093,7 +1096,7 @@ struct bt_avrcp_vendor* bt_avrcp_vendor_rsp_parse(struct bt_avrcp_vendor_header 
  *  BT_AVRCP_PDU_ID_GET_ELEMENT_ATTRIBUTE            bt_avrcp_player_get_element_attr_rsp
  *  BT_AVRCP_PDU_ID_GET_PLAY_STATUS                  bt_avrcp_play_status_rsp
  *  BT_AVRCP_PDU_ID_REGISTER_NOTIFICATION            bt_avrcp_event_rsp
- *  BT_AVRCP_PDU_ID_REQUEST_CONTINUING_RESPONSE      requested messgae response
+ *  BT_AVRCP_PDU_ID_REQUEST_CONTINUING_RESPONSE      NULL
  *  BT_AVRCP_PDU_ID_ABORT_CONTINUING_RESPONSE        NULL
  *  BT_AVRCP_PDU_ID_SET_ABSOLUTE_VOLUME              volume(uint8_t)
  *  BT_AVRCP_PDU_ID_SET_ADDRESSED_PLAYER             status(uint8_t)
@@ -1102,6 +1105,9 @@ struct bt_avrcp_vendor* bt_avrcp_vendor_rsp_parse(struct bt_avrcp_vendor_header 
  *  @param param_len rsp_param's data length.
  *
  *  @return 0 in case of success and error code in case of error.
+ *  @return -ENOMEM in case of packet length exceeds CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE and the internal buffer is not enough to create the response packet.
+ * The CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE's default value is 512 which is AVRCP defined max response data length without Continuation function.
+ * Please reduce the replied content or increase CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE.
  */
 int bt_avrcp_response_vendor_dependent(
     struct bt_conn *conn, uint8_t pdu_id, uint8_t tl,
@@ -1224,6 +1230,9 @@ int bt_avrcp_get_total_num_of_items(struct bt_conn *conn, uint8_t scope);
  *  @param param_len rsp_param data length.
  *
  *  @return 0 in case of success and error code in case of error.
+ *  @return -ENOMEM in case of packet length exceeds CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE and the internal buffer is not enough to create the response packet.
+ * The CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE's default value is 512 which is AVRCP defined max response data length without Continuation function.
+ * Please reduce the replied content or increase CONFIG_BT_AVRCP_SEND_PACKET_MAX_SIZE.
  */
 int bt_avrcp_response_browsing(struct bt_conn *conn, uint8_t pdu_id, uint8_t tl, void *rsp_param, uint16_t param_len);
 #endif
