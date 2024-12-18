@@ -1927,6 +1927,13 @@ config BT_HFP_AG_ESCO_S4
       This option enables eSCO S4 Settings for HFP AG
 endif # BT_HFP_AG
 
+config BT_EDR_ESCO_PKT
+    bool "BT EDR ESCO packets Settings for HFP [EXPERIMENTAL]"
+    default n
+    depends on BT_CLASSIC && (BT_HFP_AG || BT_HFP_HF)
+    help
+      This option enables BT EDR eSCO packets Settings
+
 config BT_IOPT
     bool "BT_IOPT"
     default 0
@@ -1934,7 +1941,6 @@ config BT_IOPT
       Bluetooth IOPT Profile.
       This option enables the IOPT profile
       This symbol is a config macro.
-
 config BT_PBAP
     bool "BT_PBAP"
     default 0

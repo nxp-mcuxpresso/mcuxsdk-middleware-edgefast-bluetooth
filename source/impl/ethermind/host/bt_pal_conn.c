@@ -2365,8 +2365,12 @@ struct bt_conn *bt_conn_add_sco(const bt_addr_t *peer, int link_type)
 						  SCO_PKT_MASK);
 		}
 	} else if (link_type == BT_HCI_ESCO) {
+#if (defined(CONFIG_BT_EDR_ESCO_PKT) && ((CONFIG_BT_EDR_ESCO_PKT) > 0U))
+		sco_conn->sco.pkt_type = bt_dev.br.esco_pkt_type;
+#else
 		sco_conn->sco.pkt_type = (bt_dev.br.esco_pkt_type &
 					  ~EDR_ESCO_PKT_MASK);
+#endif
 	}
 
 	return sco_conn;
