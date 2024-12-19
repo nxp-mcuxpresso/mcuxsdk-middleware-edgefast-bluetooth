@@ -446,27 +446,6 @@ int controller_hci_uart_get_configuration(controller_hci_uart_config_t *config)
 }
 #endif
 
-static void USB_EusbInit(void)
-{
-    /* start */
-#if 0
-    /* enable eUSB native mode */
-    USBNC1->EUSB_CTRL0 |= USBNC_EUSB_CTRL0_NATIVE_MODE_MASK;
-    /* squilsh: 59.7 mv */
-    USBNC1->EUSB_CTRL1 = 0x6000U;
-    /* IBG: 90uA */
-    USBNC1->EUSB_CTRL1 |= 0x38U;
-    /* swing 0000: 200 mV */
-    USBNC1->EUSB_CTRL3 &= 0xFFFFFFF0U;
-    
-    USBNC1->EUSB_CTRL0 |= USBNC_EUSB_CTRL0_PONRST_MASK;
-    while ((USBNC1->CTRL2 & USBNC_CTRL2_UTMI_CLK_VLD_MASK) == 0U)
-    {
-    }
-#endif
-    /* end */
-}
-
 void USB_HostClockInit(void)
 {
     uint32_t usbClockFreq = 24000000;
