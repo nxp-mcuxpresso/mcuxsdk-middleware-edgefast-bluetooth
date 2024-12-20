@@ -537,8 +537,8 @@ static int scan_delegator_add_source(struct bt_conn *conn,
 		return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
 	}
 
-	add_src = (void *)buf->data;
-	total_len = sizeof(struct bt_bap_bass_cp_add_src);
+	add_src = (void *)(buf->data - 1);
+	total_len = sizeof(struct bt_bap_bass_cp_add_src) - 1;
 	for (int i = 0; i < add_src->num_subgroups; i++) {
 		struct bt_bap_bass_cp_subgroup *subgroup;
 		uint16_t index = total_len;
@@ -739,8 +739,8 @@ static int scan_delegator_mod_src(struct bt_conn *conn,
 		return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
 	}
 
-	mod_src = (void *)buf->data;
-	total_len = sizeof(struct bt_bap_bass_cp_mod_src);
+	mod_src = (void *)(buf->data - 1);
+	total_len = sizeof(struct bt_bap_bass_cp_mod_src) - 1;
 	for (int i = 0; i < mod_src->num_subgroups; i++) {
 		struct bt_bap_bass_cp_subgroup *subgroup;
 		uint16_t index = total_len;
