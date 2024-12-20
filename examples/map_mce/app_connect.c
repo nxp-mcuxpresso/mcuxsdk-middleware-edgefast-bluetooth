@@ -231,9 +231,6 @@ static void disconnected(struct bt_conn *conn, uint8_t reason)
     {
         return;
     }
-#if 0
-    app_hfp_ag_disconnect();
-#endif
 }
 
 static void security_changed(struct bt_conn *conn, bt_security_t level, enum bt_security_err err)
