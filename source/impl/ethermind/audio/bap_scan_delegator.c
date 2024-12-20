@@ -528,10 +528,40 @@ static int scan_delegator_add_source(struct bt_conn *conn,
 	uint32_t aggregated_bis_syncs = 0;
 	uint32_t broadcast_id;
 	bool bis_sync_requested;
+	uint16_t total_len;
+	struct bt_bap_bass_cp_add_src *add_src;
 
 	/* subtract 1 as the opcode has already been pulled */
 	if (buf->len < sizeof(struct bt_bap_bass_cp_add_src) - 1) {
 		LOG_DBG("Invalid length %u", buf->size);
+		return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
+	}
+
+	add_src = (void *)buf->data;
+	total_len = sizeof(struct bt_bap_bass_cp_add_src);
+	for (int i = 0; i < add_src->num_subgroups; i++) {
+		struct bt_bap_bass_cp_subgroup *subgroup;
+		uint16_t index = total_len;
+
+		total_len += sizeof(struct bt_bap_bass_cp_subgroup);
+		if (total_len > buf->len) {
+			LOG_DBG("Invalid length %u", buf->len);
+
+			return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
+		}
+
+		subgroup = (void *)&buf->data[index];
+		total_len += subgroup->metadata_len;
+		if (total_len > buf->len) {
+			LOG_DBG("Invalid length %u", buf->len);
+
+			return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
+		}
+	}
+
+	if (total_len != buf->len) {
+		LOG_DBG("Invalid length %u", buf->len);
+
 		return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
 	}
 
@@ -592,11 +622,6 @@ static int scan_delegator_add_source(struct bt_conn *conn,
 		struct bt_bap_bass_subgroup *subgroup = &state->subgroups[i];
 		uint8_t *metadata;
 
-		if (buf->len < (sizeof(subgroup->bis_sync) + sizeof(subgroup->metadata_len))) {
-			LOG_DBG("Invalid length %u", buf->size);
-			return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
-		}
-
 		internal_state->requested_bis_sync[i] = net_buf_simple_pull_le32(buf);
 		if (internal_state->requested_bis_sync[i] != BT_BAP_BIS_SYNC_NO_PREF) {
 			/* Received BIS Index bitfield uses BIT(0) for BIS Index 1 */
@@ -634,12 +659,6 @@ static int scan_delegator_add_source(struct bt_conn *conn,
 
 		subgroup->metadata_len = net_buf_simple_pull_u8(buf);
 
-		if (buf->len < subgroup->metadata_len) {
-			LOG_DBG("Invalid length %u", buf->size);
-
-			return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
-		}
-
 #if CONFIG_BT_AUDIO_CODEC_CFG_MAX_METADATA_SIZE < 255 /* walkaround for below compare always false issue. */
 		if (subgroup->metadata_len > CONFIG_BT_AUDIO_CODEC_CFG_MAX_METADATA_SIZE) {
 			LOG_WRN("Metadata too long %u/%u", subgroup->metadata_len,
@@ -652,11 +671,6 @@ static int scan_delegator_add_source(struct bt_conn *conn,
 		metadata = net_buf_simple_pull_mem(buf, subgroup->metadata_len);
 		(void)memcpy(subgroup->metadata, metadata,
 			     subgroup->metadata_len);
-	}
-
-	if (buf->len != 0) {
-		LOG_DBG("Invalid length %u", buf->size);
-		return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
 	}
 
 	/* The active flag shall be set before any application callbacks, so that any calls for the
@@ -715,9 +729,39 @@ static int scan_delegator_mod_src(struct bt_conn *conn,
 	uint8_t pa_sync;
 	uint32_t aggregated_bis_syncs = 0;
 	bool bis_sync_change_requested;
+	uint16_t total_len;
+	struct bt_bap_bass_cp_mod_src *mod_src;
 
 	/* subtract 1 as the opcode has already been pulled */
 	if (buf->len < sizeof(struct bt_bap_bass_cp_mod_src) - 1) {
+		LOG_DBG("Invalid length %u", buf->len);
+
+		return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
+	}
+
+	mod_src = (void *)buf->data;
+	total_len = sizeof(struct bt_bap_bass_cp_mod_src);
+	for (int i = 0; i < mod_src->num_subgroups; i++) {
+		struct bt_bap_bass_cp_subgroup *subgroup;
+		uint16_t index = total_len;
+
+		total_len += sizeof(struct bt_bap_bass_cp_subgroup);
+		if (total_len > buf->len) {
+			LOG_DBG("Invalid length %u", buf->len);
+
+			return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
+		}
+
+		subgroup = (void *)&buf->data[index];
+		total_len += subgroup->metadata_len;
+		if (total_len > buf->len) {
+			LOG_DBG("Invalid length %u", buf->len);
+
+			return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
+		}
+	}
+
+	if (total_len != buf->len) {
 		LOG_DBG("Invalid length %u", buf->len);
 
 		return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
@@ -757,11 +801,6 @@ static int scan_delegator_mod_src(struct bt_conn *conn,
 		uint32_t old_bis_sync_req;
 		uint8_t *metadata;
 
-		if (buf->len < (sizeof(subgroup->bis_sync) + sizeof(subgroup->metadata_len))) {
-			LOG_DBG("Invalid length %u", buf->len);
-			return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
-		}
-
 		old_bis_sync_req = internal_state->requested_bis_sync[i];
 
 		internal_state->requested_bis_sync[i] = net_buf_simple_pull_le32(buf);
@@ -797,11 +836,6 @@ static int scan_delegator_mod_src(struct bt_conn *conn,
 
 		subgroup->metadata_len = net_buf_simple_pull_u8(buf);
 
-		if (buf->len < subgroup->metadata_len) {
-			LOG_DBG("Invalid length %u", buf->len);
-			return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
-		}
-
 #if CONFIG_BT_AUDIO_CODEC_CFG_MAX_METADATA_SIZE < 255 /* walkaround for below compare always false issue. */
 		if (subgroup->metadata_len > CONFIG_BT_AUDIO_CODEC_CFG_MAX_METADATA_SIZE) {
 			LOG_WRN("Metadata too long %u/%u", subgroup->metadata_len,
@@ -814,12 +848,6 @@ static int scan_delegator_mod_src(struct bt_conn *conn,
 
 		(void)memcpy(subgroup->metadata, metadata,
 			     subgroup->metadata_len);
-	}
-
-	if (buf->len != 0) {
-		LOG_DBG("Invalid length %u", buf->size);
-
-		return BT_GATT_ERR(BT_ATT_ERR_WRITE_REQ_REJECTED);
 	}
 
 	/* All input has been validated; update receive state and check for changes */
@@ -1381,6 +1409,7 @@ int bt_bap_scan_delegator_add_src(const struct bt_bap_scan_delegator_add_src_par
 	bt_addr_le_copy(&state->addr, &param->addr);
 	state->adv_sid = param->sid;
 	state->broadcast_id = param->broadcast_id;
+	state->encrypt_state = param->encrypt_state;
 	state->pa_sync_state =
 		pa_sync == NULL ? BT_BAP_PA_STATE_NOT_SYNCED : BT_BAP_PA_STATE_SYNCED;
 	state->num_subgroups = param->num_subgroups;
