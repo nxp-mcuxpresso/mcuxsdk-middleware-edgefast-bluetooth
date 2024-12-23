@@ -1026,31 +1026,9 @@ static void avrcp_target_handle_vendor_dependent_msg(struct bt_conn *conn, struc
 
         case BT_AVRCP_PDU_ID_REQUEST_CONTINUING_RESPONSE:
         {
-            uint8_t pdu_id = vendor_msg->parameter;
-            shell_print(ctx_shell, "    PDU-ID -> Request Continue Response<0x%x>.", vendor_msg->pdu_id);
-            shell_print(ctx_shell, "    Continue PDU ID: 0x%02x", pdu_id);
+            /* reply the continuning request for the previous response */
             rsp_param = NULL;
-            rsp_len   = 0;
-            if (pdu_id == BT_AVRCP_PDU_ID_LIST_PLAYER_APP_SETTING_ATTR)
-            {
-                struct bt_avrcp_player_app_setting_attr_ids *rsp;
-                rsp = (struct bt_avrcp_player_app_setting_attr_ids *)&data[0];
-
-                shell_print(ctx_shell, "    PDU-ID -> List Player Appl. Setting Attributes<0x%x>.", vendor_msg->pdu_id);
-
-                vendor_msg->pdu_id = pdu_id;
-                rsp->num_of_attr   = 1;
-                rsp->attr_ids[0]   = 1;
-
-                rsp_param = &data[0];
-                rsp_len   = 2;
-            }
-            else
-            {
-                rsp_param     = &rj_data;
-                rsp_len       = sizeof(rj_data);
-                response_type = BT_AVRCP_RESPONSE_TYPE_REJECTED;
-            }
+            rsp_len = 0;
             break;
         }
         case BT_AVRCP_PDU_ID_ABORT_CONTINUING_RESPONSE:
@@ -2274,22 +2252,7 @@ static void avrcp_auto_test(uint8_t print)
         case 10:
         {
             uint8_t req_pdu = BT_AVRCP_PDU_ID_LIST_PLAYER_APP_SETTING_ATTR;
-
-            shell_print(ctx_shell, "10.RequestContinuingResponse");
-            if (print)
-            {
-                break;
-            }
-            if (bt_avrcp_send_vendor_dependent(default_conn, BT_AVRCP_PDU_ID_REQUEST_CONTINUING_RESPONSE, &req_pdu))
-            {
-                shell_error(ctx_shell, "fail to call bt_avrcp_send_vendor_dependent");
-            }
-            break;
-        }
-        case 11:
-        {
-            uint8_t req_pdu = BT_AVRCP_PDU_ID_LIST_PLAYER_APP_SETTING_ATTR;
-            shell_print(ctx_shell, "11.AbortContinuingResponse");
+            shell_print(ctx_shell, "10.AbortContinuingResponse");
             if (print)
             {
                 break;
@@ -2300,11 +2263,11 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 12:
+        case 11:
         {
             DEF_DATA(2);
             struct bt_avrcp_player_app_setting_attr_ids *attr = (struct bt_avrcp_player_app_setting_attr_ids *)&data[0];
-            shell_print(ctx_shell, "12.GetCurrentPlayerApplicationSettingValue");
+            shell_print(ctx_shell, "11.GetCurrentPlayerApplicationSettingValue");
             if (print)
             {
                 break;
@@ -2319,11 +2282,11 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 13:
+        case 12:
         {
             DEF_DATA(3);
             struct bt_avrcp_player_app_attr_values *attr_values = (struct bt_avrcp_player_app_attr_values *)&data[0];
-            shell_print(ctx_shell, "13.SetPlayerApplicationSettingValue");
+            shell_print(ctx_shell, "12.SetPlayerApplicationSettingValue");
             if (print)
             {
                 break;
@@ -2339,11 +2302,11 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 14:
+        case 13:
         {
             DEF_DATA(2);
             struct bt_avrcp_player_app_setting_attr_ids *attr = (struct bt_avrcp_player_app_setting_attr_ids *)&data[0];
-            shell_print(ctx_shell, "14.GetPlayerApplicationSettingAttributeText");
+            shell_print(ctx_shell, "13.GetPlayerApplicationSettingAttributeText");
             if (print)
             {
                 break;
@@ -2358,12 +2321,12 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 15:
+        case 14:
         {
             DEF_DATA(3);
             struct bt_avrcp_get_player_app_setting_value_text *text =
                 (struct bt_avrcp_get_player_app_setting_value_text *)&data[0];
-            shell_print(ctx_shell, "15.GetPlayerApplicatoinSettingValueText");
+            shell_print(ctx_shell, "14.GetPlayerApplicatoinSettingValueText");
             if (print)
             {
                 break;
@@ -2379,11 +2342,11 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 16:
+        case 15:
         {
             DEF_DATA(3);
             struct bt_avrcp_inform_displayable_char_set *set = (struct bt_avrcp_inform_displayable_char_set *)&data[0];
-            shell_print(ctx_shell, "16.InformDisplayableCharacterSet");
+            shell_print(ctx_shell, "15.InformDisplayableCharacterSet");
             if (print)
             {
                 break;
@@ -2398,11 +2361,11 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 17:
+        case 16:
         {
             uint8_t battery_status = 0;
 
-            shell_print(ctx_shell, "17.InformBatterSatusofCT");
+            shell_print(ctx_shell, "16.InformBatterSatusofCT");
             if (print)
             {
                 break;
@@ -2414,12 +2377,12 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 18:
+        case 17:
         {
             DEF_DATA(13u);
             struct bt_avrcp_get_element_attrs *attrs = (struct bt_avrcp_get_element_attrs *)&data[0];
 
-            shell_print(ctx_shell, "18.GetElementAttributes");
+            shell_print(ctx_shell, "17.GetElementAttributes");
             if (print)
             {
                 break;
@@ -2433,9 +2396,9 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 19:
+        case 18:
         {
-            shell_print(ctx_shell, "19.GetPlayStatus");
+            shell_print(ctx_shell, "18.GetPlayStatus");
             if (print)
             {
                 break;
@@ -2446,10 +2409,10 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 20:
+        case 19:
         {
             struct bt_avrcp_register_ntfy reg;
-            shell_print(ctx_shell, "20.RegisterNotification");
+            shell_print(ctx_shell, "19.RegisterNotification");
             if (print)
             {
                 break;
@@ -2463,10 +2426,10 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 21:
+        case 20:
         {
             uint8_t volume = 10;
-            shell_print(ctx_shell, "21.SetAbsoluteVolume");
+            shell_print(ctx_shell, "20.SetAbsoluteVolume");
             if (print)
             {
                 break;
@@ -2477,10 +2440,10 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 22:
+        case 21:
         {
             uint16_t player_id = 1;
-            shell_print(ctx_shell, "22.SetAddressedPlayer");
+            shell_print(ctx_shell, "21.SetAddressedPlayer");
             if (print)
             {
                 break;
@@ -2491,9 +2454,9 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 23:
+        case 22:
         {
-            shell_print(ctx_shell, "23.SetBrowsedPlayer");
+            shell_print(ctx_shell, "22.SetBrowsedPlayer");
             if (print)
             {
                 break;
@@ -2504,10 +2467,10 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 24:
+        case 23:
         {
             struct bt_avrcp_search_cmd search;
-            shell_print(ctx_shell, "24.Search");
+            shell_print(ctx_shell, "23.Search");
             if (print)
             {
                 break;
@@ -2523,11 +2486,11 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 25:
+        case 24:
         {
             struct bt_avrcp_add_to_now_playing add;
 
-            shell_print(ctx_shell, "25.AddToNowPlaying");
+            shell_print(ctx_shell, "24.AddToNowPlaying");
             if (print)
             {
                 break;
@@ -2543,10 +2506,10 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 26:
+        case 25:
         {
             struct bt_avrcp_get_folder_items_cmd param;
-            shell_print(ctx_shell, "26.GetFolderItems(MediaPlayerList)");
+            shell_print(ctx_shell, "25.GetFolderItems(MediaPlayerList)");
             if (print)
             {
                 break;
@@ -2563,10 +2526,10 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 27:
+        case 26:
         {
             struct bt_avrcp_get_folder_items_cmd param;
-            shell_print(ctx_shell, "27.GetFolderItems(Filesystem)");
+            shell_print(ctx_shell, "26.GetFolderItems(Filesystem)");
             if (print)
             {
                 break;
@@ -2583,10 +2546,10 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 28:
+        case 27:
         {
             struct bt_avrcp_get_folder_items_cmd param;
-            shell_print(ctx_shell, "28.GetFolderItems(SearchResultList)");
+            shell_print(ctx_shell, "27.GetFolderItems(SearchResultList)");
             if (print)
             {
                 break;
@@ -2603,10 +2566,10 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 29:
+        case 28:
         {
             struct bt_avrcp_get_folder_items_cmd param;
-            shell_print(ctx_shell, "29.GetFolderItems(NowPlayingList)");
+            shell_print(ctx_shell, "28.GetFolderItems(NowPlayingList)");
             if (print)
             {
                 break;
@@ -2623,10 +2586,10 @@ static void avrcp_auto_test(uint8_t print)
             }
             break;
         }
-        case 30:
+        case 29:
         {
             struct bt_avrcp_change_path_cmd change_path;
-            shell_print(ctx_shell, "30.ChangePath");
+            shell_print(ctx_shell, "29.ChangePath");
             if (print)
             {
                 break;
@@ -2644,10 +2607,10 @@ static void avrcp_auto_test(uint8_t print)
             break;
         }
 
-        case 31:
+        case 30:
         {
             struct bt_avrcp_get_item_attrs_cmd get_item;
-            shell_print(ctx_shell, "31.GetItemAttributes(FileSystem)");
+            shell_print(ctx_shell, "30.GetItemAttributes(FileSystem)");
             if (print)
             {
                 break;
@@ -2666,10 +2629,10 @@ static void avrcp_auto_test(uint8_t print)
             break;
         }
 
-        case 32:
+        case 31:
         {
             struct bt_avrcp_get_item_attrs_cmd get_item;
-            shell_print(ctx_shell, "32.GetItemAttributes(search)");
+            shell_print(ctx_shell, "31.GetItemAttributes(search)");
             if (print)
             {
                 break;
@@ -2688,10 +2651,10 @@ static void avrcp_auto_test(uint8_t print)
             break;
         }
 
-        case 33:
+        case 32:
         {
             struct bt_avrcp_get_item_attrs_cmd get_item;
-            shell_print(ctx_shell, "33.GetItemAttributes(Now Playing)");
+            shell_print(ctx_shell, "32.GetItemAttributes(Now Playing)");
             if (print)
             {
                 break;
@@ -2710,9 +2673,9 @@ static void avrcp_auto_test(uint8_t print)
             break;
         }
 
-        case 34:
+        case 33:
         {
-            shell_print(ctx_shell, "34.GetTotalNumberOfItems");
+            shell_print(ctx_shell, "33.GetTotalNumberOfItems");
             if (print)
             {
                 break;
@@ -2724,11 +2687,11 @@ static void avrcp_auto_test(uint8_t print)
             break;
         }
 
-        case 35:
+        case 34:
         {
             struct bt_avrcp_play_item play;
 
-            shell_print(ctx_shell, "35.PlayItem(Filesystem)");
+            shell_print(ctx_shell, "34.PlayItem(Filesystem)");
             if (print)
             {
                 break;
@@ -2745,11 +2708,11 @@ static void avrcp_auto_test(uint8_t print)
             break;
         }
 
-        case 36:
+        case 35:
         {
             struct bt_avrcp_play_item play;
 
-            shell_print(ctx_shell, "36.PlayItem(SearchResultList)");
+            shell_print(ctx_shell, "35.PlayItem(SearchResultList)");
             if (print)
             {
                 break;
@@ -2766,11 +2729,11 @@ static void avrcp_auto_test(uint8_t print)
             break;
         }
 
-        case 37:
+        case 36:
         {
             struct bt_avrcp_play_item play;
 
-            shell_print(ctx_shell, "37.PlayItem(NowPlayingList)");
+            shell_print(ctx_shell, "36.PlayItem(NowPlayingList)");
             if (print)
             {
                 break;
