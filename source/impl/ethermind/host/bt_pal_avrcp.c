@@ -2773,6 +2773,7 @@ static API_RESULT ethermind_avrcp_cai_cb(AVRCP_CA_HANDLE *avrcp_ca_handle,
 }
 #endif
 
+#if (defined(CONFIG_BT_AVRCP_COVER_ART_RESPONDER) && ((CONFIG_BT_AVRCP_COVER_ART_RESPONDER) > 0U))
 API_RESULT ethermind_avrcp_car_cb(AVRCP_CA_HANDLE *avrcp_ca_handle,
                                   UINT8 event_type,
                                   UINT16 event_result,
@@ -2909,6 +2910,7 @@ API_RESULT ethermind_avrcp_car_cb(AVRCP_CA_HANDLE *avrcp_ca_handle,
 
     return API_SUCCESS;
 }
+#endif
 
 #if (defined(CONFIG_BT_AVRCP_COVER_ART_INITIATOR) && ((CONFIG_BT_AVRCP_COVER_ART_INITIATOR) > 0U))
 int bt_avrcp_cover_art_start_initiator(uint8_t *handle)
