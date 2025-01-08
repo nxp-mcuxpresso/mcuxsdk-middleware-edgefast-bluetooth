@@ -1,4 +1,4 @@
-# EFEM4RT1170UG
+# Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170
 
 
 ```{tocTree}

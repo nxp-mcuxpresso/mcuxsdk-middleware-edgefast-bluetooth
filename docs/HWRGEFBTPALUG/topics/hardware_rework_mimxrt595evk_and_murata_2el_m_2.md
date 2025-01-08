@@ -1,11 +1,11 @@
 # Hardware rework 
 -   **Debug console serial rework**
 
-    For details, refer Section 24 "Hardware Rework Guide for MIMXRT595-EVK and Murata M.2 Module“.
+    For details, refer [Hardware Rework Guide for MIMXRT595-EVK and Murata M.2 Module](hardware_rework_guide_for_mimxrt595-evk_with_direc.md).
 
 -   **Host wake-up controller pin rework**:
 
-    For details, refer Section 25 "Hardware Rework Guide for Low Power Feature on MIMXRT595-EVK and Murata 1XK M.2 Module ".
+    For details, refer [Hardware Rework Guide for Low Power Feature on MIMXRT595-EVK and Murata 1XK M.2 Module](hardware_rework_MIMXRT595-EVK_murata_m2.md).
 
 -   **Controller wake-up host pin rework:**
 

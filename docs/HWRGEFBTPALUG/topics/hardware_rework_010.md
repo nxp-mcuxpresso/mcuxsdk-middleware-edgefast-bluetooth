@@ -26,15 +26,13 @@ Connect J4\[1-2\] for VIO 1.8 V supply.
 
 Connect the pins of two boards as the following table.
 
-|**Pin Name**|**AW-CM358-USD**|**i.MX RT685**|**PIN NAME of RT685**|**GPIONAME of RT685**|
-|------------|----------------|--------------|---------------------|---------------------|
-|**PCM\_IN**|J11 \(pin 1\)|J47 \(pin 7\)|I2S2\_TXD|FC2\_RXD\_SDA\_MOSI\_DATA|
-|**PCM\_OUT**
-
-|J11 \(pin 2\)|J28 \(pin 4\)|I2S5\_RXD|FC5\_RXD\_SDA\_MOSI\_DATA|
-|**PCM\_SYNC**|J11 \(pin 3\)|J28 \(pin 5\)|I2S5\_WS|FC5\_TXD\_SCL\_MISO\_WS|
-|**PCM\_CLK**|J11 \(pin 4\)|J28 \(pin 6\)|I2S5\_SCK|FC5\_SCK|
-|**GND**|J11 \(pin 5\)|J29 \(pin 7\)|GND|GND|
+| Pin Name | AW-CM358-USD | i.MX RT685  | PIN NAME of RT685 | GPIONAME of RT685     |
+| -------- | ------------ | ----------- | ----------------- | --------------------- |
+| PCM_IN   | J11 (pin 1)  | J47 (pin 7) | I2S2_TXD          | FC2_RXD_SDA_MOSI_DATA |
+| PCM_OUT  | J11 (pin 2)  | J28 (pin 4) | I2S5_RXD          | FC5_RXD_SDA_MOSI_DATA |
+| PCM_SYNC | J11 (pin 3)  | J28 (pin 5) | I2S5_WS           | FC5_TXD_SCL_MISO_WS   |
+| PCM_CLK  | J11 (pin 4)  | J28 (pin 6) | I2S5_SCK          | FC5_SCK               |
+| GND      | J11 (pin 5)  | J29 (pin 7) | GND               | GND                   |
 
 **Parent topic:**[Hardware Rework Guide for MIMXRT685-EVK and AW-CM358-uSD](../topics/hardware_rework_guide_for_mimxrt685-evk_and_aw-cm3.md)
 

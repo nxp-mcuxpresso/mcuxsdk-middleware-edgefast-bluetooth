@@ -5,7 +5,7 @@ This section is a brief hardware rework guidance of the EdgeFast Bluetooth PAL o
 -   M.2 UART interface
 -   M.2 SDIO interface
 
-## Hardware rework {#MCXN548EVKrework .section}
+## Hardware rework 
 
 -   M.2 UART interface rework
     -   Mount R835

@@ -1,25 +1,10 @@
-# HWRGEFBTPALUG
+# Rework Guide for EdgeFast Bluetooth Protocol Abstraction Layer
 
 
 ```{tocTree}
 :maxdepth: 4
 :caption: Table of Contents
 
-topics/hardware_rework_guide_for_mimxrt1060-evkb_and_aw-a.md
-topics/hardware_rework_guide_for_mimxrt1060-evkb_and_aw-c.md
-topics/hardware_rework_guide_for_mimxrt1060-evkb_and_aw-a_002.md
-topics/hardware_rework_guide_for_mimxrt1060-evkb_and_aw-c_001.md
-topics/hardware_rework_guide_for_mimxrt1060-evkb_and_mura.md
-topics/hardware_rework_guide_for_mimxrt1060-evkb_and_aw-a_001.md
-topics/hardware_rework_guide_for_mimxrt1060-evk_and_aw-am_001.md
-topics/hardware_rework_guide_for_mimxrt1060-evk_and_aw-cm.md
-topics/hardware_rework_guide_for_mimxrt1060-evk_and_murat.md
-topics/hardware_rework_guide_for_mimxrt1060-evk_and_aw-am.md
-topics/hardware_rework_guide_for_mimxrt1170-evk_and_aw-am.md
-topics/hardware_rework_guide_for_mimxrt1170-evk_and_aw-cm.md
-topics/hardware_rework_guide_for_mimxrt1170-evk_and_aw-am_001.md
-topics/hardware_rework_guide_for_mimxrt1170-evk_with_dire.md
-topics/hardware_rework_guide_for_mimxrt1170-evk_and_murat.md
 topics/MIMXRT1170-EVKB_Murata_1XKM2.md
 topics/MIMXRT1170-EVKB_Murata_1ZM.md
 topics/MIMXRT1170-EVKB_Murata_2EL.md
@@ -34,7 +19,6 @@ topics/hardware_rework_guide_for_mimxrt595-evk_with_murata1XKM2Module.md
 topics/hardware_rework_guide_for_mimxrt595-evk_and_aw-am5.md
 topics/hardware_rework_guide_for_mimxrt595-evk_with_aw-cm.md
 topics/hardware_rework_guide_for_mimxrt1040-evkb_and_mura.md
-topics/hardware_rework_guide_for_mimxrt1160-evk_with_directmurratem2.md
 topics/RT1060EVKC_Murata_1XKM2.md
 topics/MIMXRT1060EVKC_Murata1ZMM2.md
 topics/MIMXRT1060EVKC_Murata2EL.md
@@ -42,5 +26,4 @@ topics/MCXN548EVK.md
 topics/MCXN947EVK.md
 topics/hardware_rework_guide_for_imxrt1050_evkb_and_murata_m_2_module.md
 topics/hardware_rework_guide_for_mimxrt1180_and_murata_m_2_module.md
-topics/hardware_rework_1180.md
 ```
